@@ -3,6 +3,7 @@ package rest
 // Import resty into your code and refer it as `resty`.
 import (
 	"context"
+	"crypto/tls"
 	"errors"
 	"fmt"
 	"time"
@@ -215,8 +216,12 @@ func (r *Response) GetCode() int {
 // }
 
 func NewRest(config map[string]interface{}) *Rest {
+	client := resty.New()
+	if config["InsecureSkipVerify"] != nil && config["InsecureSkipVerify"].(bool) {
+		client.SetTLSClientConfig(&tls.Config{InsecureSkipVerify: config["InsecureSkipVerify"].(bool)})
+	}
 	rest := &Rest{
-		http:   resty.New(),
+		http:   client,
 		config: config,
 		token:  &Token{},
 	}
