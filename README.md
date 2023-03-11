@@ -160,4 +160,4 @@ O pacote `\database` é responsável por gerenciar a conexão com o banco de dad
 
 #### Mensagens
 
-O pacote `\messagens` é responsável por gerenciar as mensagens a serem enviadas ao usuário ou cliente
+O pacote `\messaging` é responsável por gerenciar as mensagens a serem enviadas ao usuário ou cliente
