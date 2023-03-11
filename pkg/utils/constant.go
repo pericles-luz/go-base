@@ -1,10 +1,8 @@
 package utils
 
 const (
-	TEST_CPF                 = "00000000191"
-	TEST_NON_MEMBER_CPF      = "00000000272"
-	TEST_WITHOUT_ANSWERS_CPF = "00000000353"
-	TEST_TOKEN               = "123456"
+	TEST_CPF   = "00000000191"
+	TEST_TOKEN = "123456"
 
 	// formas de envio de mensagem
 	SEND_MEDIA_SMS   = 1

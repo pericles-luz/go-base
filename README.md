@@ -66,7 +66,7 @@ func CompleteWithZeros(str string, length int) string
 
 Completa uma string com zeros a esquerda
 
-#### JWT
+### JWT
 
 Estrutura usada para gerenciar o token JWT
 
@@ -150,9 +150,105 @@ func ValidateEmail(email string) bool
 
 Valida um email
 
-#### Configuração
+### Configuração
 
 O pacote `\conf` é responsável por carregar as configurações da aplicação
+
+```go
+func (db *Database) NewDB(cfg *conf.DBConfiguration) error
+```
+Cria uma nova conexão com o banco de dados
+
+```go
+func (db *Database) GetDatabase() *sql.DB
+```
+
+Retorna a conexão com o banco de dados
+
+```go
+func (db *Database) IsConnected() bool
+```
+
+Verifica se a conexão com o banco de dados está ativa
+
+```go
+func (db *Database) Close() error
+```
+
+Fecha a conexão com o banco de dados
+
+```go
+func (db *Database) GetResult() (sql.Result, error)
+```
+
+Retorna o resultado da última query executada
+
+```go
+func (db *Database) GetLastInsertId() uint64
+```
+
+Retorna o ID da última inserção
+
+```go
+func (db *Database) GetStmt(sql string) (*sql.Stmt, error)
+```
+
+Retorna um statement para ser usado em queries
+
+```go
+func (db *Database) Exec(sql string, data ...interface{}) error
+```
+
+Executa uma query
+
+```go
+func (db *Database) GetOne(sql string, data ...interface{}) ([]byte, error)
+```
+
+Executa uma query e retorna apenas um resultado. Independente do tipo de dados, o resultado é retornado em um slice de bytes
+
+```go
+func (db *Database) GetRecord(sqlString string, data ...interface{}) (map[string]interface{}, error)
+```
+
+Executa uma query e retorna apenas um resultado. O resultado é retornado em um map de interface
+
+```go
+func (db *Database) GetRecords(sqlString string, data ...interface{}) ([]map[string]interface{}, error)
+```
+
+Executa uma query e retorna vários resultados. O resultado é retornado em um slice de map de interface
+
+```go
+func (db *Database) Insert(tableName string, data map[string]interface{}) error
+```
+
+Insere um registro no banco de dados
+
+```go
+func (db *Database) Update(tableName string, data map[string]interface{}) error
+```
+
+Atualiza um registro no banco de dados
+
+```go
+func (db *Database) IsMySQL() bool
+```
+
+Verifica se o banco de dados é MySQL
+
+```go
+func (db *Database) IsPostgreSQL() bool
+```
+
+Verifica se o banco de dados é PostgreSQL
+
+```go
+func (db *Database) IsSQLite() bool
+```
+
+Verifica se o banco de dados é SQLite
+
 
 #### Database
 
