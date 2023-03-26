@@ -20,12 +20,8 @@ func GetBaseDirectory(directory string) string {
 	if directory == "" {
 		return path
 	}
-	if directory[0] == '/' {
-		directory = directory[1:]
-	}
-	if directory[len(directory)-1] == '/' {
-		directory = directory[:len(directory)-1]
-	}
+	directory = strings.TrimPrefix(directory, "/")
+	directory = strings.TrimSuffix(directory, "/")
 	path += string(filepath.Separator) + directory
 	return path
 }
@@ -36,7 +32,7 @@ func getBaseDirectoryOnTesting() string {
 		log.Println("Erro ao obter diretorio atual", err)
 		return ""
 	}
-	for !(strings.HasSuffix(filepath.Dir(base), "/go") || FileExists(base+"/config")) && len(base) > 1 {
+	for !(FileExists(base+"/config") || strings.HasSuffix(base, "/go")) && len(base) > 1 {
 		base = filepath.Dir(base)
 	}
 	return base
