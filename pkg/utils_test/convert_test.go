@@ -67,3 +67,39 @@ func TestByteToMapInterfaceMustReturnNilIfBytesIsNotJson(t *testing.T) {
 	// Then
 	require.Nil(t, data)
 }
+
+func TestStringToIntMustConvertCorrectly(t *testing.T) {
+	// Given
+	value := "123"
+	// When
+	result := utils.StringToInt(value)
+	// Then
+	require.Equal(t, 123, result)
+}
+
+func TestStringToIntMustReturnZeroIfValueIsNotNumber(t *testing.T) {
+	// Given
+	value := "not number"
+	// When
+	result := utils.StringToInt(value)
+	// Then
+	require.Equal(t, 0, result)
+}
+
+func TestInterfaceToIntMustConvertStringToInt(t *testing.T) {
+	// Given
+	value := "123"
+	// When
+	result := utils.InterfaceToInt(value)
+	// Then
+	require.Equal(t, 123, result)
+}
+
+func TestInterfaceToIntMustConvertIntToInt(t *testing.T) {
+	// Given
+	value := 123
+	// When
+	result := utils.InterfaceToInt(value)
+	// Then
+	require.Equal(t, 123, result)
+}

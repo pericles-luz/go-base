@@ -26,6 +26,18 @@ func MapStringToMapInterface(data map[string]string) map[string]interface{}
 
 Converte um map de string para um map de interface
 
+```go
+func InterfaceToInt(in interface{}) int
+```
+
+Converte uma interface para um inteiro
+
+```go
+func StringToInt(str string) int
+```
+
+Converte uma string para um inteiro
+
 #### Arquivos
 
 ```go
