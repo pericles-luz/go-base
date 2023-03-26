@@ -2,7 +2,6 @@ package conf
 
 import (
 	"fmt"
-	"log"
 	"os"
 	"strings"
 
@@ -15,7 +14,6 @@ type ConfigBase struct {
 
 func (cfg *ConfigBase) ReadConfigurationFile(fileName string) ([]byte, error) {
 	configPath := utils.GetBaseDirectory("config")
-	log.Println("configPath:", configPath)
 	fileName = strings.ReplaceAll(fileName, "..", "")
 	fileName = strings.ReplaceAll(fileName, "/", "")
 	filePath := fmt.Sprintf("%s/%s.json", configPath, fileName)
