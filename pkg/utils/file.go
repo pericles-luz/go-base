@@ -36,7 +36,7 @@ func getBaseDirectoryOnTesting() string {
 		log.Println("Erro ao obter diretorio atual", err)
 		return ""
 	}
-	for !strings.HasSuffix(filepath.Dir(base), "/go") && len(base) > 1 {
+	for !(strings.HasSuffix(filepath.Dir(base), "/go") || FileExists(base+"/config")) && len(base) > 1 {
 		base = filepath.Dir(base)
 	}
 	return base

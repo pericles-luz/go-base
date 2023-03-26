@@ -1,6 +1,9 @@
 package utils
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"log"
+)
 
 func MapInterfaceToBytes(data map[string]interface{}) []byte {
 	if data == nil {
@@ -27,34 +30,39 @@ func MapStringToMapInterface(data map[string]string) map[string]interface{} {
 	return result
 }
 
-func InterfaceToInt(in interface{}) int {
-	switch in.(type) {
+func InterfaceToInt(incomming interface{}) int {
+	if incomming == nil {
+		return 0
+	}
+	switch in := incomming.(type) {
 	case int:
-		return in.(int)
+		return incomming.(int)
 	case int8:
-		return int(in.(int8))
+		return int(incomming.(int8))
 	case int16:
-		return int(in.(int16))
+		return int(incomming.(int16))
 	case int32:
-		return int(in.(int32))
+		return int(incomming.(int32))
 	case int64:
-		return int(in.(int64))
+		return int(incomming.(int64))
 	case uint:
-		return int(in.(uint))
+		return int(incomming.(uint))
 	case uint8:
-		return int(in.(uint8))
+		return int(incomming.(uint8))
 	case uint16:
-		return int(in.(uint16))
+		return int(incomming.(uint16))
 	case uint32:
-		return int(in.(uint32))
+		return int(incomming.(uint32))
 	case uint64:
-		return int(in.(uint64))
+		return int(incomming.(uint64))
 	case float32:
-		return int(in.(float32))
+		return int(incomming.(float32))
 	case float64:
-		return int(in.(float64))
+		return int(incomming.(float64))
 	case string:
-		return StringToInt(in.(string))
+		return StringToInt(incomming.(string))
+	default:
+		log.Println("InterfaceToInt: unknown type", in)
 	}
 	return 0
 }
