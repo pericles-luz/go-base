@@ -39,6 +39,7 @@ func getBaseDirectoryOnTesting() string {
 }
 
 func FileExists(path string) bool {
+	log.Println("FileExists:", path)
 	if path == "" {
 		return false
 	}
