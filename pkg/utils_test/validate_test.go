@@ -57,3 +57,12 @@ func TestValidateEmail(t *testing.T) {
 	require.False(t, utils.ValidateEmail("email@test"))
 	require.False(t, utils.ValidateEmail("ema"))
 }
+
+func TestValidateURL(t *testing.T) {
+	require.True(t, utils.ValidateURL("http://www.google.com"))
+	require.True(t, utils.ValidateURL("https://www.google.com"))
+	require.True(t, utils.ValidateURL("https://www.google.com/"))
+	require.True(t, utils.ValidateURL("https://www.google.com/test"))
+	require.True(t, utils.ValidateURL("https://www.google.com/test/"))
+	require.False(t, utils.ValidateURL("https//www.google.com/test/test"))
+}

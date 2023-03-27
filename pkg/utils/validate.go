@@ -3,6 +3,7 @@ package utils
 import (
 	"errors"
 	"net/mail"
+	"net/url"
 	"regexp"
 	"strings"
 	"time"
@@ -147,4 +148,9 @@ func ValidateEmail(email string) bool {
 		return false
 	}
 	return true
+}
+
+func ValidateURL(link string) bool {
+	_, err := url.ParseRequestURI(link)
+	return err == nil
 }

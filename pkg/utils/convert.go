@@ -30,6 +30,19 @@ func MapStringToMapInterface(data map[string]string) map[string]interface{} {
 	return result
 }
 
+func StructToMapInterface(data interface{}) (map[string]interface{}, error) {
+	inter, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	var result map[string]interface{}
+	err = json.Unmarshal(inter, &result)
+	if err != nil {
+		return nil, err
+	}
+	return result, nil
+}
+
 func InterfaceToInt(incomming interface{}) int {
 	if incomming == nil {
 		return 0
