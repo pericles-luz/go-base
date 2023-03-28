@@ -9,6 +9,7 @@ import (
 
 type Database struct {
 	file     ConfigBase
+	Name     string `json:"name,omitempty"`
 	DBName   string `json:"dbname,omitempty"`
 	Engine   string `json:"engine,omitempty"`
 	Host     string `json:"host,omitempty"`

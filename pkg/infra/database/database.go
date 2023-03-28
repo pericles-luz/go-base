@@ -14,7 +14,7 @@ import (
 )
 
 type IDatabase interface {
-	NewDB(*conf.Database) error
+	connect(*conf.Database) error
 	Exec(sql string, data ...interface{}) error
 	GetOne(sql string, data ...interface{}) ([]byte, error)
 	GetRecord(sql string, data ...interface{}) (map[string]interface{}, error)
@@ -28,23 +28,29 @@ type IDatabase interface {
 	GetLastInsertId() uint64
 	GetResult() (sql.Result, error)
 	GetDatabase() *sql.DB
+	GetName() string
 }
 
 type Database struct {
 	database *sql.DB
 	res      sql.Result
 	engine   string
+	name     string
 }
 
 func NewDatabase(cfg *conf.Database) (*Database, error) {
 	database := Database{}
 	if cfg == nil {
-		return &database, errors.New("no configuration provided")
+		return nil, errors.New("no configuration provided")
 	}
-	if err := database.NewDB(cfg); nil != err {
+	if err := database.connect(cfg); nil != err {
 		log.Println("database not initialized")
-		return &database, err
+		return nil, err
 	}
+	if cfg.Name == "" {
+		cfg.Name = cfg.DBName
+	}
+	database.name = cfg.Name
 	return &database, nil
 }
 
@@ -54,7 +60,7 @@ func NewDatabaseWithConnection(db *sql.DB) Database {
 	return database
 }
 
-func (db *Database) NewDB(cfg *conf.Database) error {
+func (db *Database) connect(cfg *conf.Database) error {
 	db.engine = cfg.Engine
 	log.Println("database engine: " + db.engine)
 	err := db.openDBWithStartupWait(cfg)
@@ -381,4 +387,8 @@ func (db *Database) IsPostgres() bool {
 
 func (db *Database) IsSQLite() bool {
 	return db.engine == "sqlite"
+}
+
+func (db *Database) GetName() string {
+	return db.name
 }

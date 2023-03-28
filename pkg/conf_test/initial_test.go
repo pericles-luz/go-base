@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/pericles-luz/go-base/pkg/infra/conf"
+	"github.com/pericles-luz/go-base/pkg/conf"
 	"github.com/stretchr/testify/require"
 )
 

@@ -5,7 +5,7 @@ import (
 	"testing"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/pericles-luz/go-base/pkg/infra/conf"
+	"github.com/pericles-luz/go-base/pkg/conf"
 	"github.com/pericles-luz/go-base/pkg/infra/database"
 
 	"github.com/stretchr/testify/require"

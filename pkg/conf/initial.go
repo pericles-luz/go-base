@@ -4,19 +4,16 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
-
-	"github.com/pericles-luz/go-base/pkg/conf"
 )
 
-// Config for the environment, read from a json file
 type Config struct {
 	file                    ConfigBase
 	Debug                   bool
 	Production              bool
 	DBConfigurationFile     string
 	AgnuDBConfigurationFile string
-	DBConfiguration         *conf.Database
-	AgnuDBConfiguration     *conf.Database
+	DBConfiguration         *Database
+	AgnuDBConfiguration     *Database
 	JwtSecret               string
 }
 
@@ -36,7 +33,7 @@ func (cfg *Config) parseDBConfiguration() error {
 		log.Println("DBConfiguration already loaded")
 		return nil
 	}
-	dBConfiguration, err := conf.NewDatabase(cfg.DBConfigurationFile)
+	dBConfiguration, err := NewDatabase(cfg.DBConfigurationFile)
 	if err != nil {
 		return err
 	}
@@ -57,7 +54,7 @@ func (cfg *Config) parseAgnuDBConfiguration() error {
 		log.Println("AgnuDBConfiguration already loaded")
 		return nil
 	}
-	dBConfiguration, err := conf.NewDatabase(cfg.AgnuDBConfigurationFile)
+	dBConfiguration, err := NewDatabase(cfg.AgnuDBConfigurationFile)
 	if err != nil {
 		return err
 	}
