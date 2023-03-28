@@ -10,11 +10,11 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
-	"github.com/pericles-luz/go-base/pkg/infra/conf"
+	"github.com/pericles-luz/go-base/pkg/conf"
 )
 
 type IDatabase interface {
-	NewDB(*conf.DBConfiguration) error
+	NewDB(*conf.Database) error
 	Exec(sql string, data ...interface{}) error
 	GetOne(sql string, data ...interface{}) ([]byte, error)
 	GetRecord(sql string, data ...interface{}) (map[string]interface{}, error)
@@ -36,7 +36,7 @@ type Database struct {
 	engine   string
 }
 
-func NewDatabase(cfg *conf.DBConfiguration) (*Database, error) {
+func NewDatabase(cfg *conf.Database) (*Database, error) {
 	database := Database{}
 	if cfg == nil {
 		return &database, errors.New("no configuration provided")
@@ -54,7 +54,7 @@ func NewDatabaseWithConnection(db *sql.DB) Database {
 	return database
 }
 
-func (db *Database) NewDB(cfg *conf.DBConfiguration) error {
+func (db *Database) NewDB(cfg *conf.Database) error {
 	db.engine = cfg.Engine
 	log.Println("database engine: " + db.engine)
 	err := db.openDBWithStartupWait(cfg)
@@ -70,7 +70,7 @@ func (db *Database) GetDatabase() *sql.DB {
 	return db.database
 }
 
-func (db *Database) openDBWithStartupWait(cfg *conf.DBConfiguration) error {
+func (db *Database) openDBWithStartupWait(cfg *conf.Database) error {
 	var startupTimeout = func() time.Duration {
 		str := "10s"
 		d, err := time.ParseDuration(str)
@@ -103,13 +103,13 @@ func (db *Database) openDBWithStartupWait(cfg *conf.DBConfiguration) error {
 // blank to use the PG* env vars).
 //
 // Open assumes that the database already exists.
-func (db *Database) open(dBConfiguration *conf.DBConfiguration) error {
-	dsn, err := dBConfiguration.GetDSN()
+func (db *Database) open(Database *conf.Database) error {
+	dsn, err := Database.GetDSN()
 	if nil != err {
 		log.Fatal("dsn not generated")
 		return errors.New("dsn not generated")
 	}
-	db.database, err = sql.Open(dBConfiguration.Engine, dsn)
+	db.database, err = sql.Open(Database.Engine, dsn)
 	if err != nil {
 		log.Println(err.Error())
 		log.Fatal("database not openned")
