@@ -199,6 +199,33 @@ func (b *Rest) GetWithHeader(payload map[string]interface{}, link string, header
 	}, nil
 }
 
+func (b *Rest) GetWithHeaderNoAuth(payload map[string]interface{}, link string, header map[string]string) (*Response, error) {
+	dados := map[string]string{}
+	for k, v := range payload {
+		switch t := v.(type) {
+		case string:
+			dados[k] = v.(string)
+		case bool:
+			if v.(bool) {
+				dados[k] = "true"
+				continue
+			}
+			dados[k] = "false"
+		default:
+			dados[k] = fmt.Sprintf("%v", t)
+		}
+	}
+	resp, err := b.getHttp().R().SetQueryParams(dados).SetHeaders(header).Get(link)
+	if err != nil {
+		return nil, err
+	}
+	resp.Time()
+	return &Response{
+		code: resp.StatusCode(),
+		raw:  resp.String(),
+	}, nil
+}
+
 func (r *Response) GetRaw() string {
 	return r.raw
 }

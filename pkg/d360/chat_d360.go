@@ -39,8 +39,10 @@ func (d *D360) Autenticate() (rest.IToken, error) {
 	token.SetKey(d.getRest().GetConfig("token"))
 	token.SetValidity(time.Now().Add(TOKEN_VALIDITY_MINUTES * time.Minute).Format("2006-01-02 15:04:05"))
 	if !token.IsValid() {
+		log.Println("Validade ruim:", token.GetValidity())
 		return nil, errors.New("token inválido")
 	}
+	log.Println("Validade passou:", token.GetValidity())
 	d.token = token
 	return d.token, nil
 }
@@ -54,6 +56,9 @@ func (d *D360) SendMessage(data map[string]interface{}) ([]rest.ISendMessageResp
 	requestData, err := utils.StructToMapInterface(message)
 	if err != nil {
 		return nil, err
+	}
+	if requestData["template"] != nil {
+		delete(requestData, "template")
 	}
 	resp, err := d.post(d.getRest().GetConfig("linkAPI")+"/messages", requestData)
 	if err != nil {
@@ -153,7 +158,7 @@ func (d *D360) get(url string, data map[string]interface{}) (*rest.Response, err
 	}
 	log.Println("data para o GET: ", data)
 
-	resp, err := d.getRest().GetWithHeader(data, url, map[string]string{
+	resp, err := d.getRest().GetWithHeaderNoAuth(data, url, map[string]string{
 		"D360-API-KEY": d.token.GetKey(),
 	})
 	if err != nil {

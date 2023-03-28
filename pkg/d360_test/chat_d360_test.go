@@ -68,6 +68,7 @@ func TestChatD360_GetTemplateInteractiveResponse(t *testing.T) {
 	chatD360, err := factory.NewChatD360("d360.prod")
 	require.NoError(t, err)
 	got, err := chatD360.GetTemplateInteractive()
+	t.Log("got", got)
 	require.NoError(t, err)
 	require.NotEmpty(t, got)
 }

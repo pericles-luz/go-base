@@ -33,7 +33,7 @@ func (t *Token) IsValid() bool {
 	if len(t.key) == 0 {
 		return false
 	}
-	isValid := time.Now().Before(t.validity.Local().Add(3 * time.Hour))
+	isValid := time.Now().Before(t.validity.Add(3 * time.Hour))
 	return isValid
 }
 
