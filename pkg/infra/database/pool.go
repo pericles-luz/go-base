@@ -35,3 +35,10 @@ func (p *Pool) RemoveConnection(name string) error {
 	delete(p.connections, name)
 	return nil
 }
+
+func (p *Pool) IsConnected(name string) bool {
+	if _, ok := p.connections[name]; ok {
+		return p.connections[name].IsConnected()
+	}
+	return false
+}
