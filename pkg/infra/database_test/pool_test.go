@@ -15,18 +15,15 @@ func TestPoolAddConnectionsCorrectly(t *testing.T) {
 	require.True(t, db.IsConnected())
 	require.NoError(t, pool.AddConnection(db.GetName(), db))
 	require.NoError(t, pool.AddConnection("test2", db))
-	conn, err := pool.GetConnection(db.GetName())
-	require.NoError(t, err)
+	conn := pool.GetConnection(db.GetName())
 	require.Equal(t, db, conn)
-	conn, err = pool.GetConnection("test2")
-	require.NoError(t, err)
+	conn = pool.GetConnection("test2")
 	require.Equal(t, db, conn)
 }
 
 func TestPoolGetConnectionMustFailIfThereIsNoConnection(t *testing.T) {
 	pool := database.NewPool()
-	_, err := pool.GetConnection("test")
-	require.Error(t, err)
+	require.Nil(t, pool.GetConnection("test"))
 }
 
 func TestPoolDeleteConnectionMustFailIfThereIsNoConnection(t *testing.T) {
@@ -42,6 +39,5 @@ func TestPoolGetConnectionMustFailAfterDeleteConnection(t *testing.T) {
 	defer db.Close()
 	require.NoError(t, pool.AddConnection(db.GetName(), db))
 	require.NoError(t, pool.RemoveConnection(db.GetName()))
-	_, err = pool.GetConnection(db.GetName())
-	require.Error(t, err)
+	require.Nil(t, pool.GetConnection(db.GetName()))
 }

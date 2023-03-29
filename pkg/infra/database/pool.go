@@ -12,11 +12,11 @@ func NewPool() *Pool {
 	}
 }
 
-func (p *Pool) GetConnection(name string) (*Database, error) {
+func (p *Pool) GetConnection(name string) *Database {
 	if conn, ok := p.connections[name]; ok {
-		return conn, nil
+		return conn
 	}
-	return nil, errors.New("connection not found")
+	return nil
 }
 
 func (p *Pool) AddConnection(name string, conn *Database) error {
