@@ -266,6 +266,31 @@ Verifica se o banco de dados é SQLite
 
 O pacote `\database` é responsável por gerenciar a conexão com o banco de dados, além de disponibilizar funções para facilitar a manipulação de dados
 
+```go
+func (p *Pool) AddConnection(name string, db *sql.DB) error
+```
+
+Adiciona uma nova conexão ao pool
+
+```go
+func (p *Pool) GetConnection(name string) (*sql.DB, error)
+```
+
+Retorna uma conexão do pool
+
+```go
+func (p *Pool) CloseConnection(name string) error
+```
+
+Fecha uma conexão do pool
+
+```go
+func (p *Pool) IsConnected(name string) bool
+```
+
+Verifica se uma conexão está ativa
+
+
 #### Mensagens
 
 O pacote `\messaging` é responsável por gerenciar as mensagens a serem enviadas ao usuário ou cliente
