@@ -181,3 +181,20 @@ func NewChatD360(rest *rest.Rest) *D360 {
 		parser: NewD360Parser(nil),
 	}
 }
+
+func NewChatD360TemplateTextMessage(data map[string]interface{}) map[string]interface{} {
+
+	return map[string]interface{}{
+		"DE_Telefone": data["DE_Telefone"],
+		"template": map[string]interface{}{
+			"DE_Namespace": data["DE_Namespace"],
+			"DE_Nome":      data["DE_Nome"],
+			"componentes": []map[string]interface{}{
+				{
+					"DE_Tipo":    "body",
+					"parametros": data["parametros"],
+				},
+			},
+		},
+	}
+}
