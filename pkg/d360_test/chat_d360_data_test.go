@@ -292,6 +292,56 @@ func dataChatD360InteractiveMessageMap() map[string]interface{} {
 	}
 }
 
+func dataChatD360TextTemplateMessageMap() map[string]interface{} {
+	return map[string]interface{}{
+		"DE_Telefone": "31986058910",
+		"template": map[string]interface{}{
+			"DE_Namespace": "39751bde_f26f_42f3_b928_aa4267759d7f",
+			"DE_Nome":      "token_logon",
+			"componentes": []map[string]interface{}{
+				{
+					"DE_Tipo": "body",
+					"parametros": []map[string]interface{}{
+						{
+							"DE_Tipo":  "text",
+							"DE_Texto": "897645",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func dataChatD360TextTemplateMessageOlaMap() map[string]interface{} {
+	return map[string]interface{}{
+		"DE_Telefone": "31986058910",
+		"template": map[string]interface{}{
+			"DE_Namespace": "39751bde_f26f_42f3_b928_aa4267759d7f",
+			"DE_Nome":      "primeiro_contato",
+			"componentes": []map[string]interface{}{
+				{
+					"DE_Tipo": "body",
+					"parametros": []map[string]interface{}{
+						{
+							"DE_Tipo":  "text",
+							"DE_Texto": "Péricles",
+						},
+						{
+							"DE_Tipo":  "text",
+							"DE_Texto": "bom dia",
+						},
+						{
+							"DE_Tipo":  "text",
+							"DE_Texto": "João",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
 func dataChatD360InteractiveTemplateWithImageMap() map[string]interface{} {
 	return map[string]interface{}{
 		"DE_Telefone": "31986058910",

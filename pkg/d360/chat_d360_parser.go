@@ -109,6 +109,24 @@ func (d *D360_Parser) SendTemplateMessage() (*D360_MessageTemplateRequest, error
 				component.Parameters = append(component.Parameters, parameter)
 			}
 		}
+		if component.Type == "body" {
+			parameters := v["parametros"].([]map[string]interface{})
+			for _, p := range parameters {
+				parameter := D360_TemplateParameter{}
+				parameter.Type = p["DE_Tipo"].(string)
+				if parameter.Type == "image" {
+					image := p["imagem"].(map[string]interface{})
+					parameter.Image.Link = image["LN_Imagem"].(string)
+					if image["DE_Texto"] != nil {
+						parameter.Image.Text = image["DE_Texto"].(string)
+					}
+				}
+				if parameter.Type == "text" {
+					parameter.Text = p["DE_Texto"].(string)
+				}
+				component.Parameters = append(component.Parameters, parameter)
+			}
+		}
 		result.Template.Components = append(result.Template.Components, component)
 	}
 	return result, nil

@@ -84,3 +84,27 @@ func TestChatD360_SendTemplateMessage(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, got)
 }
+
+func TestChatD360_SendTextTemplateMessageToken(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Não testar no github")
+	}
+	// só funciona em produção
+	chatD360, err := factory.NewChatD360("d360.prod")
+	require.NoError(t, err)
+	got, err := chatD360.SendMessageTemplate(dataChatD360TextTemplateMessageMap())
+	require.NoError(t, err)
+	require.NotEmpty(t, got)
+}
+
+func TestChatD360_SendTextTemplateMessageOla(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Não testar no github")
+	}
+	// só funciona em produção
+	chatD360, err := factory.NewChatD360("d360.prod")
+	require.NoError(t, err)
+	got, err := chatD360.SendMessageTemplate(dataChatD360TextTemplateMessageOlaMap())
+	require.NoError(t, err)
+	require.NotEmpty(t, got)
+}

@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	MISSING_RESPONSE_DATA = "Faltam dados para o envio da mensagem: "
+	MISSING_RESPONSE_DATA = "faltam dados para o envio da mensagem: "
 )
 
 func (d *D360_Parser) validadeMessageInteractiveRequest() error {
@@ -57,6 +57,20 @@ func (d *D360_Parser) validadeMessageTemplateRequest() error {
 					image := param["imagem"].(map[string]interface{})
 					if image["LN_Imagem"] == nil || !utils.ValidateURL(image["LN_Imagem"].(string)) {
 						return errors.New(MISSING_RESPONSE_DATA + "Imagem do cabeçalho")
+					}
+				}
+				if param["DE_Tipo"] != nil && param["DE_Tipo"].(string) == "text" {
+					if param["DE_Texto"] == nil || len(param["DE_Texto"].(string)) == 0 {
+						return errors.New(MISSING_RESPONSE_DATA + "texto do parâmento")
+					}
+				}
+			}
+		}
+		if component["DE_Tipo"].(string) == "body" {
+			for _, param := range component["parametros"].([]map[string]interface{}) {
+				if param["DE_Tipo"] != nil && param["DE_Tipo"].(string) == "text" {
+					if param["DE_Texto"] == nil || len(param["DE_Texto"].(string)) == 0 {
+						return errors.New(MISSING_RESPONSE_DATA + "texto do parâmento")
 					}
 				}
 			}
