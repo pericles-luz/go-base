@@ -313,11 +313,40 @@ func dataChatD360TextTemplateMessageMap() map[string]interface{} {
 	}
 }
 
+func dataChatD360TextTemplateMessageLinkMap() map[string]interface{} {
+	return map[string]interface{}{
+		"DE_Telefone": "31986058910",
+		"template": map[string]interface{}{
+			"DE_Namespace": "07c4fdf0_e75d_4ff2_b19d_7fabc1524bbc",
+			"DE_Nome":      "certificado_assunatura",
+			"componentes": []map[string]interface{}{
+				{
+					"DE_Tipo": "body",
+					"parametros": []map[string]interface{}{
+						{
+							"DE_Tipo":  "text",
+							"DE_Texto": "https://api.oopss.com.br/venda/1e4184c4-ca43-4752-a466-73afd7560255/certificado",
+						},
+						{
+							"DE_Tipo":  "text",
+							"DE_Texto": "897645",
+						},
+						{
+							"DE_Tipo":  "text",
+							"DE_Texto": "https://oopss.com.br/assinatura?vendaid=1e4184c4-ca43-4752-a466-73afd7560255",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
 func dataChatD360TextTemplateMessageOlaMap() map[string]interface{} {
 	return map[string]interface{}{
 		"DE_Telefone": "31986058910",
 		"template": map[string]interface{}{
-			"DE_Namespace": "39751bde_f26f_42f3_b928_aa4267759d7f",
+			"DE_Namespace": "07c4fdf0_e75d_4ff2_b19d_7fabc1524bbc",
 			"DE_Nome":      "primeiro_contato",
 			"componentes": []map[string]interface{}{
 				{
@@ -366,6 +395,45 @@ func dataChatD360InteractiveTemplateWithImageMap() map[string]interface{} {
 }
 
 func dataChatD360InteractiveMessageWithImageMap() map[string]interface{} {
+	return map[string]interface{}{
+		"DE_Telefone": "31986058910",
+		"interactive": map[string]interface{}{
+			"DE_Tipo": "button",
+			"cabecalho": map[string]interface{}{
+				"DE_Tipo": "image",
+				"imagem": map[string]interface{}{
+					"LN_Imagem": "https://connectpeoplebrasil.com.br/assets/images/SaporeMode.png",
+				},
+			},
+			"corpo": map[string]interface{}{
+				"DE_Texto": "Condição exclusiva para você",
+			},
+			"rodape": map[string]interface{}{
+				"DE_Texto": "Deseja prosseguir?",
+			},
+			"acao": map[string]interface{}{
+				"botoes": []map[string]interface{}{
+					{
+						"DE_Tipo": "reply",
+						"resposta": map[string]interface{}{
+							"ID_Botao":  "12345-s",
+							"DE_Titulo": "Sim",
+						},
+					},
+					{
+						"DE_Tipo": "reply",
+						"resposta": map[string]interface{}{
+							"ID_Botao":  "12345-n",
+							"DE_Titulo": "Não",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func dataChatD360InteractiveMessageWithPDFMap() map[string]interface{} {
 	return map[string]interface{}{
 		"DE_Telefone": "31986058910",
 		"interactive": map[string]interface{}{
