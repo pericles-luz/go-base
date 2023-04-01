@@ -103,3 +103,12 @@ func TestInterfaceToIntMustConvertIntToInt(t *testing.T) {
 	// Then
 	require.Equal(t, 123, result)
 }
+
+func TestWhatsappNumberToBrazilianPhonenumber(t *testing.T) {
+	// Given
+	number := "553186058910"
+	// When
+	result := utils.WhatsappNumberToBrazilianPhonenumber(number)
+	// Then
+	require.Equal(t, "31986058910", result)
+}

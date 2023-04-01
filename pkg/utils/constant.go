@@ -12,5 +12,7 @@ const (
 	PHONENUMBER_MAX_LENGTH = 9
 	PHONENUMBER_MIN_LENGTH = 8
 
+	WHATSAPP_PHONENUMBER_LENGTH = 12
+
 	VALID_EMAIL_REGEX = "^[a-zA-Z0-9.!#$%&'*+\\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
 )

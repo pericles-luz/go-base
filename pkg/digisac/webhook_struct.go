@@ -6,6 +6,7 @@ const (
 	MESSAGE_TYPE_TICKET   = "ticket"
 	MESSAGE_TYPE_CHAT     = "chat"
 	MESSAGE_ORIGIN_TICKET = "ticket"
+	EVENT_NEW_MESSAGE     = "message.created"
 )
 
 type WebHookMessage struct {
@@ -47,4 +48,22 @@ type WebhookData struct {
 	Files              map[string]interface{} `json:"files,omitempty"`
 	QuotedMessage      string                 `json:"quotedMessage,omitempty"`
 	IsFromBot          bool                   `json:"isFromBot,omitempty"`
+}
+
+func (w *WebHookMessage) IsNewMessage() bool {
+	return w.Event == EVENT_NEW_MESSAGE
+}
+
+func (w *WebHookMessage) IsFromContact() bool {
+	if w.Data.Type != MESSAGE_TYPE_CHAT {
+		return false
+	}
+	if w.Data.IsFromMe || w.Data.IsFromBot {
+		return false
+	}
+	return true
+}
+
+func (w *WebHookMessage) ContactID() string {
+	return w.Data.ContactID
 }

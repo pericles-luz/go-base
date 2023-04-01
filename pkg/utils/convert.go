@@ -89,3 +89,12 @@ func StringToInt(in string) int {
 func ByteToStruct(raw []byte, result interface{}) error {
 	return json.Unmarshal(raw, result)
 }
+
+func WhatsappNumberToBrazilianPhonenumber(in string) string {
+	if len(in) != WHATSAPP_PHONENUMBER_LENGTH {
+		return ""
+	}
+	ddd := in[2:4]
+	phone := in[4:]
+	return ddd + "9" + phone
+}

@@ -1,6 +1,10 @@
 package digisac
 
-import "time"
+import (
+	"time"
+
+	"github.com/pericles-luz/go-base/pkg/utils"
+)
 
 type Contact struct {
 	Unsubscribed         bool        `json:"unsubscribed,omitempty"`
@@ -42,4 +46,15 @@ type ContactData struct {
 	IsOriginal         bool      `json:"isOriginal,omitempty"`
 	BotIsRunning       bool      `json:"botIsRunning,omitempty"`
 	LastChargedMessage time.Time `json:"lastChargedMessage,omitempty"`
+}
+
+func (c *Contact) Phonenumber() string {
+	if c.Data.Number != "" {
+		return utils.WhatsappNumberToBrazilianPhonenumber(c.Data.Number)
+	}
+	return ""
+}
+
+func (c *Contact) ContactID() string {
+	return c.ID
 }
