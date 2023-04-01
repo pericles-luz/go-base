@@ -85,3 +85,7 @@ func StringToInt(in string) int {
 	json.Unmarshal([]byte(in), &result)
 	return result
 }
+
+func ByteToStruct(raw []byte, result interface{}) error {
+	return json.Unmarshal(raw, result)
+}
