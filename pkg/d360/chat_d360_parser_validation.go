@@ -135,6 +135,12 @@ func (d *D360_Parser) validateHeader() error {
 		}
 		return nil
 	}
+	if header["DE_Tipo"].(string) == "document" {
+		if err := d.validateDocument(header); err != nil {
+			return err
+		}
+		return nil
+	}
 	return errors.New("tipo de cabeçalho não identificado")
 }
 
@@ -157,6 +163,26 @@ func (d *D360_Parser) validateImage(header map[string]interface{}) error {
 	}
 	if image["DE_Texto"] != nil && image["DE_Texto"].(string) != "" && len(image["DE_Texto"].(string)) > 1024 {
 		return errors.New("o texto do cabeçalho não pode ter mais de 1024 caracteres")
+	}
+	return nil
+}
+
+func (d *D360_Parser) validateDocument(header map[string]interface{}) error {
+	if header["documento"] == nil {
+		return errors.New(MISSING_RESPONSE_DATA + "Documento")
+	}
+	document := header["documento"].(map[string]interface{})
+	if document["LN_Documento"] == nil {
+		return errors.New(MISSING_RESPONSE_DATA + "Link do documento")
+	}
+	if document["LN_Documento"].(string) == "" {
+		return errors.New(MISSING_RESPONSE_DATA + "Link do documento")
+	}
+	if document["LN_Documento"].(string) != "" && !utils.ValidateURL(document["LN_Documento"].(string)) {
+		return errors.New("link do documento inválido")
+	}
+	if document["DE_Documento"] != nil && document["DE_Documento"].(string) != "" && len(document["DE_Documento"].(string)) > 250 {
+		return errors.New("o nome do arquivo não pode ter mais de 250 caracteres")
 	}
 	return nil
 }

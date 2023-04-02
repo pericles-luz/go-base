@@ -56,6 +56,14 @@ func (d *D360_Parser) SendInteractiveMessageResquest() (*D360_MessageInteractive
 				result.Interactive.Header.Image.Text = image["DE_Texto"].(string)
 			}
 		}
+		if result.Interactive.Header.Type == "document" {
+			document := d.getData()["interactive"].(map[string]interface{})["cabecalho"].(map[string]interface{})["documento"].(map[string]interface{})
+			result.Interactive.Header.Document.Link = document["LN_Documento"].(string)
+			// nome do arquivo é opcional
+			if document["DE_Documento"] != nil {
+				result.Interactive.Header.Document.Filename = document["DE_Documento"].(string)
+			}
+		}
 	}
 	// corpo é obrigatório
 	result.Interactive.Body.Text = d.getData()["interactive"].(map[string]interface{})["corpo"].(map[string]interface{})["DE_Texto"].(string)

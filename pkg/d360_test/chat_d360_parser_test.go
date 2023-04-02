@@ -92,6 +92,31 @@ func TestChatD360_SendInteractiveMessageWithImageResquestMustFailIfHasCaption(t 
 	require.NotNil(t, err)
 }
 
+func TestChatD360_SendInteractiveMessageWithDocumentResquest(t *testing.T) {
+	data := dataChatD360InteractiveMessageWithPDFMap()
+	parser := d360.NewD360Parser(data)
+	message, err := parser.SendInteractiveMessageResquest()
+	require.NoError(t, err)
+	require.Equal(t, d360.FormatPhonenumber(data["DE_Telefone"].(string)), message.To)
+	interactive := data["interactive"].(map[string]interface{})
+	require.Equal(t, interactive["corpo"].(map[string]interface{})["DE_Texto"].(string), message.Interactive.Body.Text)
+	require.Equal(t, interactive["rodape"].(map[string]interface{})["DE_Texto"].(string), message.Interactive.Footer.Text)
+	cabecalho := interactive["cabecalho"].(map[string]interface{})
+	require.Equal(t, cabecalho["DE_Tipo"].(string), message.Interactive.Header.Type)
+	document := cabecalho["documento"].(map[string]interface{})
+	if document["DE_Texto"] != nil {
+		require.Equal(t, document["DE_Documento"].(string), message.Interactive.Header.Document.Filename)
+	}
+	require.Equal(t, document["LN_Documento"].(string), message.Interactive.Header.Document.Link)
+	acao := interactive["acao"].(map[string]interface{})
+	botoes := acao["botoes"].([]map[string]interface{})
+	for i, botao := range botoes {
+		require.Equal(t, botao["DE_Tipo"].(string), message.Interactive.Action.Buttons[i].Type)
+		require.Equal(t, botao["resposta"].(map[string]interface{})["DE_Titulo"].(string), message.Interactive.Action.Buttons[i].Reply.Title)
+		require.Equal(t, botao["resposta"].(map[string]interface{})["ID_Botao"].(string), message.Interactive.Action.Buttons[i].Reply.ID)
+	}
+}
+
 func TestChatD360_FormatPhonenumber(t *testing.T) {
 	formated := d360.FormatPhonenumber("31978675897")
 	require.Equal(t, "553178675897", formated)

@@ -439,16 +439,17 @@ func dataChatD360InteractiveMessageWithPDFMap() map[string]interface{} {
 		"interactive": map[string]interface{}{
 			"DE_Tipo": "button",
 			"cabecalho": map[string]interface{}{
-				"DE_Tipo": "image",
-				"imagem": map[string]interface{}{
-					"LN_Imagem": "https://connectpeoplebrasil.com.br/assets/images/SaporeMode.png",
+				"DE_Tipo": "document",
+				"documento": map[string]interface{}{
+					"LN_Documento": "https://api.sindireceita.org.br/documentos/00000000191/1/9b0d340d",
+					"DE_Documento": "documento.pdf",
 				},
 			},
 			"corpo": map[string]interface{}{
-				"DE_Texto": "Condição exclusiva para você",
+				"DE_Texto": "Este é um documento de teste",
 			},
 			"rodape": map[string]interface{}{
-				"DE_Texto": "Deseja prosseguir?",
+				"DE_Texto": "Confirma o recebimento?",
 			},
 			"acao": map[string]interface{}{
 				"botoes": []map[string]interface{}{

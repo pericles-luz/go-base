@@ -60,6 +60,17 @@ func TestChatD360_SendMessageInteractiveWithImage(t *testing.T) {
 	require.NotEmpty(t, sent)
 }
 
+func TestChatD360_SendMessageInteractiveWithPDF(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Não testar no github")
+	}
+	chatD360, err := factory.NewChatD360("d360.sindireceita")
+	require.NoError(t, err)
+	sent, err := chatD360.SendMessageInteractive(dataChatD360InteractiveMessageWithPDFMap())
+	require.NoError(t, err)
+	require.NotEmpty(t, sent)
+}
+
 func TestChatD360_GetTemplateInteractiveResponse(t *testing.T) {
 	if os.Getenv("GITHUB") == "yes" {
 		t.Skip("Não testar no github")
