@@ -67,3 +67,7 @@ func (w *WebHookMessage) IsFromContact() bool {
 func (w *WebHookMessage) ContactID() string {
 	return w.Data.ContactID
 }
+
+func (w *WebHookMessage) Text() string {
+	return w.Data.Text
+}

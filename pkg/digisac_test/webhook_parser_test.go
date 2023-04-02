@@ -11,6 +11,8 @@ import (
 func TestDigisac_UnMarshalMessageReceivingToWebhookMessage(t *testing.T) {
 	var webhookMessage digisac.WebHookMessage
 	require.NoError(t, json.Unmarshal([]byte(dataWebhookMessageCreatedReceiving()), &webhookMessage))
+	require.True(t, webhookMessage.IsFromContact())
+	require.Equal(t, "irpf", webhookMessage.Text())
 	t.Log(webhookMessage)
 }
 
