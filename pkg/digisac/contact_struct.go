@@ -49,9 +49,13 @@ type ContactData struct {
 }
 
 func (c *Contact) Phonenumber() string {
-	if c.Data.Number != "" {
-		return utils.WhatsappNumberToBrazilianPhonenumber(c.Data.Number)
+	if c.Data.Number == "" {
+		return ""
 	}
+	if len(c.Data.Number) == utils.FULL_PHONENUMBER_LENGTH {
+		return c.Data.Number
+	}
+	return utils.WhatsappNumberToBrazilianPhonenumber(c.Data.Number)
 	return ""
 }
 
