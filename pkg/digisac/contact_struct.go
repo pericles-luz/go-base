@@ -53,10 +53,9 @@ func (c *Contact) Phonenumber() string {
 		return ""
 	}
 	if len(c.Data.Number) == utils.FULL_PHONENUMBER_LENGTH {
-		return c.Data.Number
+		return c.Data.Number[2:]
 	}
 	return utils.WhatsappNumberToBrazilianPhonenumber(c.Data.Number)
-	return ""
 }
 
 func (c *Contact) ContactID() string {
