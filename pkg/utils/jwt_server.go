@@ -28,6 +28,7 @@ func NewJwtServer(secret string) *JwtServer {
 	}
 }
 
+// Validate a token
 func (j *JwtServer) Valid(token string) bool {
 	_, err := j.Parse(token)
 	if err != nil {
@@ -36,6 +37,7 @@ func (j *JwtServer) Valid(token string) bool {
 	return err == nil
 }
 
+// Create a token with a given payload.
 func (j *JwtServer) Create(payload map[string]interface{}) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims(payload))
 	sub, ok := payload["sub"].(string)
@@ -45,6 +47,8 @@ func (j *JwtServer) Create(payload map[string]interface{}) (string, error) {
 	return token.SignedString([]byte(Hash256(sub + j.Secret)))
 }
 
+// Extract the payload from a token.
+// If the token is invalid, return an error.
 func (j *JwtServer) Parse(token string) (map[string]interface{}, error) {
 	if len(token) == 0 {
 		return nil, errors.New("token is empty")
@@ -70,6 +74,7 @@ func (j *JwtServer) Parse(token string) (map[string]interface{}, error) {
 	return claims, nil
 }
 
+// Extract a value from a token.
 func ExtractValue(key string, jwt string) (interface{}, error) {
 	// separate jwt payload
 	payload := strings.Split(jwt, ".")[1]

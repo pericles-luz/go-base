@@ -6,6 +6,7 @@ import (
 	"log"
 )
 
+// Convert a map[string]interface{} to a byte sequence
 func MapInterfaceToBytes(data map[string]interface{}) []byte {
 	if data == nil {
 		return nil
@@ -14,12 +15,14 @@ func MapInterfaceToBytes(data map[string]interface{}) []byte {
 	return bytes
 }
 
+// Convert a byte sequence to a map[string]string
 func ByteToMapInterface(bytes []byte) map[string]interface{} {
 	var data map[string]interface{}
 	json.Unmarshal(bytes, &data)
 	return data
 }
 
+// Convert a map[string]string to a map[string]interface{}
 func MapStringToMapInterface(data map[string]string) map[string]interface{} {
 	if data == nil {
 		return nil
@@ -31,6 +34,8 @@ func MapStringToMapInterface(data map[string]string) map[string]interface{} {
 	return result
 }
 
+// Convert a struct to a map[string]interface{}
+// If some error occurs, return nil and the error
 func StructToMapInterface(data interface{}) (map[string]interface{}, error) {
 	inter, err := json.Marshal(data)
 	if err != nil {
@@ -44,6 +49,7 @@ func StructToMapInterface(data interface{}) (map[string]interface{}, error) {
 	return result, nil
 }
 
+// Convert an interface to an int
 func InterfaceToInt(incomming interface{}) int {
 	if incomming == nil {
 		return 0
@@ -81,20 +87,25 @@ func InterfaceToInt(incomming interface{}) int {
 	return 0
 }
 
+// Convert a string to an int
 func StringToInt(in string) int {
 	var result int
 	json.Unmarshal([]byte(in), &result)
 	return result
 }
 
+// Convert an int to a string
 func IntToString(in int) string {
 	return fmt.Sprintf("%d", in)
 }
 
+// Convert a byte sequence to a struct
+// If some error occurs, return the error
 func ByteToStruct(raw []byte, result interface{}) error {
 	return json.Unmarshal(raw, result)
 }
 
+// Convert a whatsapp number to a brazilian cellphonenumber
 func WhatsappNumberToBrazilianPhonenumber(in string) string {
 	if len(in) != WHATSAPP_PHONENUMBER_LENGTH {
 		return ""

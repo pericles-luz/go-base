@@ -10,6 +10,9 @@ import (
 	"strings"
 )
 
+// Identify the root directory of the project. The default is the current one.
+// If there is a running test, the root directory is the first one that contains
+// the directory "config" or the first one inside the directory "go".
 func GetBaseDirectory(directory string) string {
 	directory = strings.ReplaceAll(directory, "..", "")
 	path, err := os.Getwd()
@@ -41,6 +44,7 @@ func getBaseDirectoryOnTesting() string {
 	return base
 }
 
+// Verify if a file or directory exists
 func FileExists(path string) bool {
 	if path == "" {
 		return false
@@ -51,6 +55,7 @@ func FileExists(path string) bool {
 	return true
 }
 
+// Calculate the MD5 hash of a file
 func MD5(filePath string) (string, error) {
 	file, err := os.Open(filePath)
 	if err != nil {
