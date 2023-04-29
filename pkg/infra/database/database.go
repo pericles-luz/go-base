@@ -13,6 +13,12 @@ import (
 	"github.com/pericles-luz/go-base/pkg/conf"
 )
 
+const (
+	ENGINE_SQLITE   = "sqlite3"
+	ENGINE_MYSQL    = "mysql"
+	ENGINE_POSTGRES = "postgres"
+)
+
 type IDatabase interface {
 	connect(*conf.Database) error
 	Exec(sql string, data ...interface{}) error
@@ -29,6 +35,7 @@ type IDatabase interface {
 	GetResult() (sql.Result, error)
 	GetDatabase() *sql.DB
 	GetName() string
+	SetEngine(engine string)
 }
 
 type Database struct {
@@ -51,6 +58,10 @@ func NewDatabase(cfg *conf.Database) (*Database, error) {
 		cfg.Name = cfg.DBName
 	}
 	database.name = cfg.Name
+	database.SetEngine(ENGINE_MYSQL)
+	if cfg.Engine != "" {
+		database.SetEngine(cfg.Engine)
+	}
 	return &database, nil
 }
 
@@ -377,16 +388,20 @@ func (db *Database) Update(tableName string, data map[string]interface{}) error 
 	return nil
 }
 
+func (db *Database) SetEngine(engine string) {
+	db.engine = engine
+}
+
 func (db *Database) IsMySQL() bool {
-	return db.engine == "mysql"
+	return db.engine == ENGINE_MYSQL
 }
 
 func (db *Database) IsPostgres() bool {
-	return db.engine == "postgres"
+	return db.engine == ENGINE_POSTGRES
 }
 
 func (db *Database) IsSQLite() bool {
-	return db.engine == "sqlite"
+	return db.engine == ENGINE_SQLITE
 }
 
 func (db *Database) GetName() string {
