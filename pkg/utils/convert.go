@@ -2,6 +2,7 @@ package utils
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 )
 
@@ -84,6 +85,10 @@ func StringToInt(in string) int {
 	var result int
 	json.Unmarshal([]byte(in), &result)
 	return result
+}
+
+func IntToString(in int) string {
+	return fmt.Sprintf("%d", in)
 }
 
 func ByteToStruct(raw []byte, result interface{}) error {

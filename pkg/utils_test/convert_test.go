@@ -112,3 +112,12 @@ func TestWhatsappNumberToBrazilianPhonenumber(t *testing.T) {
 	// Then
 	require.Equal(t, "31986058910", result)
 }
+
+func TestIntToString(t *testing.T) {
+	// Given
+	value := 123
+	// When
+	result := utils.IntToString(value)
+	// Then
+	require.Equal(t, "123", result)
+}
