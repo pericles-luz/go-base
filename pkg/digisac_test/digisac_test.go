@@ -18,5 +18,4 @@ func TestDigisac_MustGetContactByIDFromAPI(t *testing.T) {
 	require.NoError(t, err)
 	require.NotNil(t, contact)
 	require.Equal(t, "553186058910", contact.Data.Number)
-	t.Log(contact)
 }

@@ -16,5 +16,4 @@ func TestParser_GetContactMustParseData(t *testing.T) {
 	require.Equal(t, "553186058910", contact.Data.Number)
 	require.Equal(t, "31986058910", contact.Phonenumber())
 	require.True(t, utils.ValidateUUID(contact.ContactID()))
-	t.Log(contact)
 }

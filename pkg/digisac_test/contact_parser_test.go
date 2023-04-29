@@ -15,7 +15,6 @@ func TestDigisac_UnMarshalContactToContact(t *testing.T) {
 	require.Equal(t, "553186058910", contact.Data.Number)
 	require.Equal(t, "31986058910", contact.Phonenumber())
 	require.True(t, utils.ValidateUUID(contact.ContactID()))
-	t.Log(contact)
 }
 
 func TestDigisac_UnMarshalContactToContactNineBaseDigits(t *testing.T) {
@@ -24,5 +23,4 @@ func TestDigisac_UnMarshalContactToContactNineBaseDigits(t *testing.T) {
 	require.Equal(t, "5521983027896", contact.Data.Number)
 	require.Equal(t, "5521983027896", contact.Phonenumber())
 	require.True(t, utils.ValidateUUID(contact.ContactID()))
-	t.Log(contact)
 }
