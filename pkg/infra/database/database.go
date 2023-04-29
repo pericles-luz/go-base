@@ -370,8 +370,12 @@ func (db *Database) Insert(tableName string, data map[string]interface{}) error 
 }
 
 func (db *Database) Update(tableName string, data map[string]interface{}) error {
-	if data[tableName+"UD"] == nil {
-		return errors.New("no UD provided for update")
+	keyName := tableName + "UD"
+	if data[keyName] == nil && data[tableName+"ID"] != nil {
+		keyName = tableName + "ID"
+	}
+	if data[keyName] == nil {
+		return errors.New("no id provided for update")
 	}
 	var keys []string
 	var values []interface{}
@@ -379,7 +383,7 @@ func (db *Database) Update(tableName string, data map[string]interface{}) error 
 		keys = append(keys, key)
 		values = append(values, value)
 	}
-	sql := fmt.Sprintf("UPDATE %s SET %s WHERE %sUD=?", tableName, strings.Join(keys, "=?,")+"=?", tableName)
+	sql := fmt.Sprintf("UPDATE %s SET %s WHERE %s=?", tableName, strings.Join(keys, "=?,")+"=?", keyName)
 	values = append(values, data[tableName+"UD"])
 	err := db.Exec(sql, values...)
 	if err != nil {
