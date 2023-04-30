@@ -1,13 +1,18 @@
 package utils
 
 import (
+	"bytes"
 	"crypto/md5"
+	"encoding/base64"
 	"encoding/hex"
+	"errors"
 	"io"
 	"log"
 	"os"
 	"path/filepath"
 	"strings"
+
+	"github.com/google/uuid"
 )
 
 // Identify the root directory of the project. The default is the current one.
@@ -68,4 +73,100 @@ func MD5(filePath string) (string, error) {
 		return "", err
 	}
 	return hex.EncodeToString(hash.Sum(nil)), nil
+}
+
+// Extract the file from a base64 string in a slice of bytes
+// The base64 string must be in the format "data:{mimeType};base64,...."
+// The file is saved in a temporary directory and the path is returned
+// The file name is a UUID to avoid conflicts
+func ExtractFileFromBase64(r io.Reader) (*os.File, error) {
+	base64Data, err := io.ReadAll(r)
+	if err != nil {
+		return nil, err
+	}
+	start, err := FileStartFromBase64(bytes.NewReader(base64Data))
+	if err != nil {
+		return nil, err
+	}
+	mimeType, err := MimeTypeFromBase64(bytes.NewReader(base64Data))
+	if err != nil {
+		return nil, err
+	}
+	fileName := uuid.NewString() + "." + strings.Split(mimeType, "/")[1]
+	file, err := os.CreateTemp("", fileName)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+	preReader := bytes.NewReader(base64Data)
+	discard := make([]byte, start)
+	count, err := preReader.Read(discard)
+	if err != nil {
+		return nil, err
+	}
+	if count != start {
+		return nil, errors.New("invalid base64")
+	}
+	reader := base64.NewDecoder(base64.StdEncoding, preReader)
+	if _, err := io.Copy(file, reader); err != nil {
+		return nil, err
+	}
+	return file, nil
+}
+
+func MimeTypeFromBase64(r io.Reader) (string, error) {
+	buffer := make([]byte, 512)
+	_, err := r.Read(buffer)
+	if err != nil {
+		return "", err
+	}
+	idx, err := FileStartFromBase64(bytes.NewReader(buffer))
+	if err != nil {
+		return "", err
+	}
+	if idx < 5 {
+		return "", errors.New("invalid base64")
+	}
+	if bytes.Index(buffer, []byte("data:")) != 0 {
+		return "", errors.New("invalid base64 start")
+	}
+	mimeType := string(buffer[5 : idx-8])
+	return mimeType, err
+}
+
+func FileStartFromBase64(r io.Reader) (int, error) {
+	buffer := make([]byte, 512)
+	_, err := r.Read(buffer)
+	if err != nil {
+		return 0, err
+	}
+	idx := bytes.Index(buffer, []byte(";base64,"))
+	if idx == -1 {
+		return 0, errors.New("invalid base64")
+	}
+	return idx + 8, nil
+}
+
+func ReadFile(path string) ([]byte, error) {
+	file, err := os.Open(path)
+	if err != nil {
+		return nil, errors.New("file not found")
+	}
+	defer file.Close()
+	return io.ReadAll(file)
+}
+
+func FileCopy(src, dst string) error {
+	srcFile, err := os.Open(src)
+	if err != nil {
+		return err
+	}
+	defer srcFile.Close()
+	dstFile, err := os.Create(dst)
+	if err != nil {
+		return err
+	}
+	defer dstFile.Close()
+	_, err = io.Copy(dstFile, srcFile)
+	return err
 }
