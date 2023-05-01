@@ -3,11 +3,13 @@ package utils
 import (
 	"bytes"
 	"crypto/md5"
+	"crypto/sha256"
 	"encoding/base64"
 	"encoding/hex"
 	"errors"
 	"io"
 	"log"
+	"net/http"
 	"os"
 	"path/filepath"
 	"strings"
@@ -69,6 +71,20 @@ func MD5(filePath string) (string, error) {
 	defer file.Close()
 
 	hash := md5.New()
+	if _, err := io.Copy(hash, file); err != nil {
+		return "", err
+	}
+	return hex.EncodeToString(hash.Sum(nil)), nil
+}
+
+// Calculate the SHA256 hash of a file
+func SHA256(filePath string) (string, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return "", err
+	}
+	defer file.Close()
+	hash := sha256.New()
 	if _, err := io.Copy(hash, file); err != nil {
 		return "", err
 	}
@@ -169,4 +185,35 @@ func FileCopy(src, dst string) error {
 	defer dstFile.Close()
 	_, err = io.Copy(dstFile, srcFile)
 	return err
+}
+
+func FileMimeType(path string) string {
+	file, err := os.Open(path)
+	if err != nil {
+		return ""
+	}
+	defer file.Close()
+	buffer := make([]byte, 512)
+	_, err = file.Read(buffer)
+	if err != nil {
+		return ""
+	}
+	return http.DetectContentType(buffer)
+}
+
+func FileExtension(path string) string {
+	return filepath.Ext(path)
+}
+
+func FileSize(path string) int64 {
+	file, err := os.Open(path)
+	if err != nil {
+		return 0
+	}
+	defer file.Close()
+	stat, err := file.Stat()
+	if err != nil {
+		return 0
+	}
+	return stat.Size()
 }
