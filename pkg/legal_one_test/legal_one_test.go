@@ -28,6 +28,17 @@ func TestLegalOneGetContactByCPF(t *testing.T) {
 	require.Equal(t, "911.348.466-49", contact.Value[0].IdentificationNumber)
 }
 
+func TestLegalOneGetLawsuits(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Não testar no github")
+	}
+	legalOne, err := factory.NewLegalOne("legalone.prod")
+	require.NoError(t, err)
+	lawsuits, err := legalOne.GetLawsuits()
+	require.NoError(t, err)
+	require.NotEmpty(t, lawsuits.Value)
+}
+
 func TestLegalOneIndividualRequstrate(t *testing.T) {
 	if os.Getenv("GITHUB") == "yes" {
 		t.Skip("Não testar no github")

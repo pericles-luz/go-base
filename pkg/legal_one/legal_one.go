@@ -89,6 +89,14 @@ func (l *LegalOne) IndividualDelete(id int) error {
 	return nil
 }
 
+func (l *LegalOne) GetLawsuits() (*LawsuitResponse, error) {
+	resp, err := l.get(l.getRest().GetConfig("LN_API")+"/lawsuits", nil)
+	if err != nil {
+		return nil, err
+	}
+	return l.getParser().GetLawsuitResponse(resp.GetRaw())
+}
+
 func (l *LegalOne) getParser() *Parser {
 	return l.parser
 }

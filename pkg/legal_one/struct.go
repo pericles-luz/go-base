@@ -78,3 +78,23 @@ type ErrorDetail struct {
 	Target  string `json:"target,omitempty"`
 	Message string `json:"message,omitempty"`
 }
+
+type Lawsuit struct {
+	OriginOfficeID    int    `json:"originOfficeId,omitempty"`
+	ID                int    `json:"id,omitempty"`
+	Folder            string `json:"folder,omitempty"`
+	Title             string `json:"title,omitempty"`
+	Type              string `json:"type,omitempty"`
+	IdentifierNumber  string `json:"identifierNumber,omitempty"`
+	OldNumber         string `json:"oldNumber,omitempty"`
+	OtherNumberTypeID int    `json:"otherNumberTypeId,omitempty"`
+	OtherNumber       string `json:"otherNumber,omitempty"`
+	StatusID          int    `json:"statusId,omitempty"`
+	DistributionDate  string `json:"distributionDate,omitempty"`
+	Notes             string `json:"notes,omitempty"`
+	CreationDate      string `json:"creationDate,omitempty"`
+}
+
+type LawsuitResponse struct {
+	Value []Lawsuit `json:"value,omitempty"`
+}
