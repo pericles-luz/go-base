@@ -11,7 +11,7 @@ func TestMapInterfaceToByteMustRunCorretly(t *testing.T) {
 	// Given
 	data := map[string]interface{}{
 		"cpf":       utils.TEST_CPF,
-		"meioEnvio": utils.SEND_MEDIA_SMS,
+		"sentMedia": utils.SEND_MEDIA_SMS,
 	}
 	// When
 	bytes := utils.MapInterfaceToBytes(data)
@@ -32,7 +32,7 @@ func TestByteToMapInterfaceMustRunCorretly(t *testing.T) {
 	// Given
 	data := map[string]interface{}{
 		"cpf":       utils.TEST_CPF,
-		"meioEnvio": utils.SEND_MEDIA_SMS,
+		"sentMedia": utils.SEND_MEDIA_SMS,
 	}
 	bytes := utils.MapInterfaceToBytes(data)
 	// When

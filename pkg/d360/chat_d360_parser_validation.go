@@ -84,7 +84,7 @@ func (d *D360_Parser) validateSendMessageResquest() error {
 		return errors.New(MISSING_RESPONSE_DATA + "Telefone")
 	}
 	if d.getData()["TX_Mensagem"] == nil || d.getData()["TX_Mensagem"].(string) == "" {
-		return errors.New(MISSING_RESPONSE_DATA + "Mensagem")
+		return errors.New(MISSING_RESPONSE_DATA + "message")
 	}
 	return nil
 }
