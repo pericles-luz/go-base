@@ -64,3 +64,15 @@ func TestLegalOneIndividualDelete(t *testing.T) {
 	require.NoError(t, err)
 	require.NoError(t, legalOne.IndividualDelete(25087))
 }
+
+func TestLegalOneGetLawsuitParticipationByContactID(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Não testar no github")
+	}
+	legalOne, err := factory.NewLegalOne("legalone.prod")
+	require.NoError(t, err)
+	participations, err := legalOne.GetLawsuitParticipationByContactID(1, 2888)
+	require.NoError(t, err)
+	require.NotEmpty(t, participations.Value)
+	t.Log(participations)
+}

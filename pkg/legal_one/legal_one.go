@@ -97,6 +97,14 @@ func (l *LegalOne) GetLawsuits() (*LawsuitResponse, error) {
 	return l.getParser().GetLawsuitResponse(resp.GetRaw())
 }
 
+func (l *LegalOne) GetLawsuitParticipationByContactID(lawsuitID int, contactID int) (*LawsuitResponse, error) {
+	resp, err := l.get(l.getRest().GetConfig("LN_API")+"/lawsuits/"+utils.IntToString(lawsuitID)+"/participants/?$filter=id eq "+utils.IntToString(contactID), nil)
+	if err != nil {
+		return nil, err
+	}
+	return l.getParser().GetLawsuitResponse(resp.GetRaw())
+}
+
 func (l *LegalOne) getParser() *Parser {
 	return l.parser
 }
