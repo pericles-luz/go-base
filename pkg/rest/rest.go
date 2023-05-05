@@ -226,6 +226,22 @@ func (b *Rest) GetWithHeaderNoAuth(payload map[string]interface{}, link string, 
 	}, nil
 }
 
+func (b *Rest) Delete(link string) (*Response, error) {
+	token, err := b.getToken()
+	if err != nil {
+		return nil, err
+	}
+	resp, err := b.getHttp().R().SetAuthToken(token.GetKey()).Delete(link)
+	if err != nil {
+		return nil, err
+	}
+	fmt.Println("tempo de resposta", resp.Time())
+	return &Response{
+		code: resp.StatusCode(),
+		raw:  resp.String(),
+	}, nil
+}
+
 func (r *Response) GetRaw() string {
 	return r.raw
 }

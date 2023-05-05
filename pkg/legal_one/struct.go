@@ -41,3 +41,40 @@ type query struct {
 	IsActive    bool `json:"isActive,omitempty"`
 	QueryString any  `json:"queryString,omitempty"`
 }
+
+type Individual struct {
+	BirthDate                       any    `json:"birthDate,omitempty"`
+	Gender                          any    `json:"gender,omitempty"`
+	Nacionality                     any    `json:"nacionality,omitempty"`
+	NitPisPasep                     any    `json:"nitPisPasep,omitempty"`
+	PersonStateIdentificationNumber any    `json:"personStateIdentificationNumber,omitempty"`
+	VoterID                         any    `json:"voterId,omitempty"`
+	VoterGeoraphicZone              any    `json:"voterGeoraphicZone,omitempty"`
+	VoterSection                    any    `json:"voterSection,omitempty"`
+	WorkerNumber                    any    `json:"workerNumber,omitempty"`
+	WorkerSeries                    any    `json:"workerSeries,omitempty"`
+	ID                              int    `json:"id,omitempty"`
+	Name                            string `json:"name,omitempty"`
+	CreationDate                    string `json:"creationDate,omitempty"`
+	IdentificationNumber            string `json:"identificationNumber,omitempty"`
+	Reason                          any    `json:"reason,omitempty"`
+	ExternalCode                    any    `json:"externalCode,omitempty"`
+	Notes                           any    `json:"notes,omitempty"`
+	RexMonitoring                   bool   `json:"rexMonitoring,omitempty"`
+	CountryID                       int    `json:"countryId,omitempty"`
+}
+
+type ResponseError struct {
+	Error struct {
+		Code    string        `json:"code,omitempty"`
+		Message string        `json:"message,omitempty"`
+		Target  string        `json:"target,omitempty"`
+		Details []ErrorDetail `json:"details,omitempty"`
+	} `json:"error,omitempty"`
+}
+
+type ErrorDetail struct {
+	Code    string `json:"code,omitempty"`
+	Target  string `json:"target,omitempty"`
+	Message string `json:"message,omitempty"`
+}

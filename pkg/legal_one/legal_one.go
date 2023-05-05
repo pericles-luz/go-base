@@ -2,7 +2,10 @@ package legal_one
 
 import (
 	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"log"
+	"net/http"
 	"time"
 
 	"github.com/pericles-luz/go-base/pkg/rest"
@@ -54,6 +57,38 @@ func (l *LegalOne) GetContactByCPF(cpf string) (*ContactResponse, error) {
 	return l.getParser().GetContactResponse(resp.GetRaw())
 }
 
+func (l *LegalOne) IndividualRegistrate(data map[string]interface{}) (*Individual, error) {
+	l.getParser().setData(data)
+	individual, err := l.getParser().IndividualRegistrateRequest()
+	if err != nil {
+		return nil, err
+	}
+	send, err := utils.StructToMapInterface(individual)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := l.post(l.getRest().GetConfig("LN_API")+"/individuals", send)
+	if err != nil {
+		return nil, err
+	}
+	response, err := l.getParser().IndividualRegistrateResponse(resp.GetRaw())
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+func (l *LegalOne) IndividualDelete(id int) error {
+	resp, err := l.delete(l.getRest().GetConfig("LN_API") + "/individuals/" + utils.IntToString(id))
+	if err != nil {
+		return err
+	}
+	if resp.GetCode() != http.StatusNoContent {
+		return errors.New("error deleting individual")
+	}
+	return nil
+}
+
 func (l *LegalOne) getParser() *Parser {
 	return l.parser
 }
@@ -74,8 +109,64 @@ func (l *LegalOne) get(url string, data map[string]interface{}) (*rest.Response,
 		return nil, err
 	}
 	log.Println("resposta do GET: ", resp)
+	response, err := l.getParser().ResponseError(resp.GetRaw())
+	if err != nil {
+		return nil, err
+	}
+	if response != "" {
+		return nil, errors.New(response)
+	}
 	return resp, nil
 }
+
+func (l *LegalOne) post(url string, data map[string]interface{}) (*rest.Response, error) {
+	if err := l.Autenticate(); err != nil {
+		return nil, err
+	}
+	dataJson, err := json.Marshal(data)
+	if err != nil {
+		return nil, err
+	}
+	l.getRest().SetToken(l.token)
+	log.Println("dataJson para o POST: ", string(dataJson))
+	resp, err := l.getRest().Post(data, url)
+	if err != nil {
+		return nil, err
+	}
+	log.Println("resposta do POST: ", resp)
+	response, err := l.getParser().ResponseError(resp.GetRaw())
+	if err != nil {
+		return nil, err
+	}
+	if response != "" {
+		return nil, errors.New(response)
+	}
+	return resp, nil
+}
+
+func (l *LegalOne) delete(url string) (*rest.Response, error) {
+	if err := l.Autenticate(); err != nil {
+		return nil, err
+	}
+	l.getRest().SetToken(l.token)
+	resp, err := l.getRest().Delete(url)
+	if err != nil {
+		return nil, err
+	}
+	if resp.GetCode() == http.StatusNoContent {
+		return resp, nil
+	}
+	log.Println("resposta do DELETE: ", resp)
+	response, err := l.getParser().ResponseError(resp.GetRaw())
+	if err != nil {
+		return nil, err
+	}
+	if response != "" {
+		return nil, errors.New(response)
+	}
+	return resp, nil
+}
+
 func NewLegalOne(rest *rest.Rest) *LegalOne {
 	return &LegalOne{
 		rest:   rest,
