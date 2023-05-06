@@ -294,3 +294,5 @@ Verifica se uma conexão está ativa
 #### Mensagens
 
 O pacote `\messaging` é responsável por gerenciar as mensagens a serem enviadas ao usuário ou cliente
+
+#### Legal One
