@@ -105,6 +105,38 @@ func (l *LegalOne) GetLawsuitParticipationByContactID(lawsuitID int, contactID i
 	return l.getParser().GetLawsuitResponse(resp.GetRaw())
 }
 
+func (l *LegalOne) ParticipationRegistrate(data map[string]interface{}) (*LitigationParticipant, error) {
+	l.getParser().setData(data)
+	participation, err := l.getParser().ParticipationRegistrateRequest()
+	if err != nil {
+		return nil, err
+	}
+	send, err := utils.StructToMapInterface(participation)
+	if err != nil {
+		return nil, err
+	}
+	resp, err := l.post(l.getRest().GetConfig("LN_API")+"/lawsuits/"+utils.IntToString(l.parser.getData()["ID_Acao"].(int))+"/participants", send)
+	if err != nil {
+		return nil, err
+	}
+	response, err := l.getParser().ParticipationRegistrateResponse(resp.GetRaw())
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+func (l *LegalOne) ParticipationDelete(lawsuitID int, participationID int) error {
+	resp, err := l.delete(l.getRest().GetConfig("LN_API") + "/lawsuits/" + utils.IntToString(lawsuitID) + "/participants/" + utils.IntToString(participationID))
+	if err != nil {
+		return err
+	}
+	if resp.GetCode() != http.StatusNoContent {
+		return errors.New("error deleting participation")
+	}
+	return nil
+}
+
 func (l *LegalOne) getParser() *Parser {
 	return l.parser
 }

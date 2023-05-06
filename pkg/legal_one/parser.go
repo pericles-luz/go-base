@@ -47,8 +47,29 @@ func (p *Parser) IndividualRegistrateRequest() (*Individual, error) {
 	return individual, nil
 }
 
+func (p *Parser) ParticipationRegistrateRequest() (*LitigationParticipant, error) {
+	if err := p.validateParticipationRegistrateRequest(); err != nil {
+		return nil, errors.New("invalid participation")
+	}
+	participation := &LitigationParticipant{}
+	participation.Type = p.data["DE_Tipo"].(string)
+	participation.ContactID = p.data["ID_Contato"].(int)
+	participation.PositionID = p.data["ID_Posicao"].(int)
+	participation.IsMainParticipant = p.data["SN_Principal"].(bool)
+	return participation, nil
+}
+
 func (p *Parser) IndividualRegistrateResponse(data string) (*Individual, error) {
 	response := &Individual{}
+	err := utils.ByteToStruct([]byte(data), response)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
+func (p *Parser) ParticipationRegistrateResponse(data string) (*LitigationParticipant, error) {
+	response := &LitigationParticipant{}
 	err := utils.ByteToStruct([]byte(data), response)
 	if err != nil {
 		return nil, err

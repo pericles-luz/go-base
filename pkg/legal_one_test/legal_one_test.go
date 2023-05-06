@@ -3,6 +3,7 @@ package legal_one_test
 import (
 	"os"
 	"testing"
+	"time"
 
 	"github.com/pericles-luz/go-base/internals/factory"
 	"github.com/stretchr/testify/require"
@@ -23,9 +24,10 @@ func TestLegalOneGetContactByCPF(t *testing.T) {
 	}
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
-	contact, err := legalOne.GetContactByCPF("91134846649")
+	contact, err := legalOne.GetContactByCPF("000.000.001-91")
 	require.NoError(t, err)
-	require.Equal(t, "911.348.466-49", contact.Value[0].IdentificationNumber)
+	require.Equal(t, "000.000.001-91", contact.Value[0].IdentificationNumber)
+	t.Log(contact)
 }
 
 func TestLegalOneGetLawsuits(t *testing.T) {
@@ -39,14 +41,14 @@ func TestLegalOneGetLawsuits(t *testing.T) {
 	require.NotEmpty(t, lawsuits.Value)
 }
 
-func TestLegalOneIndividualRequstrate(t *testing.T) {
+func TestLegalOneIndividualRegistrate(t *testing.T) {
 	if os.Getenv("GITHUB") == "yes" {
 		t.Skip("Não testar no github")
 	}
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	data := map[string]interface{}{
-		"DE_Pessoa": "Pericles Luz",
+		"DE_Pessoa": "Joaquim de Teste",
 		"CO_CPF":    "00000000191",
 	}
 	individual, err := legalOne.IndividualRegistrate(data)
@@ -75,4 +77,31 @@ func TestLegalOneGetLawsuitParticipationByContactID(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, participations.Value)
 	t.Log(participations)
+}
+
+func TestLegalOneParticipationRegistrate(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Não testar no github")
+	}
+	legalOne, err := factory.NewLegalOne("legalone.prod")
+	require.NoError(t, err)
+	data := map[string]interface{}{
+		"ID_Contato": 25089,
+		"ID_Acao":    1,
+	}
+	participation, err := legalOne.ParticipationRegistrate(data)
+	t.Log(participation)
+	require.NoError(t, err)
+	require.NotEmpty(t, participation.ID)
+	time.Sleep(1 * time.Second)
+	require.NoError(t, legalOne.ParticipationDelete(1, participation.ID))
+}
+
+func TestLegalOneParticipationDelete(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Não testar no github")
+	}
+	legalOne, err := factory.NewLegalOne("legalone.prod")
+	require.NoError(t, err)
+	require.NoError(t, legalOne.ParticipationDelete(1, 349846))
 }

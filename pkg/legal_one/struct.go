@@ -98,3 +98,11 @@ type Lawsuit struct {
 type LawsuitResponse struct {
 	Value []Lawsuit `json:"value,omitempty"`
 }
+
+type LitigationParticipant struct {
+	Type              string `json:"type,omitempty"`
+	ID                int    `json:"id,omitempty"`
+	ContactID         int    `json:"contactId,omitempty"`
+	PositionID        int    `json:"positionId,omitempty"`
+	IsMainParticipant bool   `json:"isMainParticipant,omitempty"`
+}
