@@ -79,6 +79,30 @@ func TestLegalOneGetLawsuitParticipationByContactID(t *testing.T) {
 	t.Log(participations)
 }
 
+func TestLegalOneGetLawsuitByProcessNumber(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Não testar no github")
+	}
+	legalOne, err := factory.NewLegalOne("legalone.prod")
+	require.NoError(t, err)
+	lawsuits, err := legalOne.GetLawsuitByProcessNumber("1004915-65.2018.4.01.3400")
+	require.NoError(t, err)
+	require.NotEmpty(t, lawsuits.Value)
+	t.Log(lawsuits)
+}
+
+func TestLegalOneGetLawsuitByFolder(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Não testar no github")
+	}
+	legalOne, err := factory.NewLegalOne("legalone.prod")
+	require.NoError(t, err)
+	lawsuits, err := legalOne.GetLawsuitByFolder("Colet-0295")
+	require.NoError(t, err)
+	require.NotEmpty(t, lawsuits.Value)
+	t.Log(lawsuits)
+}
+
 func TestLegalOneParticipationRegistrate(t *testing.T) {
 	if os.Getenv("GITHUB") == "yes" {
 		t.Skip("Não testar no github")

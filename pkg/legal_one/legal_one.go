@@ -105,6 +105,22 @@ func (l *LegalOne) GetLawsuitParticipationByContactID(lawsuitID int, contactID i
 	return l.getParser().GetLawsuitResponse(resp.GetRaw())
 }
 
+func (l *LegalOne) GetLawsuitByProcessNumber(processNumber string) (*LawsuitResponse, error) {
+	resp, err := l.get(l.getRest().GetConfig("LN_API")+"/lawsuits/?$filter=identifierNumber eq '"+processNumber+"'", nil)
+	if err != nil {
+		return nil, err
+	}
+	return l.getParser().GetLawsuitResponse(resp.GetRaw())
+}
+
+func (l *LegalOne) GetLawsuitByFolder(folder string) (*LawsuitResponse, error) {
+	resp, err := l.get(l.getRest().GetConfig("LN_API")+"/lawsuits/?$filter=folder eq '"+folder+"'", nil)
+	if err != nil {
+		return nil, err
+	}
+	return l.getParser().GetLawsuitResponse(resp.GetRaw())
+}
+
 func (l *LegalOne) ParticipationRegistrate(data map[string]interface{}) (*LitigationParticipant, error) {
 	l.getParser().setData(data)
 	participation, err := l.getParser().ParticipationRegistrateRequest()
