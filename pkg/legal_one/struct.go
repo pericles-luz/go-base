@@ -106,3 +106,7 @@ type LitigationParticipant struct {
 	PositionID        int    `json:"positionId,omitempty"`
 	IsMainParticipant bool   `json:"isMainParticipant,omitempty"`
 }
+
+type LitigationParticipationResponse struct {
+	Value []LitigationParticipant `json:"value,omitempty"`
+}

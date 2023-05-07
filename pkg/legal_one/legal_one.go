@@ -97,12 +97,12 @@ func (l *LegalOne) GetLawsuits() (*LawsuitResponse, error) {
 	return l.getParser().GetLawsuitResponse(resp.GetRaw())
 }
 
-func (l *LegalOne) GetLawsuitParticipationByContactID(lawsuitID int, contactID int) (*LawsuitResponse, error) {
+func (l *LegalOne) GetLawsuitParticipationByContactID(lawsuitID int, contactID int) (*LitigationParticipationResponse, error) {
 	resp, err := l.get(l.getRest().GetConfig("LN_API")+"/lawsuits/"+utils.IntToString(lawsuitID)+"/participants/?$filter=contactId eq "+utils.IntToString(contactID), nil)
 	if err != nil {
 		return nil, err
 	}
-	return l.getParser().GetLawsuitResponse(resp.GetRaw())
+	return l.getParser().LitigationParticipationResponse(resp.GetRaw())
 }
 
 func (l *LegalOne) GetLawsuitByProcessNumber(processNumber string) (*LawsuitResponse, error) {

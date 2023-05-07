@@ -73,7 +73,7 @@ func TestLegalOneGetLawsuitParticipationByContactID(t *testing.T) {
 	}
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
-	participations, err := legalOne.GetLawsuitParticipationByContactID(1, 2888)
+	participations, err := legalOne.GetLawsuitParticipationByContactID(1, 3)
 	require.NoError(t, err)
 	require.NotEmpty(t, participations.Value)
 	t.Log(participations)
