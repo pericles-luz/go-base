@@ -37,7 +37,7 @@ func (d *D360) Autenticate() (rest.IToken, error) {
 	}
 	token := rest.NewToken()
 	token.SetKey(d.getRest().GetConfig("token"))
-	token.SetValidity(time.Now().Add(TOKEN_VALIDITY_MINUTES * time.Minute).Format("2006-01-02 15:04:05"))
+	token.SetValidity(time.Now().UTC().Add(TOKEN_VALIDITY_MINUTES * time.Minute).Format("2006-01-02 15:04:05"))
 	if !token.IsValid() {
 		log.Println("Validade ruim:", token.GetValidity())
 		return nil, errors.New("token inválido")
