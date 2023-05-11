@@ -121,11 +121,32 @@ func TestLegalOneParticipationRegistrate(t *testing.T) {
 	require.NoError(t, legalOne.ParticipationDelete(1, participation.ID))
 }
 
-func TestLegalOneParticipationDelete(t *testing.T) {
+func TestLegalOneGetAppealByFolder(t *testing.T) {
 	if os.Getenv("GITHUB") == "yes" {
 		t.Skip("Não testar no github")
 	}
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
-	require.NoError(t, legalOne.ParticipationDelete(1, 349846))
+	lawsuits, err := legalOne.GetAppealByFolder("Colet-0295/001")
+	require.NoError(t, err)
+	require.NotEmpty(t, lawsuits.Value)
+	t.Log(lawsuits)
+}
+
+func TestLegalOneAppealParticipationRegistrate(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Não testar no github")
+	}
+	legalOne, err := factory.NewLegalOne("legalone.prod")
+	require.NoError(t, err)
+	data := map[string]interface{}{
+		"ID_Contato": 25089,
+		"ID_Acao":    9184,
+	}
+	participation, err := legalOne.AppealParticipationRegistrate(data)
+	t.Log(participation)
+	require.NoError(t, err)
+	require.NotEmpty(t, participation.ID)
+	time.Sleep(1 * time.Second)
+	require.NoError(t, legalOne.AppealParticipationDelete(9184, participation.ID))
 }

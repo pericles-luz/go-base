@@ -37,6 +37,15 @@ func (p *Parser) GetLawsuitResponse(data string) (*LawsuitResponse, error) {
 	return response, nil
 }
 
+func (p *Parser) GetAppealResponse(data string) (*AppealResponse, error) {
+	response := &AppealResponse{}
+	err := utils.ByteToStruct([]byte(data), response)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 func (p *Parser) IndividualRegistrateRequest() (*Individual, error) {
 	if err := p.validateIndividualRegistrateRequest(); err != nil {
 		return nil, errors.New("invalid individual")

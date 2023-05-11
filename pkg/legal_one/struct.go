@@ -110,3 +110,24 @@ type LitigationParticipant struct {
 type LitigationParticipationResponse struct {
 	Value []LitigationParticipant `json:"value,omitempty"`
 }
+
+type Appeal struct {
+	RelatedLitigationType string `json:"relatedLitigationType,omitempty"`
+	RelatedLitigationID   int    `json:"relatedLitigationId,omitempty"`
+	ID                    int    `json:"id,omitempty"`
+	Folder                string `json:"folder,omitempty"`
+	Title                 string `json:"title,omitempty"`
+	Type                  string `json:"type,omitempty"`
+	IdentifierNumber      string `json:"identifierNumber,omitempty"`
+	OldNumber             any    `json:"oldNumber,omitempty"`
+	OtherNumberTypeID     any    `json:"otherNumberTypeId,omitempty"`
+	OtherNumber           any    `json:"otherNumber,omitempty"`
+	StatusID              int    `json:"statusId,omitempty"`
+	DistributionDate      string `json:"distributionDate,omitempty"`
+	CreationDate          string `json:"creationDate,omitempty"`
+	TerminationDate       any    `json:"terminationDate,omitempty"`
+}
+
+type AppealResponse struct {
+	Value []Appeal `json:"value,omitempty"`
+}
