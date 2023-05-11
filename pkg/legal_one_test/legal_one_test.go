@@ -42,9 +42,7 @@ func TestLegalOneGetLawsuits(t *testing.T) {
 }
 
 func TestLegalOneIndividualRegistrate(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("use apenas se necessário")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	data := map[string]interface{}{
@@ -59,9 +57,7 @@ func TestLegalOneIndividualRegistrate(t *testing.T) {
 }
 
 func TestLegalOneIndividualDelete(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("use apenas se necessário")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	require.NoError(t, legalOne.IndividualDelete(25087))
