@@ -75,6 +75,18 @@ func TestLegalOneGetLawsuitParticipationByContactID(t *testing.T) {
 	t.Log(participations)
 }
 
+func TestLegalOneGetAppealParticipationByContactID(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Não testar no github")
+	}
+	legalOne, err := factory.NewLegalOne("legalone.prod")
+	require.NoError(t, err)
+	participations, err := legalOne.GetAppealParticipationByContactID(9184, 3)
+	require.NoError(t, err)
+	require.NotEmpty(t, participations.Value)
+	t.Log(participations)
+}
+
 func TestLegalOneGetLawsuitByProcessNumber(t *testing.T) {
 	if os.Getenv("GITHUB") == "yes" {
 		t.Skip("Não testar no github")

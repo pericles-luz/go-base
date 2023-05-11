@@ -129,6 +129,14 @@ func (l *LegalOne) GetAppealByFolder(folder string) (*AppealResponse, error) {
 	return l.getParser().GetAppealResponse(resp.GetRaw())
 }
 
+func (l *LegalOne) GetAppealParticipationByContactID(appealID int, contactID int) (*LitigationParticipationResponse, error) {
+	resp, err := l.get(l.getRest().GetConfig("LN_API")+"/appeals/"+utils.IntToString(appealID)+"/participants/?$filter=contactId eq "+utils.IntToString(contactID), nil)
+	if err != nil {
+		return nil, err
+	}
+	return l.getParser().LitigationParticipationResponse(resp.GetRaw())
+}
+
 func (l *LegalOne) ParticipationRegistrate(data map[string]interface{}) (*LitigationParticipant, error) {
 	l.getParser().setData(data)
 	participation, err := l.getParser().ParticipationRegistrateRequest()
