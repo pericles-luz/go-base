@@ -111,6 +111,18 @@ func TestLegalOneGetLawsuitByFolder(t *testing.T) {
 	t.Log(lawsuits)
 }
 
+func TestLegalLitigationsByContactID(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Não testar no github")
+	}
+	legalOne, err := factory.NewLegalOne("legalone.prod")
+	require.NoError(t, err)
+	litigations, err := legalOne.GetLitigationByContactID(3175)
+	require.NoError(t, err)
+	require.NotEmpty(t, litigations.Value)
+	t.Log(litigations)
+}
+
 func TestLegalOneParticipationRegistrate(t *testing.T) {
 	if os.Getenv("GITHUB") == "yes" {
 		t.Skip("Não testar no github")

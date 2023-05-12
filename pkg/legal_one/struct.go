@@ -119,15 +119,36 @@ type Appeal struct {
 	Title                 string `json:"title,omitempty"`
 	Type                  string `json:"type,omitempty"`
 	IdentifierNumber      string `json:"identifierNumber,omitempty"`
-	OldNumber             any    `json:"oldNumber,omitempty"`
-	OtherNumberTypeID     any    `json:"otherNumberTypeId,omitempty"`
-	OtherNumber           any    `json:"otherNumber,omitempty"`
+	OldNumber             string `json:"oldNumber,omitempty"`
+	OtherNumberTypeID     int    `json:"otherNumberTypeId,omitempty"`
+	OtherNumber           string `json:"otherNumber,omitempty"`
 	StatusID              int    `json:"statusId,omitempty"`
 	DistributionDate      string `json:"distributionDate,omitempty"`
 	CreationDate          string `json:"creationDate,omitempty"`
-	TerminationDate       any    `json:"terminationDate,omitempty"`
+	TerminationDate       string `json:"terminationDate,omitempty"`
 }
 
 type AppealResponse struct {
 	Value []Appeal `json:"value,omitempty"`
+}
+
+type Litigation struct {
+	ID                int    `json:"id,omitempty"`
+	LitigationType    string `json:"litigationType,omitempty"`
+	Folder            string `json:"folder,omitempty"`
+	Title             string `json:"title,omitempty"`
+	Type              string `json:"type,omitempty"`
+	IdentifierNumber  string `json:"identifierNumber,omitempty"`
+	OldNumber         string `json:"oldNumber,omitempty"`
+	OtherNumberTypeID int    `json:"otherNumberTypeId,omitempty"`
+	OtherNumber       string `json:"otherNumber,omitempty"`
+	StatusID          int    `json:"statusId,omitempty"`
+	DistributionDate  string `json:"distributionDate,omitempty"`
+	TerminationDate   string `json:"terminationDate,omitempty"`
+	Notes             string `json:"notes,omitempty"`
+	CreationDate      string `json:"creationDate,omitempty"`
+}
+
+type LitigationResponse struct {
+	Value []Litigation `json:"value,omitempty"`
 }
