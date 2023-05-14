@@ -138,7 +138,7 @@ func (l *LegalOne) GetAppealParticipationByContactID(appealID int, contactID int
 }
 
 func (l *LegalOne) GetLitigationByContactID(contactID int) (*LitigationResponse, error) {
-	resp, err := l.get(l.getRest().GetConfig("LN_API")+"/litigations?$filter=participants/any(p:p/contactId eq ("+utils.IntToString(contactID)+"))", nil)
+	resp, err := l.get(l.getRest().GetConfig("LN_API")+"/litigations?$filter=participants/any(p:p/contactId eq ("+utils.IntToString(contactID)+") and p/positionId eq (24))", nil)
 	if err != nil {
 		return nil, err
 	}
