@@ -384,7 +384,7 @@ func (db *Database) Update(tableName string, data map[string]interface{}) error 
 		values = append(values, value)
 	}
 	sql := fmt.Sprintf("UPDATE %s SET %s WHERE %s=?", tableName, strings.Join(keys, "=?,")+"=?", keyName)
-	values = append(values, data[tableName+"UD"])
+	values = append(values, data[keyName])
 	err := db.Exec(sql, values...)
 	if err != nil {
 		return err
