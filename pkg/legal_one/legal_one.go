@@ -209,6 +209,14 @@ func (l *LegalOne) AppealParticipationDelete(appealID int, participationID int) 
 	return nil
 }
 
+func (l *LegalOne) GetLitigationUpdateByID(lawsuitID int, count int) (*LitigationUpdateResponse, error) {
+	resp, err := l.get(l.getRest().GetConfig("LN_API")+"/Updates?$filter=relationships/any(r:r/linkId eq ("+utils.IntToString(lawsuitID)+"))&$orderBy=id desc&$top="+utils.IntToString(count), nil)
+	if err != nil {
+		return nil, err
+	}
+	return l.getParser().LitigationUpdateResponse(resp.GetRaw())
+}
+
 func (l *LegalOne) getParser() *Parser {
 	return l.parser
 }

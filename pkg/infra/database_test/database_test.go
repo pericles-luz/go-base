@@ -29,9 +29,7 @@ func TestDatabase(t *testing.T) {
 }
 
 func TestAgnuDatabase(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Skip when running on github")
-	}
+
 	db, err := databaseAgnuConnection(t)
 	require.NoError(t, err)
 	defer db.Close()

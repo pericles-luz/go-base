@@ -104,6 +104,15 @@ func (p *Parser) LitigationParticipationResponse(data string) (*LitigationPartic
 	return response, nil
 }
 
+func (p *Parser) LitigationUpdateResponse(data string) (*LitigationUpdateResponse, error) {
+	response := &LitigationUpdateResponse{}
+	err := utils.ByteToStruct([]byte(data), response)
+	if err != nil {
+		return nil, err
+	}
+	return response, nil
+}
+
 func (p *Parser) ResponseError(data string) (string, error) {
 	response := &ResponseError{}
 	err := utils.ByteToStruct([]byte(data), response)

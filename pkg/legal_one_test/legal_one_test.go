@@ -170,3 +170,15 @@ func TestLegalOneAppealParticipationRegistrate(t *testing.T) {
 	time.Sleep(1 * time.Second)
 	require.NoError(t, legalOne.AppealParticipationDelete(9184, participation.ID))
 }
+
+func TestLegalOneGetLitigationUpdateByID(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Não testar no github")
+	}
+	legalOne, err := factory.NewLegalOne("legalone.prod")
+	require.NoError(t, err)
+	litigation, err := legalOne.GetLitigationUpdateByID(1, 1)
+	require.NoError(t, err)
+	require.NotEmpty(t, litigation.Value)
+	t.Log(litigation)
+}

@@ -152,3 +152,21 @@ type Litigation struct {
 type LitigationResponse struct {
 	Value []Litigation `json:"value,omitempty"`
 }
+
+type LitigationUpdate struct {
+	ID               int    `json:"id"`
+	TypeID           int    `json:"typeId"`
+	OriginType       string `json:"originType"`
+	IsSubType        bool   `json:"isSubType"`
+	ActExecutorID    any    `json:"actExecutorId"`
+	ContactCreatorID any    `json:"contactCreatorId"`
+	Description      string `json:"description"`
+	Notes            any    `json:"notes"`
+	IsConfidential   bool   `json:"isConfidential"`
+	Date             string `json:"date"`
+	CreationDate     string `json:"creationDate"`
+}
+
+type LitigationUpdateResponse struct {
+	Value []LitigationUpdate `json:"value,omitempty"`
+}

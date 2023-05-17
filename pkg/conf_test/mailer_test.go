@@ -1,7 +1,6 @@
 package conf_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/pericles-luz/go-base/pkg/conf"
@@ -9,9 +8,7 @@ import (
 )
 
 func TestMailer(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Skip when running on github")
-	}
+
 	mailer := conf.NewMailer()
 	require.NoError(t, mailer.Load("mailer.test"))
 	require.Equal(t, "smtp.test.email", mailer.GetConfig()["host"])

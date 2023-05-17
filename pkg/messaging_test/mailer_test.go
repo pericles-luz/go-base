@@ -1,7 +1,6 @@
 package messaging_test
 
 import (
-	"os"
 	"testing"
 
 	"github.com/pericles-luz/go-base/pkg/conf"
@@ -10,9 +9,7 @@ import (
 )
 
 func TestMailer_Send(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Skip when running on github")
-	}
+
 	mailer := messaging.NewMailer()
 	mailer.SetTo("pericles.luz@gmail.com")
 	mailer.SetSubject("Teste via golang")
