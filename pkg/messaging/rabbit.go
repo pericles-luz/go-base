@@ -68,6 +68,16 @@ func NewRabbit(file string) *Rabbit {
 func NewRabbitPublisher(file string, pool *database.Pool) *migration.MessageService {
 	messageService := factory.NewMessageService(pool)
 	rabbit := NewRabbit(file)
+	count := 5
+	for count > 0 && !rabbit.IsConnected() {
+		log.Println("RabbitMQ: trying to connect...")
+		time.Sleep(1 * time.Second)
+		count--
+	}
+	if !rabbit.IsConnected() {
+		log.Println("RabbitMQ: not connected")
+		return messageService
+	}
 	go rabbit.PublishFromCache(messageService)
 	return messageService
 }
