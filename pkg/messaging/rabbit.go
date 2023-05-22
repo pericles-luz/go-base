@@ -9,8 +9,10 @@ import (
 	"log"
 	"time"
 
+	"github.com/pericles-luz/go-base/internals/factory"
 	"github.com/pericles-luz/go-base/internals/migration"
 	"github.com/pericles-luz/go-base/pkg/conf"
+	"github.com/pericles-luz/go-base/pkg/infra/database"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
@@ -47,6 +49,27 @@ func NewRabbit(file string) *Rabbit {
 	}
 	go rabbit.handleReconnect()
 	return &rabbit
+}
+
+// NewRabbitPublisher is a function that creates a new RabbitMQ publisher
+// and publishes all messages from the database.
+// It is used to publish messages that were not published due to a RabbitMQ
+// connection failure.
+// The messages are published in the same order they were created.
+// The table used to store the messages is:
+// create table if not exists RabbitCache(RabbitCacheID string primary key, DE_Exchange string, DE_RoutingKey string, JS_Data text, SN_Durable integer, TS_Operacao string)
+// The table is created in memory and is not persisted.
+// To send a message, you have to call the function Send of the message service that uses the same database connection.
+// the function needs the following parameters:
+// - exchange: the exchange name
+// - routingKey: the routing key
+// - data: the message data
+// - durable: if the message is durable
+func NewRabbitPublisher(file string, pool *database.Pool) *migration.MessageService {
+	messageService := factory.NewMessageService(pool)
+	rabbit := NewRabbit(file)
+	go rabbit.PublishFromCache(messageService)
+	return messageService
 }
 
 func (r *Rabbit) Publish(exchange, routingKey string, body []byte) error {
