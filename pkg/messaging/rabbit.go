@@ -221,6 +221,10 @@ func (r *Rabbit) IsConnected() bool {
 
 func (r *Rabbit) PublishFromCache(messageService *migration.MessageService) error {
 	for {
+		if !r.IsConnected() {
+			time.Sleep(500 * time.Millisecond)
+			continue
+		}
 		message, err := messageService.GetNext()
 		if err != nil && err != sql.ErrNoRows {
 			return err
