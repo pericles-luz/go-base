@@ -31,6 +31,9 @@ func (r *Redis) Get(key string) (string, error) {
 	if err != nil {
 		return "", err
 	}
+	if err.Error() == "redis: nil" {
+		return "", nil
+	}
 	return val, nil
 }
 
