@@ -28,11 +28,11 @@ func NewRedis(file string) *Redis {
 
 func (r *Redis) Get(key string) (string, error) {
 	val, err := r.client.Get(key).Result()
-	if err != nil {
-		return "", err
-	}
 	if err.Error() == "redis: nil" {
 		return "", nil
+	}
+	if err != nil {
+		return "", err
 	}
 	return val, nil
 }
