@@ -13,23 +13,8 @@ import (
 
 type Rest struct {
 	http   *resty.Client
-	token  IToken
+	token  *Token
 	config map[string]interface{}
-}
-
-type IRest interface {
-	Post(payload map[string]interface{}, link string) (*Response, error)
-	PostWithContext(payload map[string]interface{}, link string, ctx context.Context) (*Response, error)
-	Get(payload map[string]interface{}, link string) (*Response, error)
-	PostWithHeader(payload map[string]interface{}, link string, header map[string]string) (*Response, error)
-	GetWithHeader(payload map[string]interface{}, link string, header map[string]string) (*Response, error)
-	SetToken(token IToken) error
-	SetConfig(key string, value string)
-	GetConfig(key string) string
-	GetConfigData() map[string]string
-	getHttp() (*resty.Client, error)
-	getToken() (IToken, error)
-	// generateToken() (IToken, error)
 }
 
 type Response struct {
@@ -37,16 +22,11 @@ type Response struct {
 	raw  string
 }
 
-type IResponse interface {
-	GetRaw() string
-	GetCode() int
-}
-
 func (b *Rest) getHttp() *resty.Client {
 	return b.http
 }
 
-func (b *Rest) getToken() (IToken, error) {
+func (b *Rest) getToken() (*Token, error) {
 	if b.token == nil {
 		return nil, errors.New("sem token de autenticação")
 	}
@@ -57,7 +37,7 @@ func (b *Rest) getToken() (IToken, error) {
 	return b.token, nil
 }
 
-func (b *Rest) SetToken(token IToken) error {
+func (b *Rest) SetToken(token *Token) error {
 	if !token.IsValid() {
 		return errors.New("token já está inválido")
 	}
@@ -250,7 +230,7 @@ func (r *Response) GetCode() int {
 	return r.code
 }
 
-// func (b *Rest) generateToken(jwt string, validity int) (IToken, error) {
+// func (b *Rest) generateToken(jwt string, validity int) (*Token, error) {
 // 	token := NewToken()
 // 	token.SetKey(jwt)
 // 	token.SetValidity(time.Now().Local().Add(time.Minute * time.Duration(validity)).Format("2006-01-02 15:04:05"))

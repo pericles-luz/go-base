@@ -25,5 +25,6 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.16
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/rabbitmq/amqp091-go v1.8.1
+	github.com/secsy/goftp v0.0.0-20200609142545-aa2de14babf4
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

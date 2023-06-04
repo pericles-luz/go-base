@@ -28,7 +28,7 @@ func (d *D360) getRest() *rest.Rest {
 	return d.rest
 }
 
-func (d *D360) Autenticate() (rest.IToken, error) {
+func (d *D360) Autenticate() (*rest.Token, error) {
 	if d.token != nil && d.token.IsValid() {
 		return d.token, nil
 	}

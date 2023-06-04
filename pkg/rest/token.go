@@ -9,14 +9,6 @@ type Token struct {
 	key      string
 }
 
-type IToken interface {
-	SetValidity(validity string) error
-	GetValidity() string
-	IsValid() bool
-	GetKey() string
-	SetKey(key string)
-}
-
 func (t *Token) SetValidity(validity string) error {
 	dtValidity, err := time.Parse("2006-01-02 15:04:05", validity)
 	if nil == err {
