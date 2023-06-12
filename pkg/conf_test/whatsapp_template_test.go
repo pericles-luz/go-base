@@ -10,7 +10,7 @@ import (
 
 func TestNewWhatsappTemplate(t *testing.T) {
 	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
+		t.Skip("Skip when running on github")
 	}
 	cfg := conf.NewWhatsappTemplate()
 	err := cfg.Load("whatsapp.template.test")

@@ -10,7 +10,7 @@ import (
 
 func TestDigisac_MustGetContactByIDFromAPI(t *testing.T) {
 	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
+		t.Skip("Skip when running on github")
 	}
 	digisac, err := factory.NewDigisac("digisac.sindireceita")
 	require.NoError(t, err)

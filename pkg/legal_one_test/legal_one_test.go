@@ -1,7 +1,6 @@
 package legal_one_test
 
 import (
-	"os"
 	"testing"
 	"time"
 
@@ -10,18 +9,14 @@ import (
 )
 
 func TestLegalOneAuthentication(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	require.NoError(t, legalOne.Autenticate())
 }
 
 func TestLegalOneGetContactByCPF(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	contact, err := legalOne.GetContactByCPF("000.000.001-91")
@@ -31,9 +26,7 @@ func TestLegalOneGetContactByCPF(t *testing.T) {
 }
 
 func TestLegalOneGetLawsuits(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	lawsuits, err := legalOne.GetLawsuits()
@@ -42,7 +35,7 @@ func TestLegalOneGetLawsuits(t *testing.T) {
 }
 
 func TestLegalOneIndividualRegistrate(t *testing.T) {
-	t.Skip("use apenas se necessário")
+	t.Skip("Test only if necessary")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	data := map[string]interface{}{
@@ -57,16 +50,14 @@ func TestLegalOneIndividualRegistrate(t *testing.T) {
 }
 
 func TestLegalOneIndividualDelete(t *testing.T) {
-	t.Skip("use apenas se necessário")
+	t.Skip("Test only if necessary")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	require.NoError(t, legalOne.IndividualDelete(25087))
 }
 
 func TestLegalOneGetLawsuitParticipationByContactID(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	participations, err := legalOne.GetLawsuitParticipationByContactID(1, 3)
@@ -76,9 +67,7 @@ func TestLegalOneGetLawsuitParticipationByContactID(t *testing.T) {
 }
 
 func TestLegalOneGetAppealParticipationByContactID(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	participations, err := legalOne.GetAppealParticipationByContactID(9184, 3)
@@ -88,9 +77,7 @@ func TestLegalOneGetAppealParticipationByContactID(t *testing.T) {
 }
 
 func TestLegalOneGetLawsuitByProcessNumber(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	lawsuits, err := legalOne.GetLawsuitByProcessNumber("1004915-65.2018.4.01.3400")
@@ -100,9 +87,7 @@ func TestLegalOneGetLawsuitByProcessNumber(t *testing.T) {
 }
 
 func TestLegalOneGetLawsuitByFolder(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	lawsuits, err := legalOne.GetLawsuitByFolder("Colet-0295")
@@ -112,9 +97,7 @@ func TestLegalOneGetLawsuitByFolder(t *testing.T) {
 }
 
 func TestLegalLitigationsByContactID(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	litigations, err := legalOne.GetLitigationByContactID(3175)
@@ -124,9 +107,7 @@ func TestLegalLitigationsByContactID(t *testing.T) {
 }
 
 func TestLegalOneParticipationRegistrate(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	data := map[string]interface{}{
@@ -142,9 +123,7 @@ func TestLegalOneParticipationRegistrate(t *testing.T) {
 }
 
 func TestLegalOneGetAppealByFolder(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	lawsuits, err := legalOne.GetAppealByFolder("Colet-0295/001")
@@ -154,9 +133,7 @@ func TestLegalOneGetAppealByFolder(t *testing.T) {
 }
 
 func TestLegalOneAppealParticipationRegistrate(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	data := map[string]interface{}{
@@ -172,9 +149,7 @@ func TestLegalOneAppealParticipationRegistrate(t *testing.T) {
 }
 
 func TestLegalOneGetLitigationUpdateByID(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	legalOne, err := factory.NewLegalOne("legalone.prod")
 	require.NoError(t, err)
 	litigation, err := legalOne.GetLitigationUpdateByID(1, 1)

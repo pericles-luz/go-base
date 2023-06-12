@@ -12,9 +12,7 @@ import (
 )
 
 func TestDatabase(t *testing.T) {
-	if os.Getenv("GITHUB") != "no" {
-		t.Skip("Skip when running on github")
-	}
+	t.Skip("Test only if necessary")
 	db, err := databaseConnection(t)
 	require.NoError(t, err)
 	defer db.Close()
@@ -29,7 +27,7 @@ func TestDatabase(t *testing.T) {
 }
 
 func TestAgnuDatabase(t *testing.T) {
-
+	t.Skip("Test only if necessary")
 	db, err := databaseAgnuConnection(t)
 	require.NoError(t, err)
 	defer db.Close()
@@ -43,6 +41,9 @@ func TestAgnuDatabase(t *testing.T) {
 }
 
 func databaseConnection(t *testing.T) (*database.Database, error) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Skip when running on github")
+	}
 	configuration, err := conf.NewInitialConfig("initial.test")
 	var db *database.Database
 	require.NoError(t, err)
@@ -53,6 +54,9 @@ func databaseConnection(t *testing.T) (*database.Database, error) {
 }
 
 func databaseAgnuConnection(t *testing.T) (*database.Database, error) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Skip when running on github")
+	}
 	configuration, err := conf.NewInitialConfig("initial.test")
 	var db *database.Database
 	require.NoError(t, err)

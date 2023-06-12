@@ -3,6 +3,7 @@ package conf_test
 import (
 	"fmt"
 	"net/url"
+	"os"
 	"testing"
 
 	"github.com/pericles-luz/go-base/pkg/conf"
@@ -10,7 +11,9 @@ import (
 )
 
 func TestInitialConfiguration(t *testing.T) {
-
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Skip when running on github")
+	}
 	cfg, err := conf.NewInitialConfig("initial")
 	require.NoError(t, err)
 	err = cfg.Validate()

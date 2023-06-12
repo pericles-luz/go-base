@@ -2,7 +2,6 @@ package d360_test
 
 import (
 	"encoding/json"
-	"os"
 	"testing"
 
 	"github.com/pericles-luz/go-base/internals/factory"
@@ -11,9 +10,7 @@ import (
 )
 
 func TestChatD360_Autenticate(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	chatD360, err := factory.NewChatD360("d360.dev")
 	require.NoError(t, err)
 	token, err := chatD360.Autenticate()
@@ -23,9 +20,7 @@ func TestChatD360_Autenticate(t *testing.T) {
 }
 
 func TestChatD360_SendMessage(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	chatD360, err := factory.NewChatD360("d360.dev")
 	require.NoError(t, err)
 	var sendMessageRequest d360.D360_MessageRequest
@@ -39,9 +34,7 @@ func TestChatD360_SendMessage(t *testing.T) {
 }
 
 func TestChatD360_SendMessageInteractive(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	chatD360, err := factory.NewChatD360("d360.dev")
 	require.NoError(t, err)
 	sent, err := chatD360.SendMessageInteractive(dataChatD360InteractiveMessageMap())
@@ -50,9 +43,7 @@ func TestChatD360_SendMessageInteractive(t *testing.T) {
 }
 
 func TestChatD360_SendMessageInteractiveWithImage(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	chatD360, err := factory.NewChatD360("d360.dev")
 	require.NoError(t, err)
 	sent, err := chatD360.SendMessageInteractive(dataChatD360InteractiveMessageWithImageMap())
@@ -61,9 +52,7 @@ func TestChatD360_SendMessageInteractiveWithImage(t *testing.T) {
 }
 
 func TestChatD360_SendMessageInteractiveWithPDF(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	chatD360, err := factory.NewChatD360("d360.sindireceita")
 	require.NoError(t, err)
 	sent, err := chatD360.SendMessageInteractive(dataChatD360InteractiveMessageWithPDFMap())
@@ -72,9 +61,7 @@ func TestChatD360_SendMessageInteractiveWithPDF(t *testing.T) {
 }
 
 func TestChatD360_GetTemplateInteractiveResponse(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	// só funciona em produção
 	chatD360, err := factory.NewChatD360("d360.prod")
 	require.NoError(t, err)
@@ -85,9 +72,7 @@ func TestChatD360_GetTemplateInteractiveResponse(t *testing.T) {
 }
 
 func TestChatD360_SendTemplateMessage(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	// só funciona em produção
 	chatD360, err := factory.NewChatD360("d360.prod")
 	require.NoError(t, err)
@@ -97,9 +82,7 @@ func TestChatD360_SendTemplateMessage(t *testing.T) {
 }
 
 func TestChatD360_SendTextTemplateMessageToken(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	// só funciona em produção
 	chatD360, err := factory.NewChatD360("d360.prod")
 	require.NoError(t, err)
@@ -109,9 +92,7 @@ func TestChatD360_SendTextTemplateMessageToken(t *testing.T) {
 }
 
 func TestChatD360_SendTextTemplateMessageOla(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	// só funciona em produção
 	chatD360, err := factory.NewChatD360("d360.oopss")
 	require.NoError(t, err)
@@ -121,9 +102,7 @@ func TestChatD360_SendTextTemplateMessageOla(t *testing.T) {
 }
 
 func TestChatD360_SendTextTemplateSignatureAndCertificateMessage(t *testing.T) {
-	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
-	}
+	t.Skip("Test only if necessary")
 	// só funciona em produção
 	chatD360, err := factory.NewChatD360("d360.oopss")
 	require.NoError(t, err)

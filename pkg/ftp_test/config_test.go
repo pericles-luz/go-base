@@ -1,6 +1,7 @@
 package ftp_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/pericles-luz/go-base/pkg/ftp"
@@ -8,6 +9,9 @@ import (
 )
 
 func TestConfigMustLoad(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Skip when running on github")
+	}
 	config := ftp.NewConfig()
 	err := config.Load("ftp.discadora")
 	require.NoError(t, err)

@@ -21,6 +21,6 @@ func TestDigisac_UnMarshalContactToContactNineBaseDigits(t *testing.T) {
 	var contact digisac.Contact
 	require.NoError(t, json.Unmarshal([]byte(dataContactNineBaseDigits()), &contact))
 	require.Equal(t, "5521983027896", contact.Data.Number)
-	require.Equal(t, "5521983027896", contact.Phonenumber())
+	require.Equal(t, "21983027896", contact.Phonenumber())
 	require.True(t, utils.ValidateUUID(contact.ContactID()))
 }

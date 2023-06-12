@@ -10,7 +10,7 @@ import (
 
 func TestSentry(t *testing.T) {
 	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Skip when running on github nada demais mesmo")
+		t.Skip("Skip when running on github")
 	}
 	sentry := conf.NewSentry()
 	require.NoError(t, sentry.Load("sentry"))

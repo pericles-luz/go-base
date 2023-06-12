@@ -10,7 +10,7 @@ import (
 
 func TestLegalOneMustLoadFile(t *testing.T) {
 	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
+		t.Skip("Skip when running on github")
 	}
 	cfg := conf.NewLegalOne()
 	err := cfg.Load("legalone.dev")

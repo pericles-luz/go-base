@@ -10,7 +10,7 @@ import (
 
 func TestChatD360Config(t *testing.T) {
 	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
+		t.Skip("Skip when running on github")
 	}
 	cfg := conf.NewChatD360Config()
 	err := cfg.Load("d360.dev")

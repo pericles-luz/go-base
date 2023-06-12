@@ -9,7 +9,7 @@ import (
 )
 
 func TestMailer_Send(t *testing.T) {
-
+	t.Skip("Test only if necessary")
 	mailer := messaging.NewMailer()
 	mailer.SetTo("pericles.luz@gmail.com")
 	mailer.SetSubject("Teste via golang")

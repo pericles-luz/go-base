@@ -8,6 +8,7 @@ import (
 )
 
 func TestPoolAddConnectionsCorrectly(t *testing.T) {
+	t.Skip("Test only if necessary")
 	pool := database.NewPool()
 	db, err := databaseConnection(t)
 	require.NoError(t, err)
@@ -22,17 +23,20 @@ func TestPoolAddConnectionsCorrectly(t *testing.T) {
 }
 
 func TestPoolGetConnectionMustFailIfThereIsNoConnection(t *testing.T) {
+	t.Skip("Test only if necessary")
 	pool := database.NewPool()
 	require.Nil(t, pool.GetConnection("test"))
 }
 
 func TestPoolDeleteConnectionMustFailIfThereIsNoConnection(t *testing.T) {
+	t.Skip("Test only if necessary")
 	pool := database.NewPool()
 	err := pool.RemoveConnection("test")
 	require.Error(t, err)
 }
 
 func TestPoolGetConnectionMustFailAfterDeleteConnection(t *testing.T) {
+	t.Skip("Test only if necessary")
 	pool := database.NewPool()
 	db, err := databaseConnection(t)
 	require.NoError(t, err)

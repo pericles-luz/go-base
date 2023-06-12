@@ -10,7 +10,7 @@ import (
 
 func TestNewVoiceConfig(t *testing.T) {
 	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
+		t.Skip("Skip when running on github")
 	}
 	cfg := conf.NewNewVoiceConfig()
 	err := cfg.Load("newvoice.test")

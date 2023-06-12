@@ -23,7 +23,7 @@ func TestCreateValidToken(t *testing.T) {
 
 func TestExtractValue(t *testing.T) {
 	jwt := "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIwMDAwMDAwMDE5MSIsImlzcyI6InNpbmRpcmVjZWl0YS5vcmcuYnIiLCJkYWRvcyI6eyJjcGYiOiIwMDAwMDAwMDE5MSIsIm5vbWUiOiJKb2FxdWltIGRlIFRlc3RlIiwidW5pZGFkZVNpbmRpY2FsIjp7ImlkIjoiNjUwODMwMjctYzk3OC00OThkLTk3NGItOWVlMDRiYWY3YjM1Iiwibm9tZSI6IkRTIERFIFRFU1RFIn19LCJleHAiOjE1MTYyMzkwMjJ9.pas0t80V6B7Shw_pzvmjBWEzIQYr1leRlu03Kxph2-U"
-	pessoa, err := utils.ExtractValue("data", jwt)
+	pessoa, err := utils.ExtractValue("dados", jwt)
 	require.NoError(t, err)
 	require.Equal(t, utils.TEST_CPF, pessoa.(map[string]interface{})["cpf"].(string))
 	require.Equal(t, "Joaquim de Teste", pessoa.(map[string]interface{})["nome"].(string))

@@ -10,7 +10,7 @@ import (
 
 func TestDigisac_MustLoagConfigFile(t *testing.T) {
 	if os.Getenv("GITHUB") == "yes" {
-		t.Skip("Não testar no github")
+		t.Skip("Skip when running on github")
 	}
 	cfg := conf.NewDigisac()
 	err := cfg.Load("digisac.dev")

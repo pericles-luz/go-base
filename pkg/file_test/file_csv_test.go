@@ -2,6 +2,7 @@ package file_test
 
 import (
 	"io"
+	"os"
 	"testing"
 
 	"github.com/pericles-luz/go-base/pkg/file"
@@ -10,7 +11,9 @@ import (
 )
 
 func TestFileCSV(t *testing.T) {
-	// t.Skip("use apenas se necessário")
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Skip when running on github")
+	}
 	file := file.NewFileCSV(utils.GetBaseDirectory("csv") + "/file.csv")
 	err := file.Open()
 	require.NoError(t, err)

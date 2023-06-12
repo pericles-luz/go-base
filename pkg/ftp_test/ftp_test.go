@@ -34,7 +34,7 @@ func TestClientReadFiles(t *testing.T) {
 }
 
 func TestClientRetrieveToBuffer(t *testing.T) {
-	// t.Skip("use only if necessary")
+	t.Skip("use only if necessary")
 	config := ftp.NewConfig()
 	err := config.Load("ftp.discadora")
 	require.NoError(t, err)

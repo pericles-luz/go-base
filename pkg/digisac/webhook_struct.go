@@ -16,7 +16,7 @@ type WebHookMessage struct {
 	Timestamp time.Time   `json:"timestamp,omitempty"`
 }
 type InternalData struct {
-	// Ack            int  `json:"ack,omitempty"`
+	Ack            int  `json:"ack,omitempty"`
 	IsNew          bool `json:"isNew,omitempty"`
 	IsFirst        bool `json:"isFirst,omitempty"`
 	TicketTransfer bool `json:"ticketTransfer,omitempty"`
