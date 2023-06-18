@@ -8,8 +8,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/pericles-luz/go-base/pkg/rest"
 	"github.com/pericles-luz/go-base/pkg/utils"
+	"github.com/pericles-luz/go-rest/pkg/rest"
 )
 
 const (

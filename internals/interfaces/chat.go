@@ -1,4 +1,4 @@
-package rest
+package interfaces
 
 import "errors"
 
@@ -40,8 +40,4 @@ type IChatFile interface {
 	SetMimetype(string) error
 	SetName(string) error
 	Validate() error
-}
-
-type ISendMessageResponse interface {
-	GetID() string
 }

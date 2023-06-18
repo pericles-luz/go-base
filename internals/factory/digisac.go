@@ -3,7 +3,7 @@ package factory
 import (
 	"github.com/pericles-luz/go-base/pkg/conf"
 	"github.com/pericles-luz/go-base/pkg/digisac"
-	"github.com/pericles-luz/go-base/pkg/rest"
+	"github.com/pericles-luz/go-rest/pkg/rest"
 )
 
 func NewDigisac(file string) (*digisac.Digisac, error) {

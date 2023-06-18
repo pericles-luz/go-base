@@ -3,7 +3,7 @@ package d360
 import (
 	"encoding/json"
 
-	"github.com/pericles-luz/go-base/pkg/rest"
+	"github.com/pericles-luz/go-base/internals/interfaces"
 )
 
 type D360_Parser struct {
@@ -145,13 +145,13 @@ func FormatPhonenumber(phoneNumber string) string {
 	return "55" + phoneNumber[0:2] + phoneNumber[3:]
 }
 
-func (d *D360_Parser) sendMessageResponse(data string) ([]rest.ISendMessageResponse, error) {
+func (d *D360_Parser) sendMessageResponse(data string) ([]interfaces.ISendMessageResponse, error) {
 	response := &D360_MessageResponse{}
 	err := json.Unmarshal([]byte(data), response)
 	if err != nil {
 		return nil, err
 	}
-	result := make([]rest.ISendMessageResponse, len(response.Messages))
+	result := make([]interfaces.ISendMessageResponse, len(response.Messages))
 	for i, v := range response.Messages {
 		result[i] = &v
 	}

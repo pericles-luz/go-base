@@ -3,7 +3,7 @@ package factory
 import (
 	"github.com/pericles-luz/go-base/pkg/conf"
 	"github.com/pericles-luz/go-base/pkg/d360"
-	"github.com/pericles-luz/go-base/pkg/rest"
+	"github.com/pericles-luz/go-rest/pkg/rest"
 )
 
 func NewChatD360(configFile string) (*d360.D360, error) {

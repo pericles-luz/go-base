@@ -5,7 +5,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/pericles-luz/go-base/pkg/rest"
+	"github.com/pericles-luz/go-rest/pkg/rest"
 )
 
 const (

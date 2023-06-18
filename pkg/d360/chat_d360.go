@@ -6,8 +6,9 @@ import (
 	"log"
 	"time"
 
-	"github.com/pericles-luz/go-base/pkg/rest"
+	"github.com/pericles-luz/go-base/internals/interfaces"
 	"github.com/pericles-luz/go-base/pkg/utils"
+	"github.com/pericles-luz/go-rest/pkg/rest"
 )
 
 const (
@@ -47,7 +48,7 @@ func (d *D360) Autenticate() (*rest.Token, error) {
 	return d.token, nil
 }
 
-func (d *D360) SendMessage(data map[string]interface{}) ([]rest.ISendMessageResponse, error) {
+func (d *D360) SendMessage(data map[string]interface{}) ([]interfaces.ISendMessageResponse, error) {
 	d.getParser().setData(data)
 	message, err := d.getParser().sendMessageResquest()
 	if err != nil {
@@ -71,7 +72,7 @@ func (d *D360) SendMessage(data map[string]interface{}) ([]rest.ISendMessageResp
 	return messageResponse, nil
 }
 
-func (d *D360) SendMessageInteractive(data map[string]interface{}) ([]rest.ISendMessageResponse, error) {
+func (d *D360) SendMessageInteractive(data map[string]interface{}) ([]interfaces.ISendMessageResponse, error) {
 	d.getParser().setData(data)
 	message, err := d.getParser().SendInteractiveMessageResquest()
 	if err != nil {
@@ -92,7 +93,7 @@ func (d *D360) SendMessageInteractive(data map[string]interface{}) ([]rest.ISend
 	return messageResponse, nil
 }
 
-func (d *D360) SendMessageTemplate(data map[string]interface{}) ([]rest.ISendMessageResponse, error) {
+func (d *D360) SendMessageTemplate(data map[string]interface{}) ([]interfaces.ISendMessageResponse, error) {
 	d.getParser().setData(data)
 	message, err := d.getParser().SendTemplateMessage()
 	if err != nil {
