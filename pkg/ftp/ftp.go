@@ -43,8 +43,14 @@ func (c *Client) Disconnect() {
 	c.engine = nil
 }
 
-func (c *Client) ReadFiles() ([]string, error) {
-	files, err := c.engine.ReadDir("/")
+func (c *Client) ReadFiles(dirname string) ([]string, error) {
+	if c.engine == nil {
+		err := c.Connect()
+		if err != nil {
+			return []string{}, err
+		}
+	}
+	files, err := c.engine.ReadDir(dirname)
 	if utils.ManageError(err) != nil {
 		return nil, err
 	}

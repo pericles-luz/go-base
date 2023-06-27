@@ -27,7 +27,7 @@ func TestClientReadFiles(t *testing.T) {
 	client := ftp.NewClient(config)
 	err = client.Connect()
 	require.NoError(t, err)
-	files, err := client.ReadFiles()
+	files, err := client.ReadFiles("/")
 	require.NoError(t, err)
 	require.NotEmpty(t, files)
 	client.Disconnect()
@@ -59,4 +59,19 @@ func TestClientRetrieveToBufferWithoutConnection(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, dst)
 	client.Disconnect()
+}
+
+func TestClientReadFilesMustReturnFileNames(t *testing.T) {
+	// t.Skip("use only if necessary")
+	config := ftp.NewConfig()
+	err := config.Load("ftp.discadora")
+	require.NoError(t, err)
+	client := ftp.NewClient(config)
+	err = client.Connect()
+	require.NoError(t, err)
+	files, err := client.ReadFiles("/GRAVACOES")
+	require.NoError(t, err)
+	require.NotEmpty(t, files)
+	client.Disconnect()
+	t.Log(files)
 }
