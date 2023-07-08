@@ -220,6 +220,7 @@ func (r *Rabbit) IsConnected() bool {
 }
 
 func (r *Rabbit) PublishFromCache(messageService *migration.MessageService) error {
+	count := 0
 	for {
 		if !r.IsConnected() {
 			time.Sleep(500 * time.Millisecond)
@@ -233,6 +234,8 @@ func (r *Rabbit) PublishFromCache(messageService *migration.MessageService) erro
 			time.Sleep(500 * time.Millisecond)
 			continue
 		}
+		count++
+		log.Println("RabbitMQ: publishing from cache", count, message.GetID(), message.GetExchange(), message.GetRoutingKey(), message.GetData())
 		err = r.Publish(message.GetExchange(), message.GetRoutingKey(), []byte(message.GetData()))
 		if err != nil {
 			return err
