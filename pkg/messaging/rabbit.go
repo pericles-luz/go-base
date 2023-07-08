@@ -220,6 +220,15 @@ func (r *Rabbit) IsConnected() bool {
 }
 
 func (r *Rabbit) PublishFromCache(messageService *migration.MessageService) error {
+	for {
+		r.publishFromCache(messageService)
+		if err := recover(); err != nil {
+			log.Println("RabbitMQ: publish from cache:", err)
+		}
+	}
+}
+
+func (r *Rabbit) publishFromCache(messageService *migration.MessageService) error {
 	count := 0
 	for {
 		if !r.IsConnected() {
@@ -238,6 +247,7 @@ func (r *Rabbit) PublishFromCache(messageService *migration.MessageService) erro
 		log.Println("RabbitMQ: publishing from cache", count, message.GetID(), message.GetExchange(), message.GetRoutingKey(), message.GetData())
 		err = r.Publish(message.GetExchange(), message.GetRoutingKey(), []byte(message.GetData()))
 		if err != nil {
+			log.Println("RabbitMQ: FAILED publishing from cache", count, message.GetID(), message.GetExchange(), message.GetRoutingKey(), message.GetData(), err)
 			return err
 		}
 		err = messageService.Delete(message.GetID())
