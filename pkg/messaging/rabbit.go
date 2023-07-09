@@ -20,6 +20,7 @@ const (
 	reconnectDelay    = 5 * time.Second
 	resendDelay       = 5 * time.Second
 	MESSAGING_TIMEOUT = 30
+	MAX_RETRIES       = 3
 )
 
 type Rabbit struct {
@@ -204,13 +205,28 @@ func (r *Rabbit) connect() bool {
 		log.Println("RabbitMQ: channel:", err)
 		return false
 	}
+	err = ch.Qos(1, 0, false)
+	if err != nil {
+		log.Println("RabbitMQ: qos:", err)
+		return false
+	}
+	// err = ch.Confirm(true)
+	// if err != nil {
+	// 	log.Println("RabbitMQ: confirm:", err)
+	// 	return false
+	// }
 	r.conn = conn
 	r.ch = ch
 	r.isConnected = true
 	r.notifyClose = make(chan *amqp.Error)
-	r.notifyConfirm = make(chan amqp.Confirmation)
+	r.notifyConfirm = make(chan amqp.Confirmation, 100)
 	r.ch.NotifyClose(r.notifyClose)
 	r.ch.NotifyPublish(r.notifyConfirm)
+	err = r.ch.Confirm(false)
+	if err != nil {
+		log.Println("RabbitMQ: confirm:", err)
+		return false
+	}
 	log.Println("RabbitMQ: connected")
 	return true
 }
@@ -221,9 +237,15 @@ func (r *Rabbit) IsConnected() bool {
 
 func (r *Rabbit) PublishFromCache(messageService *migration.MessageService) error {
 	for {
-		r.publishFromCache(messageService)
+		if err := r.publishFromCache(messageService); err != nil {
+			log.Println("RabbitMQ: publish from cache FAILED:", err)
+			time.Sleep(500 * time.Millisecond)
+			continue
+		}
 		if err := recover(); err != nil {
-			log.Println("RabbitMQ: publish from cache:", err)
+			log.Println("RabbitMQ: publish from cache FAILED:", err)
+			time.Sleep(500 * time.Millisecond)
+			continue
 		}
 	}
 }
@@ -244,15 +266,33 @@ func (r *Rabbit) publishFromCache(messageService *migration.MessageService) erro
 			continue
 		}
 		count++
-		log.Println("RabbitMQ: publishing from cache", count, message.GetID(), message.GetExchange(), message.GetRoutingKey(), message.GetData())
+		log.Println("RabbitMQ: publishing from cache", count, message.GetID())
 		err = r.Publish(message.GetExchange(), message.GetRoutingKey(), []byte(message.GetData()))
 		if err != nil {
-			log.Println("RabbitMQ: FAILED publishing from cache", count, message.GetID(), message.GetExchange(), message.GetRoutingKey(), message.GetData(), err)
 			return err
 		}
-		err = messageService.Delete(message.GetID())
-		if err != nil {
-			return err
+		tries := MAX_RETRIES
+	waitingLoop:
+		for tries > 0 {
+			select {
+			case confirm := <-r.notifyConfirm:
+				if confirm.Ack {
+					log.Println("RabbitMQ: confirmed cached", message.GetID())
+					err = messageService.Delete(message.GetID())
+					if err != nil {
+						return err
+					}
+					log.Println("RabbitMQ: deleted cached", message.GetID())
+				} else {
+					log.Println("RabbitMQ: failed to confirm", message.GetID())
+					time.Sleep(500 * time.Millisecond)
+				}
+				break waitingLoop
+			case <-time.After(5 * time.Second):
+				log.Println("RabbitMQ: timeout waiting for confirmation of cached sending", message.GetID())
+				time.Sleep(500 * time.Millisecond)
+				tries--
+			}
 		}
 	}
 }

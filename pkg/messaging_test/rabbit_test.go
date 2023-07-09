@@ -70,8 +70,10 @@ func TestRabbitPublishConsume(t *testing.T) {
 			return
 		}
 		d.Acknowledger.Ack(d.DeliveryTag, false)
+		log.Println("Message received", d.DeliveryTag)
 	}
-	rabbit.Consume("vt.teste", proccess)
+	rabbit.Consume("ct.teste", proccess)
+	time.Sleep(3 * time.Second)
 }
 
 func TestRabbitSendToAnotherQueue(t *testing.T) {
@@ -111,51 +113,11 @@ func TestRabbitPublishFromRabbitCache(t *testing.T) {
 	defer tearDown(t)
 	messageDB := factory.NewMessageDB(pool)
 	messageService := migration.NewMessageService(messageDB)
-	messageService.Send("tst.teste", "teste", `{"teste":"testado de cache"}`, 1)
+	for i := 0; i < 5; i++ {
+		messageService.Send("tst.teste", "teste", fmt.Sprintf(`{"teste":"testado de cache %v"}`, i), 1)
+	}
 	rabbit := messaging.NewRabbit("rabbit")
 	time.Sleep(time.Second * 3)
-	defer rabbit.Disconnect()
-	go func(service *migration.MessageService, rabbit *messaging.Rabbit) {
-		var message *migration.Message
-		var err error
-		count := 0
-		for {
-			count++
-			fmt.Println("count", count)
-			if count > 5 {
-				break
-			}
-			message, err = service.GetNext()
-			if err != nil {
-				fmt.Println("erro: ", err)
-			}
-			if message == nil {
-				fmt.Println("message nil")
-				_, err = service.Send("tst.teste", "teste", `{"teste":"testado 1"}`, 1)
-				require.NoError(t, err)
-				continue
-			}
-			err = rabbit.Publish(message.GetExchange(), message.GetRoutingKey(), []byte(message.GetData()))
-			require.NoError(t, err)
-			fmt.Println("apagando: ", message)
-			err = service.Delete(message.GetID())
-			require.NoError(t, err)
-		}
-	}(messageService, rabbit)
-	t.Log("esperando para finalizar")
-	time.Sleep(time.Second * 3)
-}
-
-func TestRabbitServicePublishFromRabbitCache(t *testing.T) {
-	t.Skip("Test only if necessary")
-	tearDown, pool := migration.SetupTest(t)
-	defer tearDown(t)
-	messageService := factory.NewMessageService(pool)
-	messageService.Send("tst.teste", "teste", `{"teste":"testado de cache 0"}`, 1)
-	messageService.Send("tst.teste", "teste", `{"teste":"testado de cache 1"}`, 1)
-	messageService.Send("tst.teste", "teste", `{"teste":"testado de cache 2"}`, 1)
-	messageService.Send("tst.teste", "teste", `{"teste":"testado de cache 3"}`, 1)
-	rabbit := messaging.NewRabbit("rabbit")
 	defer rabbit.Disconnect()
 	go rabbit.PublishFromCache(messageService)
 	t.Log("esperando para finalizar")
