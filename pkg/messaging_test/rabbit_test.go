@@ -107,6 +107,36 @@ func TestRabbitPublishConsumeWithContext(t *testing.T) {
 	rabbit.ConsumeWithContext(ctx, "ct.teste", proccess)
 }
 
+func TestRabbitPublishConsumeResilient(t *testing.T) {
+	t.Skip("Test only if necessary")
+	rabbit := messaging.NewRabbit("rabbit")
+	time.Sleep(3 * time.Second)
+	msg := map[string]interface{}{
+		"teste": "teste",
+	}
+	body, err := json.Marshal(msg)
+	if err != nil {
+		t.Error(err)
+	}
+	err = rabbit.Publish("tst.teste", "teste", body)
+	if err != nil {
+		t.Error(err)
+	}
+	proccess := func(d amqp.Delivery) {
+		err := receiveMessage(d.Body)
+		if err != nil {
+			t.Error(err)
+			d.Acknowledger.Nack(d.DeliveryTag, false, true)
+			return
+		}
+		d.Acknowledger.Ack(d.DeliveryTag, false)
+		log.Println("Message received", d.DeliveryTag)
+		panic("test")
+	}
+	rabbit.ConsumeResilient("ct.teste", proccess)
+	time.Sleep(30 * time.Second)
+}
+
 func TestRabbitSendToAnotherQueue(t *testing.T) {
 	t.Skip("Test only if necessary")
 	rabbit := messaging.NewRabbit("rabbit")

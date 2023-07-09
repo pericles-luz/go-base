@@ -136,6 +136,16 @@ func (r *Rabbit) ConsumeWithContext(ctx context.Context, queue string, callback 
 	}
 }
 
+func (r *Rabbit) ConsumeResilient(queue string, callback func(amqp.Delivery)) error {
+	for {
+		r.Consume(queue, callback)
+		if err := recover(); err != nil {
+			log.Println("RabbitMQ: FAILED consuming", err)
+			time.Sleep(reconnectDelay)
+		}
+	}
+}
+
 func (r *Rabbit) consumeWithContext(ctx context.Context, queue string, callback func(amqp.Delivery)) error {
 	maxTry := 3
 	for !r.isConnected {
