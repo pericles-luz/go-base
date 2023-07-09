@@ -305,7 +305,6 @@ func (r *Rabbit) PublishFromCache(messageService *migration.MessageService) erro
 }
 
 func (r *Rabbit) publishFromCache(messageService *migration.MessageService) error {
-	count := 0
 	for {
 		if !r.IsConnected() {
 			time.Sleep(500 * time.Millisecond)
@@ -319,10 +318,9 @@ func (r *Rabbit) publishFromCache(messageService *migration.MessageService) erro
 			time.Sleep(500 * time.Millisecond)
 			continue
 		}
-		count++
-		log.Println("RabbitMQ: publishing from cache", count, message.GetID())
 		err = r.Publish(message.GetExchange(), message.GetRoutingKey(), []byte(message.GetData()))
 		if err != nil {
+			log.Println("RabbitMQ: failed to publish from cache", message.GetID())
 			return err
 		}
 		tries := MAX_RETRIES
@@ -331,12 +329,11 @@ func (r *Rabbit) publishFromCache(messageService *migration.MessageService) erro
 			select {
 			case confirm := <-r.notifyConfirm:
 				if confirm.Ack {
-					log.Println("RabbitMQ: confirmed cached", message.GetID())
 					err = messageService.Delete(message.GetID())
 					if err != nil {
+						log.Println("RabbitMQ: failed to delete cached", message.GetID())
 						return err
 					}
-					log.Println("RabbitMQ: deleted cached", message.GetID())
 				} else {
 					log.Println("RabbitMQ: failed to confirm", message.GetID())
 					time.Sleep(500 * time.Millisecond)
