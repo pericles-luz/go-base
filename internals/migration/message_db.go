@@ -26,6 +26,7 @@ func (p *MessageDB) Get(id string) (*Message, error) {
 		&message.SN_Durable,
 		&message.TS_Operacao,
 	)
+	defer stmt.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -47,6 +48,7 @@ func (p *MessageDB) GetNext() (*Message, error) {
 		&message.SN_Durable,
 		&createdAt,
 	)
+	defer stmt.Close()
 	if err != nil {
 		return nil, err
 	}
