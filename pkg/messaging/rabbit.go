@@ -87,7 +87,8 @@ func (r *Rabbit) Publish(exchange, routingKey string, body []byte) error {
 	if !r.isConnected {
 		return errors.New("Rabbit is not connected")
 	}
-	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(context.Background(), resendDelay)
+	defer cancel()
 	err := r.ch.PublishWithContext(ctx, exchange, routingKey, false, false, amqp.Publishing{Body: body})
 	if err != nil {
 		return err
@@ -113,6 +114,49 @@ func (r *Rabbit) Consume(queue string, callback func(amqp.Delivery)) error {
 		}
 	}()
 	<-incoming
+	return nil
+}
+
+func (r *Rabbit) ConsumeWithContext(ctx context.Context, queue string, callback func(amqp.Delivery)) error {
+	for {
+		select {
+		case <-ctx.Done():
+			return nil
+		default:
+			err := r.consumeWithContext(ctx, queue, callback)
+			if err != nil {
+				log.Println("RabbitMQ: error consuming", err)
+				time.Sleep(reconnectDelay)
+			}
+			if err := recover(); err != nil {
+				log.Println("RabbitMQ: error consuming", err)
+				time.Sleep(reconnectDelay)
+			}
+		}
+	}
+}
+
+func (r *Rabbit) consumeWithContext(ctx context.Context, queue string, callback func(amqp.Delivery)) error {
+	maxTry := 3
+	for !r.isConnected {
+		log.Println("RabbitMQ: not connected")
+		time.Sleep(reconnectDelay)
+		maxTry--
+	}
+	msgs, err := r.ch.Consume(queue, "", false, false, false, false, nil)
+	if err != nil {
+		return err
+	}
+	go func() {
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case d := <-msgs:
+				callback(d)
+			}
+		}
+	}()
 	return nil
 }
 
