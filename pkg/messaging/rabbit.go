@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"errors"
 	"log"
+	"sync"
 	"time"
 
 	"github.com/pericles-luz/go-base/internals/factory"
@@ -56,9 +57,9 @@ func NewRabbit(file string) *Rabbit {
 // and publishes all messages from the database.
 // It is used to publish messages that were not published due to a RabbitMQ
 // connection failure.
-// The messages are published in the same order they were created.
+// The messages are published unordered
 // The table used to store the messages is:
-// create table if not exists RabbitCache(RabbitCacheID string primary key, DE_Exchange string, DE_RoutingKey string, JS_Data text, SN_Durable integer, TS_Operacao string)
+// create table if not exists RabbitCache(RabbitCacheID string primary key, DE_Exchange string, DE_RoutingKey string, JS_Data text, SN_Durable integer, TS_Operacao string, ID_Status integer default 0)
 // The table is created in memory and is not persisted.
 // To send a message, you have to call the function Send of the message service that uses the same database connection.
 // the function needs the following parameters:
@@ -66,20 +67,25 @@ func NewRabbit(file string) *Rabbit {
 // - routingKey: the routing key
 // - data: the message data
 // - durable: if the message is durable
-func NewRabbitPublisher(file string, pool *database.Pool) *migration.MessageService {
+// CAUTION: if you use more than one dispatcher, the messages can be sent more than once. You have to take care of this.
+// The function returns a message service that can be used to send messages.
+func NewRabbitPublisher(file string, pool *database.Pool, mtx *sync.Mutex, dispatchers int) *migration.MessageService {
 	messageService := factory.NewMessageService(pool)
-	rabbit := NewRabbit(file)
-	count := 5
-	for count > 0 && !rabbit.IsConnected() {
-		log.Println("RabbitMQ: trying to connect...")
-		time.Sleep(1 * time.Second)
-		count--
+
+	for i := 0; i < dispatchers; i++ {
+		rabbit := NewRabbit(file)
+		count := 5
+		for count > 0 && !rabbit.IsConnected() {
+			log.Println("RabbitMQ: trying to connect...")
+			time.Sleep(1 * time.Second)
+			count--
+		}
+		if !rabbit.IsConnected() {
+			log.Println("RabbitMQ: not connected")
+			return messageService
+		}
+		go rabbit.PublishFromCache(messageService, mtx)
 	}
-	if !rabbit.IsConnected() {
-		log.Println("RabbitMQ: not connected")
-		return messageService
-	}
-	go rabbit.PublishFromCache(messageService)
 	return messageService
 }
 
@@ -289,9 +295,9 @@ func (r *Rabbit) IsConnected() bool {
 	return r.isConnected
 }
 
-func (r *Rabbit) PublishFromCache(messageService *migration.MessageService) error {
+func (r *Rabbit) PublishFromCache(messageService *migration.MessageService, mtx *sync.Mutex) error {
 	for {
-		if err := r.publishFromCache(messageService); err != nil {
+		if err := r.publishFromCache(messageService, mtx); err != nil {
 			log.Println("RabbitMQ: publish from cache FAILED:", err)
 			time.Sleep(500 * time.Millisecond)
 			continue
@@ -304,13 +310,15 @@ func (r *Rabbit) PublishFromCache(messageService *migration.MessageService) erro
 	}
 }
 
-func (r *Rabbit) publishFromCache(messageService *migration.MessageService) error {
+func (r *Rabbit) publishFromCache(messageService *migration.MessageService, mtx *sync.Mutex) error {
 	for {
 		if !r.IsConnected() {
 			time.Sleep(500 * time.Millisecond)
 			continue
 		}
+		mtx.Lock()
 		message, err := messageService.GetNext()
+		mtx.Unlock()
 		if err != nil && err != sql.ErrNoRows {
 			return err
 		}

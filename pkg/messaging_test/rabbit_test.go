@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"sync"
 	"testing"
 	"time"
 
@@ -180,7 +181,8 @@ func TestRabbitPublishFromRabbitCache(t *testing.T) {
 	rabbit := messaging.NewRabbit("rabbit")
 	time.Sleep(time.Second * 3)
 	defer rabbit.Disconnect()
-	go rabbit.PublishFromCache(messageService)
+	mtx := sync.Mutex{}
+	go rabbit.PublishFromCache(messageService, &mtx)
 	t.Log("esperando para finalizar")
 	time.Sleep(time.Second * 3)
 }
@@ -192,6 +194,20 @@ func TestRabbitDeclareExchange(t *testing.T) {
 	require.NoError(t, rabbit.DeclareExchange("tst.teste"))
 	require.NoError(t, rabbit.DeclareQueue("ct.teste", "tst.teste", "teste"))
 	rabbit.Disconnect()
+}
+
+func TestNewRabbitPublisher(t *testing.T) {
+	t.Skip("Use only when needed it")
+	tearDown, pool := migration.SetupTest(t)
+	defer tearDown(t)
+	mtx := sync.Mutex{}
+	messageService := messaging.NewRabbitPublisher("rabbit", pool, &mtx, 1)
+	for i := 0; i < 30; i++ {
+		messageService.Send("tst.teste", "teste", fmt.Sprintf(`{"teste":"testado de publisher com mutex %v"}`, i), 1)
+	}
+	time.Sleep(time.Second * 10)
+	message, _ := messageService.GetNext()
+	require.Nil(t, message)
 }
 
 func receiveMessage(body []byte) error {

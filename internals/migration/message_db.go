@@ -4,6 +4,11 @@ import (
 	"database/sql"
 )
 
+const (
+	STATUS_PENDING = 0
+	STATUS_SENDING = 1
+)
+
 type MessageDB struct {
 	db *sql.DB
 }
@@ -36,7 +41,7 @@ func (p *MessageDB) Get(id string) (*Message, error) {
 func (p *MessageDB) GetNext() (*Message, error) {
 	var message Message
 	var createdAt sql.NullString
-	stmt, err := p.db.Prepare(`select RabbitCacheID, DE_Exchange, DE_RoutingKey, JS_Data, SN_Durable, TS_Operacao from RabbitCache order by RabbitCacheID limit 1`)
+	stmt, err := p.db.Prepare(`select RabbitCacheID, DE_Exchange, DE_RoutingKey, JS_Data, SN_Durable, TS_Operacao from RabbitCache order by ID_Status, RabbitCacheID limit 1`)
 	if err != nil {
 		return nil, err
 	}
@@ -49,6 +54,10 @@ func (p *MessageDB) GetNext() (*Message, error) {
 		&createdAt,
 	)
 	defer stmt.Close()
+	if err != nil {
+		return nil, err
+	}
+	err = p.SetStatus(message.RabbitCacheID, STATUS_SENDING)
 	if err != nil {
 		return nil, err
 	}
@@ -67,6 +76,22 @@ func (p *MessageDB) Save(message *Message) error {
 		message.JS_Data,
 		message.SN_Durable,
 	)
+	if err != nil {
+		return err
+	}
+	err = stmt.Close()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (m *MessageDB) SetStatus(id string, status int) error {
+	stmt, err := m.db.Prepare(`update RabbitCache set ID_Status=? where RabbitCacheID=?`)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(status, id)
 	if err != nil {
 		return err
 	}
