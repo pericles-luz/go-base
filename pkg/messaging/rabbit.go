@@ -337,7 +337,9 @@ func (r *Rabbit) publishFromCache(messageService *migration.MessageService, mtx 
 			select {
 			case confirm := <-r.notifyConfirm:
 				if confirm.Ack {
+					mtx.Lock()
 					err = messageService.Delete(message.GetID())
+					mtx.Unlock()
 					if err != nil {
 						log.Println("RabbitMQ: failed to delete cached", message.GetID())
 						return err
