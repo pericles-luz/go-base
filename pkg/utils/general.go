@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"strings"
+	"time"
 )
 
 func isTesting() bool {
@@ -42,4 +43,26 @@ func CompleteWithZeros(str string, length int) string {
 		str = "0" + str
 	}
 	return str
+}
+
+// Returns a string list with the dates between the start and end dates, inclusive of both
+// The dates must be in the format "2006-01-02"
+func DatesInInterval(start string, end string) []string {
+	startDate, err := time.Parse("2006-01-02 15:04:05", start+" 00:00:00")
+	if err != nil {
+		return nil
+	}
+	endDate, err := time.Parse("2006-01-02 15:04:05", end+" 23:59:59")
+	if err != nil {
+		return nil
+	}
+	if startDate.After(endDate) {
+		return nil
+	}
+	var dates []string
+	for startDate.Before(endDate) || startDate.Equal(endDate) {
+		dates = append(dates, startDate.Format("2006-01-02"))
+		startDate = startDate.AddDate(0, 0, 1)
+	}
+	return dates
 }

@@ -78,6 +78,12 @@ func CompleteWithZeros(str string, length int) string
 
 Completa uma string com zeros a esquerda
 
+```go
+func DatesInInterval(start string, end string) []string
+```
+
+Retorna um slice de strings com todas as datas entre o início e o fim do intervalo, incluindo as datas de início e fim
+
 ### JWT
 
 Estrutura usada para gerenciar o token JWT
