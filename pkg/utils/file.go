@@ -225,7 +225,7 @@ func FileSize(path string) int64 {
 
 // Generate base64 string from a file
 // the string must start with "data:{mimeType};base64,"
-// the file is read in chunks of 512 bytes
+// the file is read in chunks of 510 bytes because needs to be multiple of 3
 func FileToBase64(path string) (string, error) {
 	mimeType := FileMimeType(path)
 	file, err := os.Open(path)
@@ -233,7 +233,7 @@ func FileToBase64(path string) (string, error) {
 		return "", errors.New("file not found")
 	}
 	defer file.Close()
-	buffer := make([]byte, 512)
+	buffer := make([]byte, 510)
 	base64String := "data:" + mimeType + ";base64,"
 	for {
 		count, err := file.Read(buffer)
