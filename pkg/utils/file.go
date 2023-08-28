@@ -198,7 +198,12 @@ func FileMimeType(path string) string {
 	if err != nil {
 		return ""
 	}
-	return http.DetectContentType(buffer)
+	result := http.DetectContentType(buffer)
+	// strip the charset
+	if idx := strings.Index(result, ";"); idx != -1 {
+		result = result[:idx]
+	}
+	return result
 }
 
 func FileExtension(path string) string {
@@ -216,4 +221,29 @@ func FileSize(path string) int64 {
 		return 0
 	}
 	return stat.Size()
+}
+
+// Generate base64 string from a file
+// the string must start with "data:{mimeType};base64,"
+// the file is read in chunks of 512 bytes
+func FileToBase64(path string) (string, error) {
+	mimeType := FileMimeType(path)
+	file, err := os.Open(path)
+	if err != nil {
+		return "", errors.New("file not found")
+	}
+	defer file.Close()
+	buffer := make([]byte, 512)
+	base64String := "data:" + mimeType + ";base64,"
+	for {
+		count, err := file.Read(buffer)
+		if err != nil {
+			if err == io.EOF {
+				break
+			}
+			return "", err
+		}
+		base64String += base64.StdEncoding.EncodeToString(buffer[:count])
+	}
+	return base64String, nil
 }

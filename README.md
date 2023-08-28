@@ -52,6 +52,24 @@ func FileExists(path string) bool
 
 Verifica se um arquivo ou diretório existe
 
+```go
+func FileToBase64(path string) (string, error)
+```
+
+Converte um arquivo para base64
+
+```go
+func FileMimeType(path string) string
+```
+
+Retorna o mime type de um arquivo
+
+```go
+func FileCopy(source string, destination string) error
+```
+
+Copia um arquivo, validando se o arquivo de origem existe
+
 #### Geral
 
 ```go

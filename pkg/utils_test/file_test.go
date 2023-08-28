@@ -2,6 +2,7 @@ package utils_test
 
 import (
 	"bytes"
+	"strings"
 	"testing"
 
 	"github.com/pericles-luz/go-base/pkg/utils"
@@ -67,4 +68,11 @@ func TestExtractFileFromBase64MustExtractTxtFile(t *testing.T) {
 	content, err := utils.ReadFile(result.Name())
 	require.NoError(t, err)
 	require.Equal(t, "Man is di", string(content))
+}
+
+func TestFileMustBeConvertedToBsse64String(t *testing.T) {
+	filePath := utils.GetBaseDirectory("csv") + "/file.xml"
+	result, err := utils.FileToBase64(filePath)
+	require.NoError(t, err)
+	require.True(t, strings.HasPrefix(result, "data:text/xml;base64,"))
 }
