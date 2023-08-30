@@ -32,6 +32,8 @@ type Channels struct {
 	// 	"durable": "if the message is durable",
 	// }
 	Messaging chan map[string]interface{}
+	// Channel for sending shutdown signal to the web server
+	Shutdown chan bool
 }
 
 func NewChannels() *Channels {
