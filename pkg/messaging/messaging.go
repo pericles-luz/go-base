@@ -42,5 +42,6 @@ func NewChannels() *Channels {
 		Email:     make(chan map[string]interface{}, 100),
 		Whatsapp:  make(chan map[string]interface{}, 100),
 		Messaging: make(chan map[string]interface{}, 100),
+		Shutdown:  make(chan bool),
 	}
 }
