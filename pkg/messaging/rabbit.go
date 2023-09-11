@@ -10,8 +10,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/pericles-luz/go-base/internals/factory"
-	"github.com/pericles-luz/go-base/internals/migration"
+	"github.com/pericles-luz/go-base/internal/factory"
+	"github.com/pericles-luz/go-base/internal/migration"
 	"github.com/pericles-luz/go-base/pkg/conf"
 	"github.com/pericles-luz/go-base/pkg/infra/database"
 	amqp "github.com/rabbitmq/amqp091-go"

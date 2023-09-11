@@ -6,7 +6,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/pericles-luz/go-base/internals/interfaces"
+	"github.com/pericles-luz/go-base/internal/interfaces"
 	"github.com/pericles-luz/go-base/pkg/utils"
 	"github.com/pericles-luz/go-rest/pkg/rest"
 )

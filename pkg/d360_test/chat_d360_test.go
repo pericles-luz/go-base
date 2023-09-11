@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"testing"
 
-	"github.com/pericles-luz/go-base/internals/factory"
+	"github.com/pericles-luz/go-base/internal/factory"
 	"github.com/pericles-luz/go-base/pkg/d360"
 	"github.com/stretchr/testify/require"
 )

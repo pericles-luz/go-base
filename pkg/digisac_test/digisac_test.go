@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/pericles-luz/go-base/internals/factory"
+	"github.com/pericles-luz/go-base/internal/factory"
 	"github.com/stretchr/testify/require"
 )
 

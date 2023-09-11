@@ -9,8 +9,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/pericles-luz/go-base/internals/factory"
-	"github.com/pericles-luz/go-base/internals/migration"
+	"github.com/pericles-luz/go-base/internal/factory"
+	"github.com/pericles-luz/go-base/internal/migration"
 	"github.com/pericles-luz/go-base/pkg/messaging"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"github.com/stretchr/testify/require"

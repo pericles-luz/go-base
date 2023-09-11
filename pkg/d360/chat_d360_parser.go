@@ -3,7 +3,7 @@ package d360
 import (
 	"encoding/json"
 
-	"github.com/pericles-luz/go-base/internals/interfaces"
+	"github.com/pericles-luz/go-base/internal/interfaces"
 )
 
 type D360_Parser struct {

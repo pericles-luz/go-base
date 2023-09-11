@@ -3,7 +3,7 @@ package messaging_test
 import (
 	"testing"
 
-	"github.com/pericles-luz/go-base/internals/migration"
+	"github.com/pericles-luz/go-base/internal/migration"
 	"github.com/stretchr/testify/require"
 )
 
