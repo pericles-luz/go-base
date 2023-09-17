@@ -252,6 +252,13 @@ func FileToBase64(path string) (string, error) {
 func GetFiles(path string) []string {
 	files := make([]string, 0)
 	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			log.Println("error walking path", path, err)
+			return nil
+		}
+		if info == nil {
+			return nil
+		}
 		if !info.IsDir() && !strings.HasPrefix(info.Name(), ".") {
 			files = append(files, path)
 		}
