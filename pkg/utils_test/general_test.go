@@ -41,3 +41,8 @@ func TestDatesInIntervalMustReturnNilIfEndIsInvalid(t *testing.T) {
 	dates := utils.DatesInInterval(start, end)
 	require.Nil(t, dates)
 }
+
+func TestGetFiles(t *testing.T) {
+	files := utils.GetFiles("../")
+	require.Greater(t, len(files), 0)
+}

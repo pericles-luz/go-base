@@ -247,3 +247,18 @@ func FileToBase64(path string) (string, error) {
 	}
 	return base64String, nil
 }
+
+// Returns a list with the fullpath of all files in a directory
+func GetFiles(path string) []string {
+	files := make([]string, 0)
+	err := filepath.Walk(path, func(path string, info os.FileInfo, err error) error {
+		if !info.IsDir() && !strings.HasPrefix(info.Name(), ".") {
+			files = append(files, path)
+		}
+		return nil
+	})
+	if err != nil {
+		return nil
+	}
+	return files
+}

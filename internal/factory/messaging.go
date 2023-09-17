@@ -1,7 +1,7 @@
 package factory
 
 import (
-	"github.com/pericles-luz/go-base/internals/migration"
+	"github.com/pericles-luz/go-base/internal/migration"
 	"github.com/pericles-luz/go-base/pkg/infra/database"
 )
 
