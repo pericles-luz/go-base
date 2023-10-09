@@ -34,14 +34,33 @@ type Channels struct {
 	Messaging chan map[string]interface{}
 	// Channel for sending shutdown signal to the web server
 	Shutdown chan bool
+	// Channel for sending phonenumbers to be updated
+	// Each message must have the following structure:
+	// {
+	// 	"UD_Proprietario": "person uuidv4",
+	// 	"CO_DDD": "area code",
+	// 	"CO_Telefone": "phone number",
+	// 	"SN_Principal": "if the phone number is the main one",
+	// }
+	PhonenumberUpdate chan map[string]interface{}
+	// Channel for sending emails to be updated
+	// Each message must have the following structure:
+	// {
+	// 	"UD_Proprietario": "person uuidv4",
+	// 	"EM_Email": "email address",
+	// 	"SN_Principal": "if the email is the main one",
+	// }
+	EmailUpdate chan map[string]interface{}
 }
 
 func NewChannels() *Channels {
 	return &Channels{
-		SMS:       make(chan map[string]string, 100),
-		Email:     make(chan map[string]interface{}, 100),
-		Whatsapp:  make(chan map[string]interface{}, 100),
-		Messaging: make(chan map[string]interface{}, 100),
-		Shutdown:  make(chan bool),
+		SMS:               make(chan map[string]string, 100),
+		Email:             make(chan map[string]interface{}, 100),
+		Whatsapp:          make(chan map[string]interface{}, 100),
+		Messaging:         make(chan map[string]interface{}, 100),
+		PhonenumberUpdate: make(chan map[string]interface{}, 100),
+		EmailUpdate:       make(chan map[string]interface{}, 100),
+		Shutdown:          make(chan bool),
 	}
 }
