@@ -3,6 +3,7 @@ package utils
 import (
 	"crypto/sha256"
 	"fmt"
+	"hash/fnv"
 	"os"
 	"strings"
 	"time"
@@ -24,6 +25,13 @@ func Hash256(s string) string {
 // Calculate the SHA256 hash of a byte sequence
 func Hash256FromBytes(b []byte) string {
 	return fmt.Sprintf("%x", sha256.Sum256(b))
+}
+
+// Calculate a numeric hash of a string
+func HashNumber(source string) string {
+	h := fnv.New32a()
+	h.Write([]byte(source))
+	return fmt.Sprintf("%d", h.Sum32()+1000)[0:4]
 }
 
 // Returns all numbers from a string and only the numbers
