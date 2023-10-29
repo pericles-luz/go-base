@@ -374,6 +374,9 @@ func (db *Database) Update(tableName string, data map[string]interface{}) error 
 	if data[keyName] == nil && data[tableName+"ID"] != nil {
 		keyName = tableName + "ID"
 	}
+	if data[keyName] == nil && data["id"] != nil {
+		keyName = "id"
+	}
 	if data[keyName] == nil {
 		return errors.New("no id provided for update")
 	}
