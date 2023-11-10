@@ -2,7 +2,9 @@ package utils
 
 import (
 	"database/sql"
+	"errors"
 	"net/http"
+	"syscall"
 	"time"
 
 	"github.com/getsentry/sentry-go"
@@ -15,6 +17,9 @@ var sentryHandler = sentryhttp.New(sentryhttp.Options{})
 // and return it. If is a running test, the error isn't sent to Sentry.
 func ManageError(err error) error {
 	if err == sql.ErrNoRows {
+		return err
+	}
+	if errors.Is(err, syscall.ECONNRESET) {
 		return err
 	}
 	if err != nil && sentry.CurrentHub().Client() != nil {
