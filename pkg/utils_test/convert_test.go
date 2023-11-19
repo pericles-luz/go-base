@@ -77,6 +77,15 @@ func TestStringToIntMustConvertCorrectly(t *testing.T) {
 	require.Equal(t, 123, result)
 }
 
+func TestStringToIntMustConvertCorrectlyWhenStringStartsWithZero(t *testing.T) {
+	// Given
+	value := "00000123"
+	// When
+	result := utils.StringToInt(value)
+	// Then
+	require.Equal(t, 123, result)
+}
+
 func TestStringToIntMustReturnZeroIfValueIsNotNumber(t *testing.T) {
 	// Given
 	value := "not number"
