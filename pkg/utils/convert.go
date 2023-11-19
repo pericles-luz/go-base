@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 )
 
 // Convert a map[string]interface{} to a byte sequence
@@ -90,7 +91,7 @@ func InterfaceToInt(incomming interface{}) int {
 // Convert a string to an int
 func StringToInt(in string) int {
 	var result int
-	json.Unmarshal([]byte(in), &result)
+	json.Unmarshal([]byte(strings.TrimLeft(in, "0")), &result)
 	return result
 }
 
