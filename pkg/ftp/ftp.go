@@ -1,6 +1,7 @@
 package ftp
 
 import (
+	"errors"
 	"io"
 
 	"github.com/pericles-luz/go-base/pkg/utils"
@@ -69,4 +70,21 @@ func (c *Client) Retrieve(path string, dst io.Writer) error {
 		}
 	}
 	return c.engine.Retrieve(path, dst)
+}
+
+func (c *Client) Delete(path string) error {
+	if c.engine == nil {
+		err := c.Connect()
+		if err != nil {
+			return err
+		}
+	}
+	stat, err := c.engine.Stat(path)
+	if utils.ManageError(err) != nil {
+		return err
+	}
+	if stat.IsDir() {
+		return errors.New("path is a directory")
+	}
+	return c.engine.Delete(path)
 }
