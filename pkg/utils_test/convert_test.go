@@ -130,3 +130,30 @@ func TestIntToString(t *testing.T) {
 	// Then
 	require.Equal(t, "123", result)
 }
+
+func TestIntToCurrency(t *testing.T) {
+	// Given
+	value := 1234567
+	// When
+	result := utils.IntToCurrency(uint(value))
+	// Then
+	require.Equal(t, "12.345,67", result)
+}
+
+func TestIntToCurrencyMustReturnZeroStringIfValueIsZero(t *testing.T) {
+	// Given
+	value := 0
+	// When
+	result := utils.IntToCurrency(uint(value))
+	// Then
+	require.Equal(t, "0,00", result)
+}
+
+func TestIntToCurrencyMustReturnCorrectWhenValueIsOneCent(t *testing.T) {
+	// Given
+	value := 1
+	// When
+	result := utils.IntToCurrency(uint(value))
+	// Then
+	require.Equal(t, "0,01", result)
+}

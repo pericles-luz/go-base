@@ -115,3 +115,16 @@ func WhatsappNumberToBrazilianPhonenumber(in string) string {
 	phone := in[4:]
 	return ddd + "9" + phone
 }
+
+// Convert an integer to currency as 1.000.000,00
+func IntToCurrency(value uint) string {
+	decimal := value % 100
+	integer := (value - (value % 100)) / 100
+	if integer < 1000 {
+		return fmt.Sprintf("%d,%02d", integer, decimal)
+	}
+	if integer < 1000000 {
+		return fmt.Sprintf("%d.%03d,%02d", integer/1000, integer%1000, decimal)
+	}
+	return fmt.Sprintf("%d.%03d.%03d,%02d", integer/1000000, (integer%1000000)/1000, integer%1000, decimal)
+}
