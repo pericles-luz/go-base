@@ -139,6 +139,9 @@ func (d *D360) post(url string, data map[string]interface{}) (*rest.Response, er
 		"D360-API-KEY": d.token.GetKey(),
 		"Content-Type": "application/json",
 	})
+	if resp.GetCode() == 555 {
+		err = errors.New(resp.GetRaw())
+	}
 	if err != nil {
 		return nil, err
 	}
