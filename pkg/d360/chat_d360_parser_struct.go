@@ -5,11 +5,12 @@ type D360_Text struct {
 }
 
 type D360_MessageRequest struct {
-	To            string                 `json:"to"`
-	Type          string                 `json:"type"`
-	RecipientType string                 `json:"recipient_type,omitempty"`
-	Text          D360_Text              `json:"text,omitempty"`
-	Template      D360_TemplateToMessage `json:"template,omitempty"`
+	MessagingProduct string                 `json:"messaging_product"`
+	To               string                 `json:"to"`
+	Type             string                 `json:"type"`
+	RecipientType    string                 `json:"recipient_type,omitempty"`
+	Text             D360_Text              `json:"text,omitempty"`
+	Template         D360_TemplateToMessage `json:"template,omitempty"`
 }
 
 type D360_Message struct {
@@ -37,10 +38,10 @@ type D360_Provider struct {
 }
 
 type D360_Document struct {
-	Filename string        `json:"filename,omitempty"`
-	ID       string        `json:"id,omitempty"`
-	Link     string        `json:"link,omitempty"`
-	Provider D360_Provider `json:"provider,omitempty"`
+	Filename string `json:"filename,omitempty"`
+	ID       string `json:"id,omitempty"`
+	Link     string `json:"link,omitempty"`
+	// Provider D360_Provider `json:"provider,omitempty"`
 }
 
 type D360_Video struct {
@@ -56,11 +57,11 @@ type D360_Image struct {
 }
 
 type D360_Header struct {
-	Type     string        `json:"type"` // "text" | "image" | "video" | "document"
-	Text     string        `json:"text,omitempty"`
-	Document D360_Document `json:"document,omitempty"`
-	Video    D360_Video    `json:"video,omitempty"`
-	Image    D360_Image    `json:"image,omitempty"`
+	Type     string         `json:"type"` // "text" | "image" | "video" | "document"
+	Text     string         `json:"text,omitempty"`
+	Document *D360_Document `json:"document,omitempty"`
+	Video    *D360_Video    `json:"video,omitempty"`
+	Image    *D360_Image    `json:"image,omitempty"`
 }
 
 type D360_Body struct {
@@ -95,17 +96,19 @@ type D360_Interacrive struct {
 }
 
 type D360_MessageInteractiveRequest struct {
-	RecipientType string           `json:"recipient_type,omitempty"`
-	To            string           `json:"to"`
-	Type          string           `json:"type"`
-	Interactive   D360_Interacrive `json:"interactive,omitempty"`
+	MessagingProduct string           `json:"messaging_product"`
+	RecipientType    string           `json:"recipient_type,omitempty"`
+	To               string           `json:"to"`
+	Type             string           `json:"type"`
+	Interactive      D360_Interacrive `json:"interactive,omitempty"`
 }
 
 type D360_MessageTemplateRequest struct {
-	RecipientType string                 `json:"recipient_type,omitempty"`
-	To            string                 `json:"to"`
-	Type          string                 `json:"type"`
-	Template      D360_TemplateToMessage `json:"template,omitempty"`
+	MessagingProduct string                 `json:"messaging_product"`
+	RecipientType    string                 `json:"recipient_type,omitempty"`
+	To               string                 `json:"to"`
+	Type             string                 `json:"type"`
+	Template         D360_TemplateToMessage `json:"template,omitempty"`
 }
 
 type D360_TemplateParameter struct {

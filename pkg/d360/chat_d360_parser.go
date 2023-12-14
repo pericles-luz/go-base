@@ -25,6 +25,7 @@ func (d *D360_Parser) sendMessageResquest() (*D360_MessageRequest, error) {
 		return nil, err
 	}
 	result := &D360_MessageRequest{}
+	result.MessagingProduct = "whatsapp"
 	result.RecipientType = "individual"
 	result.Type = "text"
 	result.To = FormatPhonenumber(d.getData()["DE_Telefone"].(string))
@@ -38,10 +39,14 @@ func (d *D360_Parser) SendInteractiveMessageResquest() (*D360_MessageInteractive
 		return nil, err
 	}
 	result := &D360_MessageInteractiveRequest{}
+	result.MessagingProduct = "whatsapp"
 	result.RecipientType = "individual"
 	result.Type = "interactive"
 	result.To = FormatPhonenumber(d.getData()["DE_Telefone"].(string))
 	result.Interactive.Type = "button"
+	// result.Interactive.Header.Video = nil
+	// result.Interactive.Header.Document = nil
+	// result.Interactive.Header.Image = nil
 	// cabeçalho é opcional
 	if d.getData()["interactive"].(map[string]interface{})["cabecalho"] != nil {
 		result.Interactive.Header.Type = d.getData()["interactive"].(map[string]interface{})["cabecalho"].(map[string]interface{})["DE_Tipo"].(string)
@@ -50,6 +55,7 @@ func (d *D360_Parser) SendInteractiveMessageResquest() (*D360_MessageInteractive
 		}
 		if result.Interactive.Header.Type == "image" {
 			image := d.getData()["interactive"].(map[string]interface{})["cabecalho"].(map[string]interface{})["imagem"].(map[string]interface{})
+			result.Interactive.Header.Image = &D360_Image{}
 			result.Interactive.Header.Image.Link = image["LN_Imagem"].(string)
 			// legenda é opcional
 			if image["DE_Texto"] != nil {
@@ -58,6 +64,7 @@ func (d *D360_Parser) SendInteractiveMessageResquest() (*D360_MessageInteractive
 		}
 		if result.Interactive.Header.Type == "document" {
 			document := d.getData()["interactive"].(map[string]interface{})["cabecalho"].(map[string]interface{})["documento"].(map[string]interface{})
+			result.Interactive.Header.Document = &D360_Document{}
 			result.Interactive.Header.Document.Link = document["LN_Documento"].(string)
 			// nome do arquivo é opcional
 			if document["DE_Documento"] != nil {
@@ -92,6 +99,7 @@ func (d *D360_Parser) SendTemplateMessage() (*D360_MessageTemplateRequest, error
 		return nil, err
 	}
 	result := &D360_MessageTemplateRequest{}
+	result.MessagingProduct = "whatsapp"
 	result.Type = "template"
 	result.To = FormatPhonenumber(d.getData()["DE_Telefone"].(string))
 	template := d.getData()["template"].(map[string]interface{})

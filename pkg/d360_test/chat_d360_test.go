@@ -84,7 +84,7 @@ func TestChatD360_SendTemplateMessage(t *testing.T) {
 func TestChatD360_SendTextTemplateMessageToken(t *testing.T) {
 	t.Skip("Test only if necessary")
 	// só funciona em produção
-	chatD360, err := factory.NewChatD360("d360.prod")
+	chatD360, err := factory.NewChatD360("d360.sindireceita")
 	require.NoError(t, err)
 	got, err := chatD360.SendMessageTemplate(dataChatD360TextTemplateMessageMap())
 	require.NoError(t, err)
