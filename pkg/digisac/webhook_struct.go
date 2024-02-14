@@ -15,6 +15,14 @@ type WebHookMessage struct {
 	WebhookID string      `json:"webhookId,omitempty"`
 	Timestamp time.Time   `json:"timestamp,omitempty"`
 }
+
+type WebHookMessages struct {
+	Event     string        `json:"event,omitempty"`
+	Data      []WebhookData `json:"data,omitempty"`
+	WebhookID string        `json:"webhookId,omitempty"`
+	Timestamp time.Time     `json:"timestamp,omitempty"`
+}
+
 type InternalData struct {
 	// Ack            int  `json:"ack,omitempty"`
 	IsNew          bool `json:"isNew,omitempty"`

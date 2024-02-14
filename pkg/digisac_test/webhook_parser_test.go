@@ -29,10 +29,16 @@ func TestDigisac_UnMarshalMessageSendingToWebhookMessage(t *testing.T) {
 	require.Equal(t, digisac.MESSAGE_TYPE_CHAT, webhookMessage.Data.Type)
 }
 
-func TestDigisac_UnMarshalMessageCloseingToWebhookMessage(t *testing.T) {
+func TestDigisac_UnMarshalMessageClosingToWebhookMessage(t *testing.T) {
 	var webhookMessage digisac.WebHookMessage
 	require.NoError(t, json.Unmarshal([]byte(dataWebhookMessageCreatedClosing()), &webhookMessage))
 	require.True(t, webhookMessage.Data.Data.TicketClose)
 	require.Equal(t, digisac.MESSAGE_TYPE_TICKET, webhookMessage.Data.Type)
 	require.Equal(t, digisac.MESSAGE_ORIGIN_TICKET, webhookMessage.Data.Origin)
+}
+
+func TestDigisac_UnMarshalMessageWithDataInArray(t *testing.T) {
+	var webhookMessages digisac.WebHookMessages
+	require.NoError(t, json.Unmarshal([]byte(dataWebhookMessageWithDataInArray()), &webhookMessages))
+	require.Len(t, webhookMessages.Data, 2)
 }

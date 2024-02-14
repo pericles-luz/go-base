@@ -146,3 +146,70 @@ func dataWebhookMessageCreatedClosing() string {
 		"timestamp":"2023-04-01T13:16:48.689Z"
 	}`
 }
+
+func dataWebhookMessageWithDataInArray() string {
+	return `{
+		"event":"message.created",
+		"data":[{
+			"id":"fbdc757e-d21f-4be6-af47-87fb9f4a97d8",
+			"isFromMe":false,
+			"sent":false,
+			"type":"ticket",
+			"timestamp":"2024-02-14T12:06:39.220Z",
+			"data":{"ticketOpen":true},
+			"visible":true,
+			"accountId":"152b1195-e23d-4cf8-84cf-8c8c69b6d8e6",
+			"contactId":"2aceeab7-e951-433b-9978-33a85afec45b",
+			"fromId":null,
+			"serviceId":"5f4e6542-852c-4ca4-8331-a7f92eef9121",
+			"toId":null,
+			"userId":null,
+			"ticketId":"78efd25a-f9cd-4394-b471-90f22608e911",
+			"ticketUserId":null,
+			"ticketDepartmentId":null,
+			"quotedMessageId":null,
+			"origin":"ticket",
+			"createdAt":"2024-02-14T12:06:42.693Z",
+			"updatedAt":"2024-02-14T12:06:42.693Z",
+			"deletedAt":null,
+			"hsmId":null,
+			"isComment":false,
+			"obfuscated":false,
+			"files":null,
+			"quotedMessage":null,
+			"isFromBot":false
+		},
+		{
+			"id":"b526d12b-e199-40bd-b80c-0dcf5b1f6649",
+			"isFromMe":false,
+			"sent":true,
+			"type":"chat",
+			"timestamp":"2024-02-14T12:06:39.221Z",
+			"data":{"ack":-1,"isNew":true,"isFirst":true},
+			"visible":true,
+			"accountId":"152b1195-e23d-4cf8-84cf-8c8c69b6d8e6",
+			"contactId":"2aceeab7-e951-433b-9978-33a85afec45b",
+			"fromId":"2aceeab7-e951-433b-9978-33a85afec45b",
+			"serviceId":"5f4e6542-852c-4ca4-8331-a7f92eef9121",
+			"toId":null,
+			"userId":null,
+			"ticketId":"78efd25a-f9cd-4394-b471-90f22608e911",
+			"ticketUserId":null,
+			"ticketDepartmentId":null,
+			"quotedMessageId":null,
+			"origin":null,
+			"createdAt":"2024-02-14T12:06:42.640Z",
+			"updatedAt":"2024-02-14T12:06:42.640Z",
+			"deletedAt":null,
+			"hsmId":null,
+			"isComment":false,
+			"text":"Bom dia.\nApareceu dois boletos do sindireceita  e do Ministério da Gestão e Inovação.\nGostaria de saber o motivo desses dois bolos do sindicato, já que foi autorizado o desconto no contracheque.\nE esse boleto do Ministério tem alguma relação com os do sindicato?",
+			"obfuscated":false,
+			"files":null,
+			"quotedMessage":null,
+			"isFromBot":false
+		}],
+		"webhookId":"34f58096-8e65-48af-9914-3de5f7b4cdc9",
+		"timestamp":"2024-02-14T12:06:44.611Z"
+	}`
+}
