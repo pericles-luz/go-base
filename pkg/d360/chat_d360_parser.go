@@ -125,7 +125,7 @@ func (d *D360_Parser) SendTemplateMessage() (*D360_MessageTemplateRequest, error
 				component.Parameters = append(component.Parameters, parameter)
 			}
 		}
-		if component.Type == "body" {
+		if component.Type == "body" && v["parametros"] != nil {
 			parameters := v["parametros"].([]map[string]interface{})
 			for _, p := range parameters {
 				parameter := D360_TemplateParameter{}
