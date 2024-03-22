@@ -66,7 +66,7 @@ func (d *D360_Parser) validadeMessageTemplateRequest() error {
 				}
 			}
 		}
-		if component["DE_Tipo"].(string) == "body" {
+		if component["DE_Tipo"].(string) == "body" && component["parametros"] != nil {
 			for _, param := range component["parametros"].([]map[string]interface{}) {
 				if param["DE_Tipo"] != nil && param["DE_Tipo"].(string) == "text" {
 					if param["DE_Texto"] == nil || len(param["DE_Texto"].(string)) == 0 {
