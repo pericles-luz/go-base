@@ -25,42 +25,42 @@ func (cfg *Config) Validate() error {
 	return nil
 }
 
-func (cfg *Config) parseDBConfiguration() error {
-	if err := cfg.Validate(); err != nil {
-		return err
-	}
-	if cfg.DBConfiguration != nil {
-		log.Println("DBConfiguration already loaded")
-		return nil
-	}
-	dBConfiguration, err := NewDatabase(cfg.DBConfigurationFile)
-	if err != nil {
-		return err
-	}
-	cfg.DBConfiguration = dBConfiguration
-	return nil
-}
+// func (cfg *Config) parseDBConfiguration() error {
+// 	if err := cfg.Validate(); err != nil {
+// 		return err
+// 	}
+// 	if cfg.DBConfiguration != nil {
+// 		log.Println("DBConfiguration already loaded")
+// 		return nil
+// 	}
+// 	dBConfiguration, err := NewDatabase(cfg.DBConfigurationFile)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	cfg.DBConfiguration = dBConfiguration
+// 	return nil
+// }
 
-func (cfg *Config) parseAgnuDBConfiguration() error {
-	if err := cfg.Validate(); err != nil {
-		log.Println("parseAgnuDBConfiguration: ", err)
-		return err
-	}
-	if cfg.AgnuDBConfigurationFile == "" {
-		log.Println("empty file name:", cfg.AgnuDBConfigurationFile)
-		return nil
-	}
-	if cfg.AgnuDBConfiguration != nil {
-		log.Println("AgnuDBConfiguration already loaded")
-		return nil
-	}
-	dBConfiguration, err := NewDatabase(cfg.AgnuDBConfigurationFile)
-	if err != nil {
-		return err
-	}
-	cfg.AgnuDBConfiguration = dBConfiguration
-	return nil
-}
+// func (cfg *Config) parseAgnuDBConfiguration() error {
+// 	if err := cfg.Validate(); err != nil {
+// 		log.Println("parseAgnuDBConfiguration: ", err)
+// 		return err
+// 	}
+// 	if cfg.AgnuDBConfigurationFile == "" {
+// 		log.Println("empty file name:", cfg.AgnuDBConfigurationFile)
+// 		return nil
+// 	}
+// 	if cfg.AgnuDBConfiguration != nil {
+// 		log.Println("AgnuDBConfiguration already loaded")
+// 		return nil
+// 	}
+// 	dBConfiguration, err := NewDatabase(cfg.AgnuDBConfigurationFile)
+// 	if err != nil {
+// 		return err
+// 	}
+// 	cfg.AgnuDBConfiguration = dBConfiguration
+// 	return nil
+// }
 
 // NewInitialConfig reads configuration from json file and validates it
 func NewInitialConfig(fileName string) (Config, error) {
@@ -76,11 +76,11 @@ func NewInitialConfig(fileName string) (Config, error) {
 	if err = cfg.Validate(); err != nil {
 		return cfg, err
 	}
-	if err = cfg.parseDBConfiguration(); err != nil {
-		return cfg, err
-	}
-	if err = cfg.parseAgnuDBConfiguration(); err != nil {
-		return cfg, err
-	}
+	// if err = cfg.parseDBConfiguration(); err != nil {
+	// 	return cfg, err
+	// }
+	// if err = cfg.parseAgnuDBConfiguration(); err != nil {
+	// 	return cfg, err
+	// }
 	return cfg, nil
 }
