@@ -18,9 +18,9 @@ type Config struct {
 }
 
 func (cfg *Config) Validate() error {
-	if cfg.DBConfigurationFile == "" {
-		log.Println("empty file name:", cfg.DBConfigurationFile)
-		return errors.New("no db configuration defined")
+	if cfg.JwtSecret == "" {
+		log.Println("empty jwt secret")
+		return errors.New("no jwt secret defined")
 	}
 	return nil
 }
