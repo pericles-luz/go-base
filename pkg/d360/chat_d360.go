@@ -76,10 +76,12 @@ func (d *D360) SendMessageInteractive(data map[string]interface{}) ([]interfaces
 	d.getParser().setData(data)
 	message, err := d.getParser().SendInteractiveMessageResquest()
 	if err != nil {
+		log.Println("erro ao gerar mensagem interativa: ", err.Error())
 		return nil, err
 	}
 	requestData, err := utils.StructToMapInterface(message)
 	if err != nil {
+		log.Println("erro ao converter mensagem interativa para map: ", err.Error())
 		return nil, err
 	}
 	resp, err := d.post(d.getRest().GetConfig("linkAPI")+"/messages", requestData)
@@ -97,18 +99,22 @@ func (d *D360) SendMessageTemplate(data map[string]interface{}) ([]interfaces.IS
 	d.getParser().setData(data)
 	message, err := d.getParser().SendTemplateMessage()
 	if err != nil {
+		log.Println("erro ao gerar mensagem de template: ", err.Error())
 		return nil, err
 	}
 	requestData, err := utils.StructToMapInterface(message)
 	if err != nil {
+		log.Println("erro ao converter mensagem de template para map: ", err.Error())
 		return nil, err
 	}
 	resp, err := d.post(d.getRest().GetConfig("linkAPI")+"/messages", requestData)
 	if err != nil {
+		log.Println("erro ao enviar mensagem de template: ", err.Error())
 		return nil, err
 	}
 	messageResponse, err := d.getParser().sendMessageResponse(resp.GetRaw())
 	if err != nil {
+		log.Println("erro ao converter resposta de mensagem de template: ", err.Error())
 		return nil, err
 	}
 	return messageResponse, nil
@@ -117,10 +123,12 @@ func (d *D360) SendMessageTemplate(data map[string]interface{}) ([]interfaces.IS
 func (d *D360) GetTemplateInteractive() (*D360_TemplateInteractiveResponse, error) {
 	resp, err := d.get(d.getRest().GetConfig("linkAPI")+"/configs/templates", nil)
 	if err != nil {
+		log.Println("erro ao buscar templates interativos: ", err.Error())
 		return nil, err
 	}
 	messageResponse, err := d.getParser().templateInteractiveResponse(resp.GetRaw())
 	if err != nil {
+		log.Println("erro ao converter resposta de templates interativos: ", err.Error())
 		return nil, err
 	}
 	return messageResponse, nil
@@ -128,10 +136,12 @@ func (d *D360) GetTemplateInteractive() (*D360_TemplateInteractiveResponse, erro
 
 func (d *D360) post(url string, data map[string]interface{}) (*rest.Response, error) {
 	if _, err := d.Autenticate(); err != nil {
+		log.Println("erro ao autenticar: ", err.Error())
 		return nil, err
 	}
 	dataJson, err := json.Marshal(data)
 	if err != nil {
+		log.Println("erro ao converter data para json: ", err.Error())
 		return nil, err
 	}
 	log.Println("dataJson para o POST: ", string(dataJson))
@@ -143,6 +153,7 @@ func (d *D360) post(url string, data map[string]interface{}) (*rest.Response, er
 		err = errors.New(resp.GetRaw())
 	}
 	if err != nil {
+		log.Println("erro ao fazer POST: ", err.Error())
 		return nil, err
 	}
 	log.Println("resposta do POST: ", resp)
