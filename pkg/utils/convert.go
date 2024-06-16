@@ -81,6 +81,10 @@ func InterfaceToInt(incomming interface{}) int {
 	case float64:
 		return int(incomming.(float64))
 	case string:
+		// if has decimal ponit remove decimal part
+		if strings.Contains(incomming.(string), ".") {
+			incomming = strings.Split(incomming.(string), ".")[0]
+		}
 		return StringToInt(incomming.(string))
 	default:
 		log.Println("InterfaceToInt: unknown type", in)

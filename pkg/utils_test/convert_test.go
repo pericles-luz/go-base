@@ -104,6 +104,21 @@ func TestInterfaceToIntMustConvertStringToInt(t *testing.T) {
 	require.Equal(t, 123, result)
 }
 
+func TestInterfaceToIntMustConvertFloatStringToInt(t *testing.T) {
+	// Given
+	value := "123.45"
+	// When
+	result := utils.InterfaceToInt(value)
+	// Then
+	require.Equal(t, 123, result)
+	// Given
+	value = "123.0"
+	// When
+	result = utils.InterfaceToInt(value)
+	// Then
+	require.Equal(t, 123, result)
+}
+
 func TestInterfaceToIntMustConvertIntToInt(t *testing.T) {
 	// Given
 	value := 123
