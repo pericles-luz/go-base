@@ -74,3 +74,15 @@ func DatesInInterval(start string, end string) []string {
 	}
 	return dates
 }
+
+// Merges two maps into a new map
+func MergeMaps(map1 map[string]interface{}, map2 map[string]interface{}) map[string]interface{} {
+	merged := make(map[string]interface{})
+	for key, value := range map1 {
+		merged[key] = value
+	}
+	for key, value := range map2 {
+		merged[key] = value
+	}
+	return merged
+}
