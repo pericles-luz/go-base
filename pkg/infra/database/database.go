@@ -153,7 +153,7 @@ func (db *Database) configureConnectionPool() {
 }
 
 func (db *Database) IsConnected() bool {
-	ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancelfunc := context.WithTimeout(context.Background(), 50*time.Second)
 	defer cancelfunc()
 	err := db.database.PingContext(ctx)
 	if err != nil {
@@ -188,7 +188,7 @@ func (db *Database) GetLastInsertId() uint64 {
 }
 
 func (db *Database) GetStmt(sql string) (*sql.Stmt, error) {
-	ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancelfunc := context.WithTimeout(context.Background(), 50*time.Second)
 	stmt, err := db.database.PrepareContext(ctx, sql)
 	if nil != err {
 		cancelfunc()
@@ -200,7 +200,7 @@ func (db *Database) GetStmt(sql string) (*sql.Stmt, error) {
 }
 
 func (db *Database) Exec(sql string, data ...interface{}) error {
-	ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancelfunc := context.WithTimeout(context.Background(), 50*time.Second)
 	defer cancelfunc()
 	stmt, err := db.GetStmt(sql)
 	if nil != err {
@@ -229,7 +229,7 @@ func (db *Database) GetOne(sql string, data ...interface{}) ([]byte, error) {
 	if !strings.HasSuffix(sql, "LIMIT 1") {
 		sql = fmt.Sprintf("%s LIMIT 1", sql)
 	}
-	ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancelfunc := context.WithTimeout(context.Background(), 50*time.Second)
 	defer cancelfunc()
 	stmt, err := db.GetStmt(sql)
 	if nil != err {
@@ -285,7 +285,7 @@ func (db *Database) GetRecord(sqlString string, data ...interface{}) (map[string
 	if !strings.HasSuffix(sqlString, "LIMIT 1") {
 		sqlString = fmt.Sprintf("%s LIMIT 1", sqlString)
 	}
-	ctx, cancelfunc := context.WithTimeout(context.Background(), 5*time.Second)
+	ctx, cancelfunc := context.WithTimeout(context.Background(), 50*time.Second)
 	defer cancelfunc()
 	stmt, err := db.GetStmt(sqlString)
 	if nil != err {
