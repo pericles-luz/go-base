@@ -132,3 +132,89 @@ func IntToCurrency(value uint) string {
 	}
 	return fmt.Sprintf("%d.%03d.%03d,%02d", integer/1000000, (integer%1000000)/1000, integer%1000, decimal)
 }
+
+// Convert an integer to extense text
+func IntToExtense(value int) string {
+	extense := []string{
+		"zero", "um", "dois", "tres", "quatro", "cinco", "seis", "sete", "oito", "nove",
+		"dez", "onze", "doze", "treze", "quatorze", "quinze", "dezesseis", "dezessete", "dezoito", "dezenove",
+		"vinte", "trinta", "quarenta", "cinquenta", "sessenta", "setenta", "oitenta", "noventa",
+		"cento", "duzentos", "trezentos", "quatrocentos", "quinhentos", "seiscentos", "setecentos", "oitocentos", "novecentos",
+	}
+	if value < 0 {
+		return "menos " + IntToExtense(-value)
+	}
+	if value == 0 {
+		return "zero"
+	}
+	if value < 20 {
+		return extense[value]
+	}
+	if value < 100 {
+		if value%10 == 0 {
+			return extense[20+value/10-2]
+		}
+		return extense[20+value/10-2] + " e " + extense[value%10]
+	}
+	if value == 100 {
+		return "cem"
+	}
+	if value < 200 {
+		return "cento e " + IntToExtense(value%100)
+	}
+	if value < 1000 {
+		if value%100 == 0 {
+			return extense[30+value/100-3]
+		}
+		return extense[30+value/100-3] + " e " + IntToExtense(value%100)
+	}
+	if value == 1000 {
+		return "mil"
+	}
+	if value < 2000 {
+		return "mil e " + IntToExtense(value%1000)
+	}
+	if value < 1000000 {
+		if value%1000 == 0 {
+			return IntToExtense(value/1000) + " mil"
+		}
+		return IntToExtense(value/1000) + " mil e " + IntToExtense(value%1000)
+	}
+	if value == 1000000 {
+		return "um milhão"
+	}
+	if value < 2000000 {
+		return "um milhão e " + IntToExtense(value%1000000)
+	}
+	if value < 1000000000 {
+		if value%1000000 == 0 {
+			return IntToExtense(value/1000000) + " milhões"
+		}
+		return IntToExtense(value/1000000) + " milhões e " + IntToExtense(value%1000000)
+	}
+	return "número muito grande"
+}
+
+// Convert an integer to extense text with cents
+func IntToExtenseWithCents(value int) string {
+	if value == 0 {
+		return "zero reais"
+	}
+	centsText := "centavos"
+	currencyText := "reais"
+	integer := value / 100
+	cents := value % 100
+	if cents == 1 {
+		centsText = "centavo"
+	}
+	if integer == 1 {
+		currencyText = "real"
+	}
+	if integer == 0 {
+		return IntToExtense(cents) + " " + centsText
+	}
+	if cents == 0 {
+		return IntToExtense(integer) + " " + currencyText
+	}
+	return IntToExtense(integer) + " " + currencyText + " e " + IntToExtense(cents) + " " + centsText
+}
