@@ -25,13 +25,14 @@ const (
 )
 
 type Rabbit struct {
+	dsn           string
 	conn          *amqp.Connection
 	ch            *amqp.Channel
-	done          chan bool
-	notifyClose   chan *amqp.Error
 	notifyConfirm chan amqp.Confirmation
+	notifyClose   chan *amqp.Error
+	done          chan bool
 	isConnected   bool
-	dsn           string
+	isClosing     bool
 }
 
 type RabbitConfig struct {
@@ -46,8 +47,9 @@ func NewRabbit(file string) *Rabbit {
 		panic(err)
 	}
 	rabbit := Rabbit{
-		dsn:  config.DSN,
-		done: make(chan bool),
+		dsn:       config.DSN,
+		done:      make(chan bool),
+		isClosing: false,
 	}
 	go rabbit.handleReconnect()
 	return &rabbit
@@ -109,7 +111,7 @@ func (r *Rabbit) Consume(queue string, callback func(amqp.Delivery)) error {
 		time.Sleep(reconnectDelay)
 		maxTry--
 	}
-	var incoming chan struct{}
+	incoming := make(chan bool)
 	msgs, err := r.ch.Consume(queue, "", false, false, false, false, nil)
 	if err != nil {
 		return err
@@ -221,6 +223,7 @@ func (r *RabbitConfig) LoadRabbitConfig(file string) error {
 }
 
 func (r *Rabbit) Disconnect() error {
+	r.isClosing = true
 	err := r.ch.Close()
 	if err != nil {
 		return err
@@ -229,19 +232,21 @@ func (r *Rabbit) Disconnect() error {
 	if err != nil {
 		return err
 	}
+	r.done <- true
 	return nil
 }
 
 func (r *Rabbit) handleReconnect() {
 	for {
 		r.isConnected = false
-		log.Println("RabbitMQ: connecting")
-		for !r.connect() {
+		for !r.connect() && !r.isClosing {
+			log.Println("RabbitMQ: connecting")
 			log.Println("RabbitMQ: reconnecting in", reconnectDelay)
 			time.Sleep(reconnectDelay)
 		}
 		select {
 		case <-r.done:
+			log.Println("RabbitMQ: done")
 			return
 		case <-r.notifyClose:
 			log.Println("RabbitMQ: closed")
@@ -250,6 +255,10 @@ func (r *Rabbit) handleReconnect() {
 }
 
 func (r *Rabbit) connect() bool {
+	if r.isClosing {
+		log.Println("RabbitMQ: closing")
+		return false
+	}
 	conn, err := amqp.DialConfig(r.dsn, amqp.Config{
 		TLSClientConfig: &tls.Config{
 			InsecureSkipVerify: true,

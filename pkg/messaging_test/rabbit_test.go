@@ -194,6 +194,8 @@ func TestRabbitDeclareExchange(t *testing.T) {
 	require.NoError(t, rabbit.DeclareExchange("tst.teste"))
 	require.NoError(t, rabbit.DeclareQueue("ct.teste", "tst.teste", "teste"))
 	rabbit.Disconnect()
+	time.Sleep(10 * time.Second)
+	t.Log("Rabbit disconnected")
 }
 
 func TestNewRabbitPublisher(t *testing.T) {
