@@ -394,6 +394,30 @@ func dataChatD360InteractiveTemplateWithImageMap() map[string]interface{} {
 	}
 }
 
+func dataChatD360InteractiveTemplateWithPDFMap() map[string]interface{} {
+	return map[string]interface{}{
+		"DE_Telefone": "31986058910",
+		"template": map[string]interface{}{
+			"DE_Namespace": "39751bde_f26f_42f3_b928_aa4267759d7f",
+			"DE_Nome":      "envio_arquivo",
+			"componentes": []map[string]interface{}{
+				{
+					"DE_Tipo": "header",
+					"parametros": []map[string]interface{}{
+						{
+							"DE_Tipo": "document",
+							"documento": map[string]interface{}{
+								"LN_Documento": "https://api.sindireceita.org.br/documentos/00000000191/1/9b0d340d",
+								// "DE_Texto": "documento.pdf",
+							},
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
 func dataChatD360InteractiveMessageWithImageMap() map[string]interface{} {
 	return map[string]interface{}{
 		"DE_Telefone": "31986058910",

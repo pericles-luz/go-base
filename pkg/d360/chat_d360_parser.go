@@ -122,6 +122,13 @@ func (d *D360_Parser) SendTemplateMessage() (*D360_MessageTemplateRequest, error
 						parameter.Image.Text = image["DE_Texto"].(string)
 					}
 				}
+				if parameter.Type == "document" {
+					image := p["documento"].(map[string]interface{})
+					parameter.Document.Link = image["LN_Documento"].(string)
+					if image["DE_Texto"] != nil {
+						parameter.Image.Text = image["DE_Texto"].(string)
+					}
+				}
 				component.Parameters = append(component.Parameters, parameter)
 			}
 		}

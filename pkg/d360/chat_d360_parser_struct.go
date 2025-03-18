@@ -112,9 +112,10 @@ type D360_MessageTemplateRequest struct {
 }
 
 type D360_TemplateParameter struct {
-	Type  string     `json:"type,omitempty"`
-	Image D360_Image `json:"image,omitempty"`
-	Text  string     `json:"text,omitempty"`
+	Type     string        `json:"type,omitempty"`
+	Image    D360_Image    `json:"image,omitempty"`
+	Document D360_Document `json:"document,omitempty"`
+	Text     string        `json:"text,omitempty"`
 }
 
 type D360_TemplateComponent struct {

@@ -81,6 +81,16 @@ func TestChatD360_SendTemplateMessage(t *testing.T) {
 	require.NotEmpty(t, got)
 }
 
+func TestChatD360_SendPDFByTemplateMessage(t *testing.T) {
+	t.Skip("Test only if necessary")
+	// só funciona em produção
+	chatD360, err := factory.NewChatD360("d360.prod")
+	require.NoError(t, err)
+	got, err := chatD360.SendMessageTemplate(dataChatD360InteractiveTemplateWithPDFMap())
+	require.NoError(t, err)
+	require.NotEmpty(t, got)
+}
+
 func TestChatD360_SendTextTemplateMessageToken(t *testing.T) {
 	t.Skip("Test only if necessary")
 	// só funciona em produção
