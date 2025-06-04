@@ -78,16 +78,17 @@ type D360_Reply struct {
 }
 
 type D360_Button struct {
-	Type  string     `json:"type"` // "reply" "text"
-	Text  string     `json:"text,omitempty"`
-	Reply D360_Reply `json:"reply,omitempty"`
+	Type    string     `json:"type"` // "reply" "text"
+	Text    string     `json:"text,omitempty"`
+	Reply   D360_Reply `json:"reply,omitempty"`
+	OTPType string     `json:"otp_type,omitempty"` // "one_time_password"
 }
 
 type D360_Action struct {
 	Buttons []D360_Button `json:"buttons"`
 }
 
-type D360_Interacrive struct {
+type D360_Interactive struct {
 	Type   string      `json:"type"` // "button"
 	Header D360_Header `json:"header,omitempty"`
 	Body   D360_Body   `json:"body,omitempty"`
@@ -100,19 +101,21 @@ type D360_MessageInteractiveRequest struct {
 	RecipientType    string           `json:"recipient_type,omitempty"`
 	To               string           `json:"to"`
 	Type             string           `json:"type"`
-	Interactive      D360_Interacrive `json:"interactive,omitempty"`
+	Interactive      D360_Interactive `json:"interactive,omitempty"`
 }
 
 type D360_MessageTemplateRequest struct {
 	MessagingProduct string                 `json:"messaging_product"`
 	RecipientType    string                 `json:"recipient_type,omitempty"`
 	To               string                 `json:"to"`
-	Type             string                 `json:"type"`
+	Type             string                 `json:"type,omitempty"`
 	Template         D360_TemplateToMessage `json:"template,omitempty"`
 }
 
 type D360_TemplateParameter struct {
 	Type     string        `json:"type,omitempty"`
+	SubType  string        `json:"sub_type,omitempty"`
+	Index    string        `json:"index,omitempty"`
 	Image    D360_Image    `json:"image,omitempty"`
 	Document D360_Document `json:"document,omitempty"`
 	Text     string        `json:"text,omitempty"`
@@ -122,6 +125,8 @@ type D360_TemplateComponent struct {
 	Format     string                   `json:"format,omitempty"`
 	Text       string                   `json:"text,omitempty"`
 	Type       string                   `json:"type"`
+	SubType    string                   `json:"sub_type,omitempty"`
+	Index      int                      `json:"index"`
 	Buttons    []D360_Button            `json:"buttons,omitempty"`
 	Parameters []D360_TemplateParameter `json:"parameters,omitempty"`
 }

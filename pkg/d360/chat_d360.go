@@ -198,8 +198,7 @@ func NewChatD360(rest *rest.Rest) *D360 {
 }
 
 func NewChatD360TemplateTextMessage(data map[string]interface{}) map[string]interface{} {
-
-	return map[string]interface{}{
+	result := map[string]interface{}{
 		"DE_Telefone": data["DE_Telefone"],
 		"template": map[string]interface{}{
 			"DE_Namespace": data["DE_Namespace"],
@@ -212,4 +211,18 @@ func NewChatD360TemplateTextMessage(data map[string]interface{}) map[string]inte
 			},
 		},
 	}
+	if data["CO_Token"] != nil {
+		result["template"].(map[string]interface{})["componentes"] = append(result["template"].(map[string]interface{})["componentes"].([]map[string]interface{}), map[string]interface{}{
+			"DE_Tipo":    "button",
+			"DE_SubTipo": "URL",
+			"NU_Indice":  0,
+			"parametros": []map[string]interface{}{
+				{
+					"DE_Tipo":  "text",
+					"DE_Texto": data["CO_Token"],
+				},
+			},
+		})
+	}
+	return result
 }

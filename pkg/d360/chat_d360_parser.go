@@ -150,6 +150,25 @@ func (d *D360_Parser) SendTemplateMessage() (*D360_MessageTemplateRequest, error
 				component.Parameters = append(component.Parameters, parameter)
 			}
 		}
+		if component.Type == "button" && v["parametros"] != nil {
+			parameters := v["parametros"].([]map[string]interface{})
+			component.SubType = v["DE_SubTipo"].(string)
+			component.Index = v["NU_Indice"].(int)
+			for _, p := range parameters {
+				parameter := D360_TemplateParameter{}
+				parameter.Type = p["DE_Tipo"].(string)
+				if parameter.Type == "URL" {
+					parameter.Text = p["DE_Texto"].(string)
+				}
+				if parameter.Type == "COPY_CODE" {
+					parameter.Text = p["DE_Texto"].(string)
+				}
+				if parameter.Type == "text" {
+					parameter.Text = p["DE_Texto"].(string)
+				}
+				component.Parameters = append(component.Parameters, parameter)
+			}
+		}
 		result.Template.Components = append(result.Template.Components, component)
 	}
 	return result, nil

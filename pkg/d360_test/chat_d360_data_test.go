@@ -1,5 +1,7 @@
 package d360_test
 
+import "github.com/pericles-luz/go-base/pkg/d360"
+
 func dataChatD360MessageRequest() string {
 	return `{
     "to": "31986058910",
@@ -416,6 +418,21 @@ func dataChatD360InteractiveTemplateWithPDFMap() map[string]interface{} {
 			},
 		},
 	}
+}
+
+func dataChatD360InteractiveTemplateWithAuthenticationCode() map[string]interface{} {
+	return d360.NewChatD360TemplateTextMessage(map[string]interface{}{
+		"DE_Telefone":  "31986058910",
+		"DE_Namespace": "39751bde_f26f_42f3_b928_aa4267759d7f",
+		"DE_Nome":      "token_06_2025",
+		"CO_Token":     "123456",
+		"parametros": []map[string]interface{}{
+			{
+				"DE_Tipo":  "text",
+				"DE_Texto": "123456",
+			},
+		},
+	})
 }
 
 func dataChatD360InteractiveMessageWithImageMap() map[string]interface{} {
