@@ -23,6 +23,7 @@ func (p *MessageDB) Get(id string) (*Message, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer stmt.Close()
 	err = stmt.QueryRow(id).Scan(
 		&message.RabbitCacheID,
 		&message.DE_Exchange,
@@ -31,7 +32,6 @@ func (p *MessageDB) Get(id string) (*Message, error) {
 		&message.SN_Durable,
 		&message.TS_Operacao,
 	)
-	defer stmt.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -45,6 +45,7 @@ func (p *MessageDB) GetNext() (*Message, error) {
 	if err != nil {
 		return nil, err
 	}
+	defer stmt.Close()
 	err = stmt.QueryRow().Scan(
 		&message.RabbitCacheID,
 		&message.DE_Exchange,
@@ -53,7 +54,6 @@ func (p *MessageDB) GetNext() (*Message, error) {
 		&message.SN_Durable,
 		&createdAt,
 	)
-	defer stmt.Close()
 	if err != nil {
 		return nil, err
 	}
@@ -69,6 +69,7 @@ func (p *MessageDB) Save(message *Message) error {
 	if err != nil {
 		return err
 	}
+	defer stmt.Close()
 	_, err = stmt.Exec(
 		message.RabbitCacheID,
 		message.DE_Exchange,
@@ -76,14 +77,7 @@ func (p *MessageDB) Save(message *Message) error {
 		message.JS_Data,
 		message.SN_Durable,
 	)
-	if err != nil {
-		return err
-	}
-	err = stmt.Close()
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func (m *MessageDB) SetStatus(id string, status int) error {
@@ -91,15 +85,9 @@ func (m *MessageDB) SetStatus(id string, status int) error {
 	if err != nil {
 		return err
 	}
+	defer stmt.Close()
 	_, err = stmt.Exec(status, id)
-	if err != nil {
-		return err
-	}
-	err = stmt.Close()
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }
 
 func (p *MessageDB) Delete(id string) error {
@@ -107,13 +95,7 @@ func (p *MessageDB) Delete(id string) error {
 	if err != nil {
 		return err
 	}
+	defer stmt.Close()
 	_, err = stmt.Exec(id)
-	if err != nil {
-		return err
-	}
-	err = stmt.Close()
-	if err != nil {
-		return err
-	}
-	return nil
+	return err
 }

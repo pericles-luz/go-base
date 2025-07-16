@@ -122,7 +122,7 @@ func TestChatD360_SendTextTemplateSignatureAndCertificateMessage(t *testing.T) {
 }
 
 func TestChatD360_SendTemplateMessageWithAuthenticationCode(t *testing.T) {
-	// t.Skip("Test only if necessary")
+	t.Skip("Test only if necessary")
 	// só funciona em produção
 	chatD360, err := factory.NewChatD360("d360.prod")
 	require.NoError(t, err)
