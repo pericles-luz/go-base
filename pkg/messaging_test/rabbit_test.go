@@ -184,7 +184,7 @@ func TestRabbitPublishFromRabbitCache(t *testing.T) {
 	mtx := sync.Mutex{}
 	go rabbit.PublishFromCache(messageService, &mtx)
 	t.Log("esperando para finalizar")
-	time.Sleep(time.Second * 3)
+	time.Sleep(time.Second * 300)
 }
 
 func TestRabbitDeclareExchange(t *testing.T) {

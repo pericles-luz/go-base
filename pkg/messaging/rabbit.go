@@ -6,6 +6,7 @@ import (
 	"database/sql"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"sync"
 	"time"
@@ -14,6 +15,7 @@ import (
 	"github.com/pericles-luz/go-base/internal/migration"
 	"github.com/pericles-luz/go-base/pkg/conf"
 	"github.com/pericles-luz/go-base/pkg/infra/database"
+	"github.com/pericles-luz/go-base/pkg/utils"
 	amqp "github.com/rabbitmq/amqp091-go"
 )
 
@@ -92,8 +94,8 @@ func NewRabbitPublisher(file string, pool *database.Pool, mtx *sync.Mutex, dispa
 }
 
 func (r *Rabbit) Publish(exchange, routingKey string, body []byte) error {
-	if !r.isConnected {
-		return errors.New("Rabbit is not connected")
+	if !r.IsConnected() {
+		return errors.New("rabbit is not connected")
 	}
 	ctx, cancel := context.WithTimeout(context.Background(), resendDelay)
 	defer cancel()
@@ -106,7 +108,7 @@ func (r *Rabbit) Publish(exchange, routingKey string, body []byte) error {
 
 func (r *Rabbit) Consume(queue string, callback func(amqp.Delivery)) error {
 	maxTry := 3
-	for !r.isConnected {
+	for !r.IsConnected() {
 		log.Println("RabbitMQ: not connected")
 		time.Sleep(reconnectDelay)
 		maxTry--
@@ -228,10 +230,7 @@ func (r *Rabbit) Disconnect() error {
 	if err != nil {
 		return err
 	}
-	err = r.conn.Close()
-	if err != nil {
-		return err
-	}
+	defer r.conn.Close()
 	r.done <- true
 	return nil
 }
@@ -306,14 +305,14 @@ func (r *Rabbit) IsConnected() bool {
 
 func (r *Rabbit) PublishFromCache(messageService *migration.MessageService, mtx *sync.Mutex) error {
 	for {
-		if err := r.publishFromCache(messageService, mtx); err != nil {
+		if err := r.publishFromCache(messageService, mtx); utils.ManageError(err) != nil {
 			log.Println("RabbitMQ: publish from cache FAILED:", err)
-			time.Sleep(500 * time.Millisecond)
+			time.Sleep(5 * time.Second)
 			continue
 		}
-		if err := recover(); err != nil {
+		if err := recover(); utils.ManageError(fmt.Errorf("recuperando do erro: %v", err)) != nil {
 			log.Println("RabbitMQ: publish from cache FAILED:", err)
-			time.Sleep(500 * time.Millisecond)
+			time.Sleep(10 * time.Second)
 			continue
 		}
 	}
@@ -321,24 +320,28 @@ func (r *Rabbit) PublishFromCache(messageService *migration.MessageService, mtx 
 
 func (r *Rabbit) publishFromCache(messageService *migration.MessageService, mtx *sync.Mutex) error {
 	for {
+		count := 5
+		for count > 0 && !r.IsConnected() {
+			log.Println("RabbitMQ: tentando conectar...")
+			time.Sleep(1 * time.Second)
+			count--
+		}
 		if !r.IsConnected() {
-			time.Sleep(500 * time.Millisecond)
-			continue
+			return errors.New("rabbit não está conectado")
 		}
 		mtx.Lock()
 		message, err := messageService.GetNext()
 		mtx.Unlock()
 		if err != nil && err != sql.ErrNoRows {
-			return err
+			return utils.ManageError(err)
 		}
 		if message == nil {
 			time.Sleep(500 * time.Millisecond)
 			continue
 		}
-		err = r.Publish(message.GetExchange(), message.GetRoutingKey(), []byte(message.GetData()))
-		if err != nil {
+		if err = r.Publish(message.GetExchange(), message.GetRoutingKey(), []byte(message.GetData())); err != nil {
 			log.Println("RabbitMQ: failed to publish from cache", message.GetID())
-			return err
+			return utils.ManageError(err)
 		}
 		tries := MAX_RETRIES
 	waitingLoop:
