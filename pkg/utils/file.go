@@ -33,9 +33,11 @@ func GetBaseDirectory(directory string) string {
 	if directory == "" {
 		return path
 	}
+	log.Println("Getting base directory:", directory, "from path:", path)
 	directory = strings.TrimPrefix(directory, "/")
 	directory = strings.TrimSuffix(directory, "/")
 	path += string(filepath.Separator) + directory
+	log.Println("Final base directory:", path)
 	return path
 }
 
@@ -45,9 +47,12 @@ func getBaseDirectoryOnTesting() string {
 		log.Println("Erro ao obter diretorio atual", err)
 		return ""
 	}
-	for !(FileExists(base+"/config") || strings.HasSuffix(base, "/go")) && len(base) > 1 {
+	log.Println("Getting base directory for testing:", base)
+	for !(FileExists(base+"/config") || strings.HasSuffix(base, "/go") || filepath.Dir(base) == "/home/runner/work") && len(base) > 1 {
+		log.Println("Checking base directory:", base, "config exists:", base+"/config", FileExists(base+"/config"), "is go path:", strings.HasSuffix(base, "/go"), "is runner path:", filepath.Dir(base) == "/home/runner/work")
 		base = filepath.Dir(base)
 	}
+	log.Println("Base directory found for testing:", base)
 	return base
 }
 
