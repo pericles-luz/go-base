@@ -27,3 +27,21 @@ func TestFileCSV(t *testing.T) {
 		t.Log(data)
 	}
 }
+
+func TestFileCSVShouldRadPhonenumbers(t *testing.T) {
+	if os.Getenv("GITHUB") == "yes" {
+		t.Skip("Skip when running on github")
+	}
+	file := file.NewFileCSV(utils.GetBaseDirectory("csv") + "/telefones.csv")
+	err := file.Open()
+	require.NoError(t, err)
+	defer file.Close()
+	for {
+		data, err := file.ReadLine()
+		if err == io.EOF {
+			break
+		}
+		require.NoError(t, err)
+		t.Log(data)
+	}
+}

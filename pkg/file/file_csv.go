@@ -3,6 +3,7 @@ package file
 import (
 	"encoding/csv"
 	"os"
+	"strings"
 
 	"github.com/pericles-luz/go-base/pkg/utils"
 )
@@ -35,6 +36,9 @@ func (f *FileCSV) Open() error {
 	header, err := f.reader.Read()
 	if err != nil {
 		return err
+	}
+	for i := 0; i < len(header); i++ {
+		header[i] = strings.Replace(strings.TrimSpace(header[i]), "\ufeff", "", 1)
 	}
 	f.header = header
 	return nil
