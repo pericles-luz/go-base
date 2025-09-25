@@ -25,6 +25,7 @@ type IDatabase interface {
 	GetOne(sql string, data ...interface{}) ([]byte, error)
 	GetRecord(sql string, data ...interface{}) (map[string]interface{}, error)
 	GetRecords(sql string, data ...interface{}) ([]map[string]interface{}, error)
+	GetLine(rows *sql.Rows) (map[string]interface{}, error)
 	Insert(tableName string, data map[string]interface{}) error
 	Update(tableName string, data map[string]interface{}) error
 	IsConnected() bool
@@ -298,6 +299,10 @@ func (db *Database) GetRecord(sqlString string, data ...interface{}) (map[string
 		log.Printf("error %s executing statement\n", err)
 		return nil, err
 	}
+	return db.GetLine(query)
+}
+
+func (db *Database) GetLine(query *sql.Rows) (map[string]interface{}, error) {
 	if err := query.Err(); err == sql.ErrNoRows {
 		log.Println("no record found", err.Error())
 		return nil, err
