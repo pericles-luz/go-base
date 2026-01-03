@@ -121,3 +121,59 @@ func TestChatD360_FormatPhonenumber(t *testing.T) {
 	formated := d360.FormatPhonenumber("31978675897")
 	require.Equal(t, "553178675897", formated)
 }
+
+func TestChatD360_ParseTemplateProvaDeVida(t *testing.T) {
+	data := dataChatD360TemplateProvaDeVidaMap()
+	parser := d360.NewD360Parser(data)
+	message, err := parser.SendTemplateMessage()
+	require.NoError(t, err)
+	require.Equal(t, d360.FormatPhonenumber(data["DE_Telefone"].(string)), message.To)
+	require.Equal(t, "template", message.Type)
+	require.Equal(t, "whatsapp", message.MessagingProduct)
+
+	template := data["template"].(map[string]interface{})
+	require.Equal(t, template["DE_Namespace"].(string), message.Template.Namespace)
+	require.Equal(t, template["DE_Nome"].(string), message.Template.Name)
+	require.Equal(t, "pt_BR", message.Template.Language.Code)
+	require.Equal(t, "deterministic", message.Template.Language.Policy)
+
+	// Valida componente header
+	require.Equal(t, 4, len(message.Template.Components))
+	headerComponent := message.Template.Components[0]
+	require.Equal(t, "header", headerComponent.Type)
+	require.Equal(t, 1, len(headerComponent.Parameters))
+	require.Equal(t, "image", headerComponent.Parameters[0].Type)
+	require.Equal(t, "https://api.sindireceita.org.br/html/statics/assets/images/provaDeVida.png", headerComponent.Parameters[0].Image.Link)
+
+	// Valida componente body
+	bodyComponent := message.Template.Components[1]
+	require.Equal(t, "body", bodyComponent.Type)
+	require.Equal(t, 2, len(bodyComponent.Parameters))
+	require.Equal(t, "text", bodyComponent.Parameters[0].Type)
+	require.Equal(t, "Péricles", bodyComponent.Parameters[0].Text)
+	require.Equal(t, "text", bodyComponent.Parameters[1].Type)
+	require.Equal(t, "02/02/2026", bodyComponent.Parameters[1].Text)
+
+	// Valida primeiro botão
+	button1Component := message.Template.Components[2]
+	require.Equal(t, "button", button1Component.Type)
+	require.Equal(t, "URL", button1Component.SubType)
+	require.Equal(t, 0, button1Component.Index)
+	require.Equal(t, 1, len(button1Component.Parameters))
+	require.Equal(t, "text", button1Component.Parameters[0].Type)
+	require.Equal(t, "a1b2c3d4-e5f6-7890-abcd-ef1234567890", button1Component.Parameters[0].Text)
+
+	// Valida segundo botão
+	button2Component := message.Template.Components[3]
+	require.Equal(t, "button", button2Component.Type)
+	require.Equal(t, "URL", button2Component.SubType)
+	require.Equal(t, 1, button2Component.Index)
+	require.Equal(t, 1, len(button2Component.Parameters))
+	require.Equal(t, "text", button2Component.Parameters[0].Type)
+	require.Equal(t, "f9e8d7c6-b5a4-3210-9876-543210fedcba", button2Component.Parameters[0].Text)
+
+	// Gera JSON para debug
+	json, err := json.Marshal(message)
+	require.NoError(t, err)
+	t.Log(string(json))
+}
