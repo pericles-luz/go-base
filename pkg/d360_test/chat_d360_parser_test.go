@@ -177,3 +177,51 @@ func TestChatD360_ParseTemplateProvaDeVida(t *testing.T) {
 	require.NoError(t, err)
 	t.Log(string(json))
 }
+
+func TestChatD360_NewChatD360TemplateImageMessage(t *testing.T) {
+	data := d360.NewChatD360TemplateImageMessage(map[string]interface{}{
+		"DE_Telefone":  "31986058910",
+		"DE_Namespace": "test_namespace",
+		"DE_Nome":      "test_template",
+		"LN_Imagem":    "https://example.com/image.png",
+		"parametros": []map[string]interface{}{
+			{
+				"DE_Tipo":  "text",
+				"DE_Texto": "Nome Teste",
+			},
+		},
+		"botoes": []map[string]interface{}{
+			{
+				"DE_Texto": "uuid-button-1",
+			},
+		},
+	})
+
+	require.Equal(t, "31986058910", data["DE_Telefone"])
+	template := data["template"].(map[string]interface{})
+	require.Equal(t, "test_namespace", template["DE_Namespace"])
+	require.Equal(t, "test_template", template["DE_Nome"])
+
+	componentes := template["componentes"].([]map[string]interface{})
+	require.Equal(t, 3, len(componentes))
+
+	// Valida header
+	require.Equal(t, "header", componentes[0]["DE_Tipo"])
+	headerParams := componentes[0]["parametros"].([]map[string]interface{})
+	require.Equal(t, "image", headerParams[0]["DE_Tipo"])
+	require.Equal(t, "https://example.com/image.png", headerParams[0]["imagem"].(map[string]interface{})["LN_Imagem"])
+
+	// Valida body
+	require.Equal(t, "body", componentes[1]["DE_Tipo"])
+	bodyParams := componentes[1]["parametros"].([]map[string]interface{})
+	require.Equal(t, "text", bodyParams[0]["DE_Tipo"])
+	require.Equal(t, "Nome Teste", bodyParams[0]["DE_Texto"])
+
+	// Valida botão
+	require.Equal(t, "button", componentes[2]["DE_Tipo"])
+	require.Equal(t, "URL", componentes[2]["DE_SubTipo"])
+	require.Equal(t, 0, componentes[2]["NU_Indice"])
+	buttonParams := componentes[2]["parametros"].([]map[string]interface{})
+	require.Equal(t, "text", buttonParams[0]["DE_Tipo"])
+	require.Equal(t, "uuid-button-1", buttonParams[0]["DE_Texto"])
+}

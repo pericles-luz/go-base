@@ -515,59 +515,28 @@ func dataChatD360InteractiveMessageWithPDFMap() map[string]interface{} {
 }
 
 func dataChatD360TemplateProvaDeVidaMap() map[string]interface{} {
-	return map[string]interface{}{
-		"DE_Telefone": "31986058910",
-		"template": map[string]interface{}{
-			"DE_Namespace": "39751bde_f26f_42f3_b928_aa4267759d7f",
-			"DE_Nome":      "alerta_prova_de_vida_imagem",
-			"componentes": []map[string]interface{}{
-				{
-					"DE_Tipo": "header",
-					"parametros": []map[string]interface{}{
-						{
-							"DE_Tipo": "image",
-							"imagem": map[string]interface{}{
-								"LN_Imagem": "https://api.sindireceita.org.br/html/statics/assets/images/provaDeVida.png",
-							},
-						},
-					},
-				},
-				{
-					"DE_Tipo": "body",
-					"parametros": []map[string]interface{}{
-						{
-							"DE_Tipo":  "text",
-							"DE_Texto": "Péricles",
-						},
-						{
-							"DE_Tipo":  "text",
-							"DE_Texto": "02/02/2026",
-						},
-					},
-				},
-				{
-					"DE_Tipo":    "button",
-					"DE_SubTipo": "URL",
-					"NU_Indice":  0,
-					"parametros": []map[string]interface{}{
-						{
-							"DE_Tipo":  "text",
-							"DE_Texto": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
-						},
-					},
-				},
-				{
-					"DE_Tipo":    "button",
-					"DE_SubTipo": "URL",
-					"NU_Indice":  1,
-					"parametros": []map[string]interface{}{
-						{
-							"DE_Tipo":  "text",
-							"DE_Texto": "f9e8d7c6-b5a4-3210-9876-543210fedcba",
-						},
-					},
-				},
+	return d360.NewChatD360TemplateImageMessage(map[string]interface{}{
+		"DE_Telefone":  "31986058910",
+		"DE_Namespace": "39751bde_f26f_42f3_b928_aa4267759d7f",
+		"DE_Nome":      "alerta_prova_de_vida_imagem",
+		"LN_Imagem":    "https://api.sindireceita.org.br/html/statics/assets/images/provaDeVida.png",
+		"parametros": []map[string]interface{}{
+			{
+				"DE_Tipo":  "text",
+				"DE_Texto": "Péricles",
+			},
+			{
+				"DE_Tipo":  "text",
+				"DE_Texto": "02/02/2026",
 			},
 		},
-	}
+		"botoes": []map[string]interface{}{
+			{
+				"DE_Texto": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+			},
+			{
+				"DE_Texto": "f9e8d7c6-b5a4-3210-9876-543210fedcba",
+			},
+		},
+	})
 }

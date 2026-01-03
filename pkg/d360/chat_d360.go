@@ -226,3 +226,52 @@ func NewChatD360TemplateTextMessage(data map[string]interface{}) map[string]inte
 	}
 	return result
 }
+
+func NewChatD360TemplateImageMessage(data map[string]interface{}) map[string]interface{} {
+	componentes := []map[string]interface{}{
+		{
+			"DE_Tipo": "header",
+			"parametros": []map[string]interface{}{
+				{
+					"DE_Tipo": "image",
+					"imagem": map[string]interface{}{
+						"LN_Imagem": data["LN_Imagem"],
+					},
+				},
+			},
+		},
+		{
+			"DE_Tipo":    "body",
+			"parametros": data["parametros"],
+		},
+	}
+
+	// Adiciona botões se fornecidos
+	if data["botoes"] != nil {
+		botoes := data["botoes"].([]map[string]interface{})
+		for i, botao := range botoes {
+			componentes = append(componentes, map[string]interface{}{
+				"DE_Tipo":    "button",
+				"DE_SubTipo": "URL",
+				"NU_Indice":  i,
+				"parametros": []map[string]interface{}{
+					{
+						"DE_Tipo":  "text",
+						"DE_Texto": botao["DE_Texto"],
+					},
+				},
+			})
+		}
+	}
+
+	result := map[string]interface{}{
+		"DE_Telefone": data["DE_Telefone"],
+		"template": map[string]interface{}{
+			"DE_Namespace": data["DE_Namespace"],
+			"DE_Nome":      data["DE_Nome"],
+			"componentes":  componentes,
+		},
+	}
+
+	return result
+}
