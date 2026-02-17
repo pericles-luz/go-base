@@ -25,6 +25,7 @@ type IDatabase interface {
 	GetOne(sql string, data ...interface{}) ([]byte, error)
 	GetRecord(sql string, data ...interface{}) (map[string]interface{}, error)
 	GetRecords(sql string, data ...interface{}) ([]map[string]interface{}, error)
+	GetRecordsContext(ctx context.Context, sql string, data ...interface{}) ([]map[string]interface{}, error)
 	GetLine(rows *sql.Rows) (map[string]interface{}, error)
 	Insert(tableName string, data map[string]interface{}) error
 	Update(tableName string, data map[string]interface{}) error
@@ -324,6 +325,42 @@ func (db *Database) GetLine(query *sql.Rows) (map[string]interface{}, error) {
 func (db *Database) GetRecords(sqlString string, data ...interface{}) ([]map[string]interface{}, error) {
 	ctx, cancelfunc := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancelfunc()
+	stmt, err := db.GetStmt(sqlString)
+	if nil != err {
+		log.Println("failed preparing sql request", err.Error(), sqlString)
+		return nil, err
+	}
+	defer stmt.Close()
+	query, err := stmt.QueryContext(ctx, data...)
+	if err != nil {
+		log.Printf("error %s executing statement\n", err)
+		return nil, err
+	}
+	if err := query.Err(); err == sql.ErrNoRows {
+		log.Println("no records found", err.Error())
+		return nil, err
+	}
+	if err := query.Err(); err != nil {
+		log.Println("error reading next record", err.Error())
+		return nil, err
+	}
+	if query == nil {
+		log.Println("query is nil")
+		return nil, errors.New("query is nil")
+	}
+	result := make([]map[string]interface{}, 0)
+	var line map[string]interface{}
+	for query.Next() {
+		if line, err = db.makeRecord(query); nil != err {
+			log.Println("error reading data", err.Error())
+			return nil, err
+		}
+		result = append(result, line)
+	}
+	return result, nil
+}
+
+func (db *Database) GetRecordsContext(ctx context.Context, sqlString string, data ...interface{}) ([]map[string]interface{}, error) {
 	stmt, err := db.GetStmt(sqlString)
 	if nil != err {
 		log.Println("failed preparing sql request", err.Error(), sqlString)
