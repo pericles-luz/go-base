@@ -2,8 +2,12 @@ package utils_test
 
 import (
 	"bytes"
+	"encoding/base64"
+	"os"
+	"path/filepath"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/pericles-luz/go-base/pkg/utils"
 	"github.com/stretchr/testify/require"
@@ -75,4 +79,25 @@ func TestFileMustBeConvertedToBsse64String(t *testing.T) {
 	result, err := utils.FileToBase64(filePath)
 	require.NoError(t, err)
 	require.True(t, strings.HasPrefix(result, "data:text/xml;base64,"))
+}
+
+// A concatenação em pedaços de 510 bytes era quadrática: um arquivo de 22 MB
+// levava minutos. O resultado tem de ser a codificação do arquivo inteiro.
+func TestFileToBase64MustEncodeLargeFileQuickly(t *testing.T) {
+	content := make([]byte, 20*1024*1024+7)
+	for i := range content {
+		content[i] = byte(i * 31)
+	}
+	path := filepath.Join(t.TempDir(), "large.bin")
+	require.NoError(t, os.WriteFile(path, content, 0o600))
+
+	start := time.Now()
+	result, err := utils.FileToBase64(path)
+	require.NoError(t, err)
+	require.Less(t, time.Since(start), 5*time.Second)
+
+	encoded := result[strings.Index(result, ";base64,")+len(";base64,"):]
+	decoded, err := base64.StdEncoding.DecodeString(encoded)
+	require.NoError(t, err)
+	require.Equal(t, content, decoded)
 }

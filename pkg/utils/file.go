@@ -231,26 +231,22 @@ func FileSize(path string) int64 {
 // Generate base64 string from a file
 // the string must start with "data:{mimeType};base64,"
 // the file is read in chunks of 510 bytes because needs to be multiple of 3
+// FileToBase64 devolve o arquivo como data URL em base64. Lê o arquivo inteiro e
+// codifica de uma vez: a versão anterior concatenava a string em pedaços de 510
+// bytes, com custo quadrático (um PDF de 22 MB levava mais de 4 minutos), e uma
+// leitura curta no meio do arquivo deixaria padding no meio do resultado.
 func FileToBase64(path string) (string, error) {
 	mimeType := FileMimeType(path)
-	file, err := os.Open(path)
+	content, err := os.ReadFile(path)
 	if err != nil {
 		return "", errors.New("file not found")
 	}
-	defer file.Close()
-	buffer := make([]byte, 510)
-	base64String := "data:" + mimeType + ";base64,"
-	for {
-		count, err := file.Read(buffer)
-		if err != nil {
-			if err == io.EOF {
-				break
-			}
-			return "", err
-		}
-		base64String += base64.StdEncoding.EncodeToString(buffer[:count])
-	}
-	return base64String, nil
+	prefix := "data:" + mimeType + ";base64,"
+	var builder strings.Builder
+	builder.Grow(len(prefix) + base64.StdEncoding.EncodedLen(len(content)))
+	builder.WriteString(prefix)
+	builder.WriteString(base64.StdEncoding.EncodeToString(content))
+	return builder.String(), nil
 }
 
 // Returns a list with the fullpath of all files in a directory
