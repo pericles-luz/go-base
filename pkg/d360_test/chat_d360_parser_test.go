@@ -225,3 +225,15 @@ func TestChatD360_NewChatD360TemplateImageMessage(t *testing.T) {
 	require.Equal(t, "text", buttonParams[0]["DE_Tipo"])
 	require.Equal(t, "uuid-button-1", buttonParams[0]["DE_Texto"])
 }
+
+func TestChatD360_FormatPhonenumberMustKeepLandline(t *testing.T) {
+	require.Equal(t, "556133334444", d360.FormatPhonenumber("6133334444"))
+}
+
+func TestChatD360_SendTemplateMessageToLandline(t *testing.T) {
+	data := dataChatD360TemplateProvaDeVidaMap()
+	data["DE_Telefone"] = "6133334444"
+	message, err := d360.NewD360Parser(data).SendTemplateMessage()
+	require.NoError(t, err)
+	require.Equal(t, "556133334444", message.To)
+}

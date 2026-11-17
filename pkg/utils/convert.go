@@ -110,13 +110,18 @@ func ByteToStruct(raw []byte, result interface{}) error {
 	return json.Unmarshal(raw, result)
 }
 
-// Convert a whatsapp number to a brazilian cellphonenumber
+// Convert a whatsapp number (55 + DDD + 8 digits) to a brazilian phonenumber.
+// Landlines start with 2-5 and are kept as they are; cellphones in the old
+// 8-digit format get the leading 9.
 func WhatsappNumberToBrazilianPhonenumber(in string) string {
 	if len(in) != WHATSAPP_PHONENUMBER_LENGTH {
 		return ""
 	}
 	ddd := in[2:4]
 	phone := in[4:]
+	if phone[0] >= '2' && phone[0] <= '5' {
+		return ddd + phone
+	}
 	return ddd + "9" + phone
 }
 

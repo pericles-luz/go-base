@@ -129,6 +129,15 @@ func ValidateLandlineNumber(phoneNumber string) error {
 	return nil
 }
 
+// ValidateWhatsappNumber aceita celular (11 dígitos) ou telefone fixo
+// (10 dígitos), este para contas do WhatsApp Business em linha fixa.
+func ValidateWhatsappNumber(phoneNumber string) error {
+	if ValidateCellphoneNumber(phoneNumber) == nil || ValidateLandlineNumber(phoneNumber) == nil {
+		return nil
+	}
+	return errors.New("número de WhatsApp inválido")
+}
+
 func ValidateEmail(email string) bool {
 	if (len(email) < 5) || (len(email) > 254) {
 		return false

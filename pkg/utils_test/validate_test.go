@@ -66,3 +66,12 @@ func TestValidateURL(t *testing.T) {
 	require.True(t, utils.ValidateURL("https://www.google.com/test/"))
 	require.False(t, utils.ValidateURL("https//www.google.com/test/test"))
 }
+
+func TestValidateWhatsappNumberMustAcceptCellphoneAndLandline(t *testing.T) {
+	require.NoError(t, utils.ValidateWhatsappNumber("61986058910"))
+	require.NoError(t, utils.ValidateWhatsappNumber("6133334444"))
+	require.Error(t, utils.ValidateWhatsappNumber("6193334444"))
+	require.Error(t, utils.ValidateWhatsappNumber("61833334444"))
+	require.Error(t, utils.ValidateWhatsappNumber("613333444"))
+	require.Error(t, utils.ValidateWhatsappNumber(""))
+}
