@@ -3,6 +3,7 @@ package d360
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"time"
 
@@ -149,10 +150,11 @@ func (d *D360) post(url string, data map[string]interface{}) (*rest.Response, er
 		"D360-API-KEY": d.token.GetKey(),
 		"Content-Type": "application/json",
 	})
-	if resp.GetCode() == 555 {
-		err = errors.New(resp.GetRaw())
-	}
 	if err != nil {
+		log.Println("erro ao fazer POST: ", err.Error())
+		return nil, err
+	}
+	if err := responseError(resp); err != nil {
 		log.Println("erro ao fazer POST: ", err.Error())
 		return nil, err
 	}
@@ -188,6 +190,19 @@ func (d *D360) get(url string, data map[string]interface{}) (*rest.Response, err
 	// 	return nil, errors.New(response)
 	// }
 	return resp, nil
+}
+
+// responseError transforma em erro a resposta HTTP de falha do 360dialog.
+// Sem isso um 400 (parâmetro inválido, texto longo demais) ou um 429 (limite de
+// envio) era lido como sucesso com zero mensagens, e a falha não aparecia.
+func responseError(resp *rest.Response) error {
+	if resp == nil {
+		return errors.New("360dialog: resposta vazia")
+	}
+	if resp.GetCode() >= 400 {
+		return fmt.Errorf("360dialog HTTP %d: %s", resp.GetCode(), resp.GetRaw())
+	}
+	return nil
 }
 
 func NewChatD360(rest *rest.Rest) *D360 {
