@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"github.com/pericles-luz/go-base/internal/interfaces"
+	"github.com/pericles-luz/go-base/pkg/utils"
 )
 
 type D360_Parser struct {
@@ -175,7 +176,11 @@ func (d *D360_Parser) SendTemplateMessage() (*D360_MessageTemplateRequest, error
 }
 
 func FormatPhonenumber(phoneNumber string) string {
-	// retira o terceiro dígito do número
+	// telefone fixo (DDD + 8 dígitos) vai inteiro
+	if utils.ValidateLandlineNumber(phoneNumber) == nil {
+		return "55" + phoneNumber
+	}
+	// celular: retira o terceiro dígito do número (o 9)
 	return "55" + phoneNumber[0:2] + phoneNumber[3:]
 }
 

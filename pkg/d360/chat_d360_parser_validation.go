@@ -12,7 +12,7 @@ const (
 
 func (d *D360_Parser) validadeMessageInteractiveRequest() error {
 	d.isInteractive = true
-	if d.getData()["DE_Telefone"] == nil || utils.ValidateCellphoneNumber(d.getData()["DE_Telefone"].(string)) != nil {
+	if d.getData()["DE_Telefone"] == nil || utils.ValidateWhatsappNumber(d.getData()["DE_Telefone"].(string)) != nil {
 		return errors.New(MISSING_RESPONSE_DATA + "Telefone")
 	}
 	if d.getData()["interactive"] == nil {
@@ -34,7 +34,7 @@ func (d *D360_Parser) validadeMessageInteractiveRequest() error {
 }
 
 func (d *D360_Parser) validadeMessageTemplateRequest() error {
-	if d.getData()["DE_Telefone"] == nil || utils.ValidateCellphoneNumber(d.getData()["DE_Telefone"].(string)) != nil {
+	if d.getData()["DE_Telefone"] == nil || utils.ValidateWhatsappNumber(d.getData()["DE_Telefone"].(string)) != nil {
 		return errors.New(MISSING_RESPONSE_DATA + "Telefone")
 	}
 	if d.getData()["template"] == nil {
@@ -80,7 +80,7 @@ func (d *D360_Parser) validadeMessageTemplateRequest() error {
 }
 
 func (d *D360_Parser) validateSendMessageResquest() error {
-	if d.getData()["DE_Telefone"] == nil || utils.ValidateCellphoneNumber(d.getData()["DE_Telefone"].(string)) != nil {
+	if d.getData()["DE_Telefone"] == nil || utils.ValidateWhatsappNumber(d.getData()["DE_Telefone"].(string)) != nil {
 		return errors.New(MISSING_RESPONSE_DATA + "Telefone")
 	}
 	if d.getData()["TX_Mensagem"] == nil || d.getData()["TX_Mensagem"].(string) == "" {

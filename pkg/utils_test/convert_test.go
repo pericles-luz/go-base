@@ -259,3 +259,10 @@ func TestIntToExtenseWithCentsMustReturnCorrectlyWhenLessThanOneThousand(t *test
 	require.Equal(t, "novecentos reais", utils.IntToExtenseWithCents(90000))
 	require.Equal(t, "novecentos e setenta e um reais", utils.IntToExtenseWithCents(97100))
 }
+
+func TestWhatsappNumberToBrazilianPhonenumberMustKeepLandline(t *testing.T) {
+	require.Equal(t, "6133334444", utils.WhatsappNumberToBrazilianPhonenumber("556133334444"))
+	require.Equal(t, "1125551234", utils.WhatsappNumberToBrazilianPhonenumber("551125551234"))
+	require.Equal(t, "61996058910", utils.WhatsappNumberToBrazilianPhonenumber("556196058910"))
+	require.Equal(t, "61966058910", utils.WhatsappNumberToBrazilianPhonenumber("556166058910"))
+}
